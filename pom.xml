@@ -18,10 +18,14 @@
     <modules>
         <module>seckill-register-center</module>
         <module>seckill-user</module>
+        <module>seckill-common</module>
     </modules>
 
     <properties>
         <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <mybatis-spring.version>2.1.0</mybatis-spring.version>
+        <mybatis.version>3.2.8</mybatis.version>
+        <seckill-common.version>1.0</seckill-common.version>
     </properties>
 
     <dependencyManagement>
