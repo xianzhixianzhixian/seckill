@@ -17,6 +17,7 @@
 
     <modules>
         <module>seckill-register-center</module>
+        <module>seckill-user</module>
     </modules>
 
     <properties>
