@@ -142,4 +142,20 @@ public class SeckillUser {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "SeckillUser{" +
+                "id=" + id +
+                ", account='" + account + '\'' +
+                ", sex=" + sex +
+                ", telphone='" + telphone + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", qq='" + qq + '\'' +
+                ", weixin='" + weixin + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }

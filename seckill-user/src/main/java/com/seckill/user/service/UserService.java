@@ -2,8 +2,6 @@ package com.seckill.user.service;
 
 import com.seckill.user.bean.SeckillUser;
 
-import java.util.List;
-
 public interface UserService {
 
     /**
@@ -12,4 +10,19 @@ public interface UserService {
      * @return
      */
     SeckillUser findUserById(Long id);
+
+    /**
+     * 添加用户信息
+     * @param userInfo
+     * @return
+     */
+    Integer addUser(SeckillUser userInfo);
+
+    /**
+     * 根据账户号查找用户信息
+     * @param account
+     * @param passwd
+     * @return
+     */
+    Boolean verifyAccount(String account, String passwd) throws Exception;
 }
