@@ -19,6 +19,7 @@
         <module>seckill-register-center</module>
         <module>seckill-user</module>
         <module>seckill-common</module>
+        <module>seckill-merchant</module>
     </modules>
 
     <properties>
