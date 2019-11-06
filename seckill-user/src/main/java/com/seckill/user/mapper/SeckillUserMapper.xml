@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seckill.user.mapper.SeckillUserMapper">
-  <resultMap id="BaseResultMap" type="com.seckill.user.bean.SeckillUser">
+<mapper namespace="com.seckill.user.com.seckill.merchant.mapper.SeckillUserMapper">
+  <resultMap id="BaseResultMap" type="com.seckill.common.bean.SeckillUser">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="account" jdbcType="VARCHAR" property="account" />
     <result column="encryption_password" jdbcType="VARCHAR" property="encryptionPassword" />
@@ -79,7 +79,7 @@
     id, account, encryption_password, original_password, sex, telphone, birthday, qq, 
     weixin, id_card, name, age, created_time, updated_time
   </sql>
-  <select id="selectByExample" parameterType="com.seckill.user.bean.SeckillUserExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.seckill.user.com.seckill.merchant.mapper.bean.SeckillUserExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -103,13 +103,13 @@
     delete from seckill_user
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.seckill.user.bean.SeckillUserExample">
+  <delete id="deleteByExample" parameterType="com.seckill.user.com.seckill.merchant.mapper.bean.SeckillUserExample">
     delete from seckill_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.seckill.user.bean.SeckillUser">
+  <insert id="insert" parameterType="com.seckill.common.bean.SeckillUser">
     insert into seckill_user (id, account, encryption_password, 
       original_password, sex, telphone, 
       birthday, qq, weixin, 
@@ -121,7 +121,7 @@
       #{idCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.seckill.user.bean.SeckillUser">
+  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillUser">
     insert into seckill_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -212,7 +212,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.seckill.user.bean.SeckillUserExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.seckill.user.com.seckill.merchant.mapper.bean.SeckillUserExample" resultType="java.lang.Long">
     select count(*) from seckill_user
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -288,7 +288,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.seckill.user.bean.SeckillUser">
+  <update id="updateByPrimaryKeySelective" parameterType="com.seckill.common.bean.SeckillUser">
     update seckill_user
     <set>
       <if test="account != null">
@@ -333,7 +333,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.seckill.user.bean.SeckillUser">
+  <update id="updateByPrimaryKey" parameterType="com.seckill.common.bean.SeckillUser">
     update seckill_user
     set account = #{account,jdbcType=VARCHAR},
       encryption_password = #{encryptionPassword,jdbcType=VARCHAR},

@@ -1,6 +1,6 @@
 package com.seckill.user.mapper;
 
-import com.seckill.user.bean.SeckillUser;
+import com.seckill.common.bean.SeckillUser;
 import com.seckill.user.bean.SeckillUserExample;
 import java.util.List;
 

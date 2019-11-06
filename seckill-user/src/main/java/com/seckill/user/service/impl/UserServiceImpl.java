@@ -1,7 +1,7 @@
 package com.seckill.user.service.impl;
 
 import com.seckill.common.utils.MD5Util;
-import com.seckill.user.bean.SeckillUser;
+import com.seckill.common.bean.SeckillUser;
 import com.seckill.user.bean.SeckillUserExample;
 import com.seckill.user.mapper.SeckillUserMapper;
 import com.seckill.user.service.UserService;

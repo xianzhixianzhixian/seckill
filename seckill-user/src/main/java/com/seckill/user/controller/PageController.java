@@ -1,6 +1,6 @@
 package com.seckill.user.controller;
 
-import com.seckill.user.bean.SeckillUser;
+import com.seckill.common.bean.SeckillUser;
 import com.seckill.user.service.impl.UserServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.seckill.user.bean;
+package com.seckill.common.bean;
 
 import java.util.Date;
 
@@ -156,6 +156,8 @@ public class SeckillUser {
                 ", idCard='" + idCard + '\'' +
                 ", name='" + name + '\'' +
                 ", age=" + age +
+                ", createdTime=" + createdTime +
+                ", updatedTime=" + updatedTime +
                 '}';
     }
 }

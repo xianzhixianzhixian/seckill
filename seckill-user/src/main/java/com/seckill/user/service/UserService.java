@@ -1,6 +1,6 @@
 package com.seckill.user.service;
 
-import com.seckill.user.bean.SeckillUser;
+import com.seckill.common.bean.SeckillUser;
 
 public interface UserService {
 
