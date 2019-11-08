@@ -39,4 +39,5 @@ public class SeckillUserApplication {
     public PlatformTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
+
 }

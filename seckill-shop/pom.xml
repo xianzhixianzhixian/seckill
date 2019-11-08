@@ -9,15 +9,18 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>seckill-merchant</artifactId>
+    <artifactId>seckill-shop</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
-
     <dependencies>
         <dependency>
             <groupId>com.seckill</groupId>
             <artifactId>seckill-common</artifactId>
             <version>${seckill-common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -73,4 +76,5 @@
             </resource>
         </resources>
     </build>
+
 </project>

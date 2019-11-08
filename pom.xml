@@ -20,6 +20,7 @@
         <module>seckill-user</module>
         <module>seckill-common</module>
         <module>seckill-merchant</module>
+        <module>seckill-shop</module>
     </modules>
 
     <properties>

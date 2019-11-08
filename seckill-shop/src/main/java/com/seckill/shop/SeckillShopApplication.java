@@ -1,4 +1,4 @@
-package com.seckill.merchant;
+package com.seckill.shop;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.tomcat.jdbc.pool.DataSource;
@@ -14,10 +14,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @EnableEurekaClient
 @SpringBootApplication
-public class SeckillMerchantApplication {
+public class SeckillShopApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SeckillMerchantApplication.class, args);
+        SpringApplication.run(SeckillShopApplication.class, args);
     }
 
     @Bean

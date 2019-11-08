@@ -1,9 +1,9 @@
 server:
-  port: 8084
+  port: 8083
 
 spring:
   application:
-    name: seckill-merchant
+    name: seckill-shop
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.jdbc.Driver
