@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <td>账号</td>
+        <td>昵称</td>
+        <td>手机号</td>
+        <td>省份</td>
+        <td>城市</td>
+        <td>住址</td>
+        <td>入驻时间</td>
+    </tr>
+    <tr>
+        <td><span th:text="${merchantInfo.getAccount()}"/></td>
+        <td><span th:text="${merchantInfo.getName()}"/></td>
+        <td><span th:text="${merchantInfo.getTelphone()}"/></td>
+        <td><span th:text="${merchantInfo.getProvince()}"/></td>
+        <td><span th:text="${merchantInfo.getCity()}"/></td>
+        <td><span th:text="${merchantInfo.getAddress()}"/></td>
+        <td><span th:text="${merchantInfo.getCreatetime()}"/></td>
+    </tr>
+</table>
+</body>
+</html>

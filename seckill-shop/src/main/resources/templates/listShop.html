@@ -19,15 +19,15 @@
         <td>操作</td>
     </tr>
     <tr th:each="entity:${listShop}">
-        <td><span th:text="${entity.merchantId}"/></td>
-        <td><span th:text="${entity.shopName}"/></td>
-        <td><span th:text="${entity.shopDescription}"/></td>
-        <td><span th:text="${entity.shopBussinessScope}"/></td>
-        <td><span th:text="${entity.businessLicense}"/></td>
-        <td><span th:text="${entity.province}"/></td>
-        <td><span th:text="${entity.city}"/></td>
-        <td><span th:text="${entity.state}"/></td>
-        <td><span th:text="${entity.createTime}"/></td>
+        <td><span th:text="${entity.getMerchantId()}"/></td>
+        <td><span th:text="${entity.getShopName()}"/></td>
+        <td><span th:text="${entity.getShopDescription()}"/></td>
+        <td><span th:text="${entity.getShopBussinessScope()}"/></td>
+        <td><span th:text="${entity.getBusinessLicense()}"/></td>
+        <td><span th:text="${entity.getProvince()}"/></td>
+        <td><span th:text="${entity.getCity()}"/></td>
+        <td><span th:text="${entity.getState()}"/></td>
+        <td><span th:text="${entity.getCreateTime()}"/></td>
         <td><span th:switch="${entity.state}">
             <span th:case="0"><a href="#" th:href="@{/shop/updateState(state=1,id=${entity.id})}" >通过</a>||<a href="#" th:href="@{/shop/updateState(state=2,id=${entity.id})}">不通过</a></span>
             <span th:case="1"><a href="#" th:href="@{/shop/updateState(state=3,id=${entity.id})}" >下架</a></span>
