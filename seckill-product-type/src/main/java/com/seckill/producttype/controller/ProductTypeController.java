@@ -1,7 +1,7 @@
-package com.seckill.merchant.controller;
+package com.seckill.producttype.controller;
 
 import com.seckill.common.bean.SeckillProductType;
-import com.seckill.merchant.service.impl.ProductTypeServiceImpl;
+import com.seckill.producttype.service.impl.ProductTypeServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

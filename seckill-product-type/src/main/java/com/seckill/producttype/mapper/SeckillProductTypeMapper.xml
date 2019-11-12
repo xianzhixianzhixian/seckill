@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seckill.merchant.mapper.SeckillProductTypeMapper">
+<mapper namespace="com.seckill.producttype.mapper.SeckillProductTypeMapper">
   <resultMap id="BaseResultMap" type="com.seckill.common.bean.SeckillProductType">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="product_type_name" jdbcType="VARCHAR" property="productTypeName" />
@@ -72,7 +72,7 @@
     id, product_type_name, product_type_description, parent_id, grade, created_time, 
     updated_time
   </sql>
-  <select id="selectByExample" parameterType="com.seckill.merchant.bean.SeckillProductTypeExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.seckill.producttype.bean.SeckillProductTypeExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -96,7 +96,7 @@
     delete from seckill_product_type
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.seckill.merchant.bean.SeckillProductTypeExample">
+  <delete id="deleteByExample" parameterType="com.seckill.producttype.bean.SeckillProductTypeExample">
     delete from seckill_product_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -159,7 +159,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.seckill.merchant.bean.SeckillProductTypeExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.seckill.producttype.bean.SeckillProductTypeExample" resultType="java.lang.Long">
     select count(*) from seckill_product_type
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

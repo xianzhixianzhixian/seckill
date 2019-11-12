@@ -1,4 +1,4 @@
-package com.seckill.merchant.service;
+package com.seckill.producttype.service;
 
 import com.seckill.common.bean.SeckillProductType;
 

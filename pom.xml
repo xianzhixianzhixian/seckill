@@ -22,6 +22,7 @@
         <module>seckill-merchant</module>
         <module>seckill-shop</module>
         <module>seckill-product-type</module>
+        <module>seckill-product</module>
     </modules>
 
     <properties>

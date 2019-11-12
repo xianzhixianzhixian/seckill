@@ -1,4 +1,4 @@
-package com.seckill.merchant.bean;
+package com.seckill.producttype.bean;
 
 import java.util.ArrayList;
 import java.util.Date;

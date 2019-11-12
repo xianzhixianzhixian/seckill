@@ -1,8 +1,8 @@
-package com.seckill.merchant.service.impl;
+package com.seckill.producttype.service.impl;
 
 import com.seckill.common.bean.SeckillProductType;
-import com.seckill.merchant.mapper.SeckillProductTypeMapper;
-import com.seckill.merchant.service.ProductTypeService;
+import com.seckill.producttype.mapper.SeckillProductTypeMapper;
+import com.seckill.producttype.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

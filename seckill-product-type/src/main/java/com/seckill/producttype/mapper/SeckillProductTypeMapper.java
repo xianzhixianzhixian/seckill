@@ -1,8 +1,9 @@
-package com.seckill.merchant.mapper;
+package com.seckill.producttype.mapper;
 
 import com.seckill.common.bean.SeckillProductType;
-import com.seckill.merchant.bean.SeckillProductTypeExample;
+import com.seckill.producttype.bean.SeckillProductTypeExample;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface SeckillProductTypeMapper {

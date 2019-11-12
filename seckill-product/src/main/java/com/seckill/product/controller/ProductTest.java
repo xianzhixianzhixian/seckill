@@ -1,4 +1,4 @@
-package com.seckill.merchant.controller;
+package com.seckill.product.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -6,11 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by li on 2019/2/2.
- */
 @RestController
-public class ProductTypeTest {
+public class ProductTest {
 
 
     @RequestMapping(value = "sayHelloWorld",method = RequestMethod.GET)
