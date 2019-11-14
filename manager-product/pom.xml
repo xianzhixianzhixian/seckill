@@ -9,48 +9,38 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>seckill-common</artifactId>
+    <artifactId>manager-product</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
+            <groupId>com.seckill</groupId>
+            <artifactId>seckill-common</artifactId>
+            <version>${seckill-common.version}</version>
         </dependency>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-        </dependency>
-        <!-- mybatis start -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis-spring.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jdbc</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <!-- mybatic end -->
     </dependencies>
 
     <build>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>sec/main/resources</directory>
                 <includes>
                     <include>**/*.properties</include>
-                    <include>**/*.xml</include>
                     <include>**/*.yml</include>
+                    <include>**/*.xml</include>
                     <include>**/*.html</include>
                 </includes>
                 <filtering>false</filtering>

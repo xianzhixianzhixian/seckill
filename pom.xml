@@ -17,12 +17,13 @@
 
     <modules>
         <module>seckill-register-center</module>
-        <module>seckill-user</module>
         <module>seckill-common</module>
-        <module>seckill-merchant</module>
-        <module>seckill-shop</module>
-        <module>seckill-product-type</module>
         <module>seckill-product</module>
+        <module>manager-user</module>
+        <module>manager-merchant</module>
+        <module>manager-shop</module>
+        <module>manager-product-type</module>
+        <module>manager-product</module>
     </modules>
 
     <properties>

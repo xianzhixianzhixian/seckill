@@ -1,9 +1,9 @@
 server:
-  port: 8087
+  port: 8082
 
 spring:
   application:
-    name: seckill-product
+    name: manager-user
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.jdbc.Driver
@@ -14,3 +14,6 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8081/eureka/
+
+mybatis:
+  mapper-locations: classpath*:src/main/java/**/*Mapper.xml

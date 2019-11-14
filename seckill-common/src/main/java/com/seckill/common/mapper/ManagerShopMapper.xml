@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seckill.common.mapper.ManagerShopMapper">
+  <resultMap id="BaseResultMap" type="com.seckill.common.bean.ManagerShop">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="shop_description" jdbcType="VARCHAR" property="shopDescription" />
+    <result column="shop_bussiness_scope" jdbcType="VARCHAR" property="shopBussinessScope" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, merchant_id, shop_name, shop_description, shop_bussiness_scope, province, city, 
+    business_license, create_time, state, created_time, updated_time
+  </sql>
+  <select id="selectByExample" parameterType="com.seckill.common.bean.ManagerShopExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from manager_shop
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from manager_shop
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from manager_shop
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.seckill.common.bean.ManagerShopExample">
+    delete from manager_shop
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.seckill.common.bean.ManagerShop">
+    insert into manager_shop (id, merchant_id, shop_name, 
+      shop_description, shop_bussiness_scope, province, 
+      city, business_license, create_time, 
+      state, created_time, updated_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{merchantId,jdbcType=BIGINT}, #{shopName,jdbcType=VARCHAR}, 
+      #{shopDescription,jdbcType=VARCHAR}, #{shopBussinessScope,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.seckill.common.bean.ManagerShop">
+    insert into manager_shop
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="shopDescription != null">
+        shop_description,
+      </if>
+      <if test="shopBussinessScope != null">
+        shop_bussiness_scope,
+      </if>
+      <if test="province != null">
+        province,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="businessLicense != null">
+        business_license,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createdTime != null">
+        created_time,
+      </if>
+      <if test="updatedTime != null">
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopDescription != null">
+        #{shopDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="shopBussinessScope != null">
+        #{shopBussinessScope,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.seckill.common.bean.ManagerShopExample" resultType="java.lang.Long">
+    select count(*) from manager_shop
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update manager_shop
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="record.shopName != null">
+        shop_name = #{record.shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopDescription != null">
+        shop_description = #{record.shopDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopBussinessScope != null">
+        shop_bussiness_scope = #{record.shopBussinessScope,jdbcType=VARCHAR},
+      </if>
+      <if test="record.province != null">
+        province = #{record.province,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.businessLicense != null">
+        business_license = #{record.businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=INTEGER},
+      </if>
+      <if test="record.createdTime != null">
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null">
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update manager_shop
+    set id = #{record.id,jdbcType=BIGINT},
+      merchant_id = #{record.merchantId,jdbcType=BIGINT},
+      shop_name = #{record.shopName,jdbcType=VARCHAR},
+      shop_description = #{record.shopDescription,jdbcType=VARCHAR},
+      shop_bussiness_scope = #{record.shopBussinessScope,jdbcType=VARCHAR},
+      province = #{record.province,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      business_license = #{record.businessLicense,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      state = #{record.state,jdbcType=INTEGER},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.seckill.common.bean.ManagerShop">
+    update manager_shop
+    <set>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=BIGINT},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopDescription != null">
+        shop_description = #{shopDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="shopBussinessScope != null">
+        shop_bussiness_scope = #{shopBussinessScope,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicense != null">
+        business_license = #{businessLicense,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="createdTime != null">
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null">
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.seckill.common.bean.ManagerShop">
+    update manager_shop
+    set merchant_id = #{merchantId,jdbcType=BIGINT},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      shop_description = #{shopDescription,jdbcType=VARCHAR},
+      shop_bussiness_scope = #{shopBussinessScope,jdbcType=VARCHAR},
+      province = #{province,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      business_license = #{businessLicense,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=INTEGER},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

@@ -1,4 +1,4 @@
-package com.seckill.product;
+package com.seckill.manager.product;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.tomcat.jdbc.pool.DataSource;
@@ -16,28 +16,28 @@ import org.springframework.transaction.PlatformTransactionManager;
 @SpringBootApplication
 public class SeckillProductApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SeckillProductApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SeckillProductApplication.class, args);
+    }
 
-	@Bean
-	@ConfigurationProperties(prefix = "spring.datasource")
-	public DataSource dataSource() {
-		return new DataSource();
-	}
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource")
+    public DataSource dataSource() {
+        return new DataSource();
+    }
 
-	@Bean
-	public SqlSessionFactory sqlSessionFactory() throws Exception {
-		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-		sqlSessionFactoryBean.setDataSource(dataSource());
-		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+    @Bean
+    public SqlSessionFactory sqlSessionFactory() throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource());
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 //        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:/mappers/*.xml"));
-		return sqlSessionFactoryBean.getObject();
-	}
+        return sqlSessionFactoryBean.getObject();
+    }
 
-	@Bean
-	public PlatformTransactionManager transactionManager() {
-		return new DataSourceTransactionManager(dataSource());
-	}
+    @Bean
+    public PlatformTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
 
 }
