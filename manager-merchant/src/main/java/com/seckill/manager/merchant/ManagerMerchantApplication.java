@@ -14,10 +14,10 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @EnableEurekaClient
 @SpringBootApplication
-public class SeckillMerchantApplication {
+public class ManagerMerchantApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SeckillMerchantApplication.class, args);
+        SpringApplication.run(ManagerMerchantApplication.class, args);
     }
 
     @Bean

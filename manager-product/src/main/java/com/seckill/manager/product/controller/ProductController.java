@@ -1,77 +1,32 @@
 package com.seckill.manager.product.controller;
 
 import com.seckill.common.bean.ManagerProductInfo;
-import com.seckill.manager.product.service.impl.ProductDetailServiceImpl;
 import com.seckill.manager.product.service.impl.ProductInfoServiceImpl;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+
+@RestController
 @RequestMapping("/product")
 public class ProductController {
 
     @Autowired
     private ProductInfoServiceImpl productInfoService;
 
-    @Autowired
-    private ProductDetailServiceImpl productDetailService;
-
-    @RequestMapping(value = "/toApplyProduct",method = RequestMethod.GET)
-    public String toApplyProduct() {
-        return "toApplyProduct";
+    @PostMapping(value = "/listProductByShopId")
+    public List<ManagerProductInfo> listProductByShopId(Long shopid) {
+        List<ManagerProductInfo> list = productInfoService.listProductInfo(shopid);
+        return list;
     }
 
-
-    @RequestMapping(value = "/applyProduct",method = RequestMethod.POST)
-    public String applyProduct(ManagerProductInfo productInfo, Model model){
-        if (StringUtils.isBlank(productInfo.getProductName())) {
-            model.addAttribute("error","商品名称不能为空");
-            return "toRegisterUser";
-        }
-        if (StringUtils.isBlank(productInfo.getProductTitle())) {
-            model.addAttribute("error","商品标题不能为空");
-            return "toRegisterUser";
-        }
-        if (productInfo.getProductPrice() == null) {
-            model.addAttribute("error","商品价格不能为空");
-            return "toRegisterUser";
-        }
-        try {
-            productInfoService.saveProductInfo(productInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "viewUser";
-    }
-
-
-    @RequestMapping(value = "/listProduct",method = RequestMethod.GET)
-    public String listProduct(Model model) {
-        try {
-            List<ManagerProductInfo> list = productInfoService.listProductInfo(-1L);
-            model.addAttribute("productList", list);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "listproduct";
-    }
-
-    @RequestMapping(value = "/updateState",method = RequestMethod.GET)
-    public String updateState(Long id ,Integer state,Model model) {
-        try {
-            ManagerProductInfo productInfo = new ManagerProductInfo();
-            productInfo.setId(id);
-            productInfo.setState(state);
-            productInfoService.updateProductInfo(productInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "listproduct";
+    @PostMapping(value = "/findProductByProductId")
+    public ManagerProductInfo findProductById(Long id){
+        return productInfoService.findProductById(id);
     }
 }
