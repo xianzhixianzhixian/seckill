@@ -15,7 +15,7 @@ public interface ProductInfoService {
 
     /**
      * 查询商店商品信息
-     * @param shopId
+     * @param shopId 值为-1的时候查询所有商品
      * @return
      */
     List<ManagerProductInfo> listProductInfo(Long shopId);
@@ -28,9 +28,9 @@ public interface ProductInfoService {
     Integer updateProductInfo(ManagerProductInfo productInfo);
 
     /**
-     * 根据id查找产品信息
-     * @param id
+     * 根据产品id查找产品信息
+     * @param productId
      * @return
      */
-    ManagerProductInfo findProductById(Long id);
+    ManagerProductInfo findProductByProductId(Long productId);
 }

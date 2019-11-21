@@ -23,7 +23,7 @@
         <td th:text="${entity.getCreateTime()}"></td>
         <td th:text="${entity.getApproveTime()}"></td>
         <td>
-            <a href="#" th:href="@{/seckKillProductControl/preSaveSeckillProduct(id=${entity.id})}" >发布秒杀商品</a>
+            <a href="#" th:href="@{/seckillProduct/toPreSaveSeckill(productId=${entity.getId()})}" >发布秒杀商品</a>
         </td>
     </tr>
 </table>

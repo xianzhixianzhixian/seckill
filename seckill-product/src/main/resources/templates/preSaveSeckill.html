@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+<form th:action="/后续写入" method="post">
+    <input type="hidden" th:name="productid" th:value="${productInfo.getId()}"></br>
+    <input type="hidden" th:name="shopid" th:value="${productInfo.getShopId()}"></br>
+    商品标题:<input name="productTitle" type="text" th:value="${productInfo.getProductTitle()}" /></br>
+    商品名称:<input name="productName" type="text" th:value="${productInfo.getProductName()}" /></br>
+    商品价格:<input name="productPrice" type="text" th:value="${productInfo.getProductPrice()}" /></br>
+    商品库存:<span th:text="${productInfo.getProductInventory()}"/></br>
+    商品秒杀价格:<input name="seckillPrice" type="text" /></br>
+    商品秒杀开始时间:<input name="startTime" type="text" />格式：yyyy-MM-dd hh:mm:ss</br>
+    商品秒杀结束时间:<input name="endTime" type="text" />格式：yyyy-MM-dd hh:mm:ss</span></br>
+    <input type="submit" th:name="提交">
+</form>
+</table>
+</body>
+</html>

@@ -21,4 +21,12 @@ public interface SeckillProductService {
     @PostMapping("/product/listProductByShopId")
     public List<ManagerProductInfo> listProductByShopId(Long shopId);
 
+    /**
+     * 根据商品id查询商品信息
+     * @param productId
+     * @return
+     */
+    @PostMapping("/product/findProductByProductId")
+    public ManagerProductInfo findProductByProductId(Long productId);
+
 }

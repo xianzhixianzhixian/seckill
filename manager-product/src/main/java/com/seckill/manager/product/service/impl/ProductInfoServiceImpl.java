@@ -27,9 +27,11 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     @Override
     public List<ManagerProductInfo> listProductInfo(Long shopId){
         ManagerProductInfoExample example = new ManagerProductInfoExample();
-        ManagerProductInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andShopIdEqualTo(shopId);
-        criteria.andStateEqualTo(1);
+        if (shopId != -1) {
+            ManagerProductInfoExample.Criteria criteria = example.createCriteria();
+            criteria.andShopIdEqualTo(shopId);
+            criteria.andStateEqualTo(1);
+        }
         return productInfoMapper.selectByExample(example);
     }
 
@@ -43,7 +45,7 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     }
 
     @Override
-    public ManagerProductInfo findProductById(Long id){
-        return productInfoMapper.selectByPrimaryKey(id);
+    public ManagerProductInfo findProductByProductId(Long productId){
+        return productInfoMapper.selectByPrimaryKey(productId);
     }
 }
