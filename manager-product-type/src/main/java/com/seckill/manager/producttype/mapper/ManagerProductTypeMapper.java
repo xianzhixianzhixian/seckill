@@ -1,4 +1,4 @@
-package com.seckill.common.mapper;
+package com.seckill.manager.producttype.mapper;
 
 import com.seckill.common.bean.ManagerProductType;
 import com.seckill.common.bean.ManagerProductTypeExample;

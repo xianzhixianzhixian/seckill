@@ -2,12 +2,13 @@ package com.seckill.manager.shop.controller;
 
 import com.seckill.common.bean.ManagerShop;
 import com.seckill.manager.shop.service.impl.ShopServiceImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import java.util.List;
 
 @RequestMapping("/shop")
@@ -41,7 +42,7 @@ public class ShopController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "viewMerchant";
+        return "toSearchShop";
     }
 
     @RequestMapping(value = "/toSearchShop", method = RequestMethod.GET)
@@ -51,6 +52,12 @@ public class ShopController {
 
     @RequestMapping(value = "/searchShop", method = RequestMethod.POST)
     public String searchShop(ManagerShop shopInfo, Model model){
+        if (StringUtils.isEmpty(shopInfo.getShopName())) {
+            model.addAttribute("error","店铺名称不能为空");
+        }
+        if (shopInfo.getState() == null) {
+            model.addAttribute("error","店铺状态不能为空");
+        }
         List<ManagerShop> listShop = shopService.listShopInfoBy(shopInfo);
         model.addAttribute("listShop",listShop);
         return "listShop";
@@ -62,7 +69,7 @@ public class ShopController {
         shopInfo.setId(id);
         shopInfo.setState(state);
         shopService.updateShopInfoSelective(shopInfo);
-        return "listShop";
+        return "updateSuccess";
     }
 
 }

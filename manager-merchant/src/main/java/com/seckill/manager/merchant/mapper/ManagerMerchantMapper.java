@@ -1,4 +1,4 @@
-package com.seckill.common.mapper;
+package com.seckill.manager.merchant.mapper;
 
 import com.seckill.common.bean.ManagerMerchant;
 import com.seckill.common.bean.ManagerMerchantExample;

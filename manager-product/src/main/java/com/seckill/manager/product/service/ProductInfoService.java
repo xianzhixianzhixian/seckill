@@ -15,10 +15,11 @@ public interface ProductInfoService {
 
     /**
      * 查询商店商品信息
-     * @param shopId 值为-1的时候查询所有商品
+     * @param shopId
+     * @param state
      * @return
      */
-    List<ManagerProductInfo> listProductInfo(Long shopId);
+    List<ManagerProductInfo> listProductInfo(Long shopId, Integer state);
 
     /**
      * 更新产品信息

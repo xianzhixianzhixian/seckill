@@ -1,4 +1,4 @@
-package com.seckill.common.mapper;
+package com.seckill.manager.user.mapper;
 
 import com.seckill.common.bean.ManagerUser;
 import com.seckill.common.bean.ManagerUserExample;

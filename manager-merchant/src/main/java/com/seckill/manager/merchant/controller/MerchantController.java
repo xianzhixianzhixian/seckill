@@ -1,6 +1,7 @@
 package com.seckill.manager.merchant.controller;
 
 import com.seckill.common.bean.ManagerMerchant;
+import com.seckill.common.utils.MD5Util;
 import com.seckill.manager.merchant.service.impl.MerchantServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ public class MerchantController {
 
     @RequestMapping(value = "/checkIn", method = RequestMethod.POST)
     public String registerUser(ManagerMerchant merchantInfo, Model model) {
+        //添加商户信息
         if (StringUtils.isBlank(merchantInfo.getAccount())) {
             model.addAttribute("error", "商家账号不能为空");
             return "toCheckIn";
@@ -66,11 +68,18 @@ public class MerchantController {
             return "toLogin";
         }
         try {
-            Boolean result = merchantService.verifyMerchantAccount(merchantInfo);
-            if (!result) {
+            ManagerMerchant merchant = merchantService.verifyMerchantAccount(merchantInfo);
+            if (merchant != null) {
+                Boolean result = MD5Util.verify(merchantInfo.getOriginalPassword(), MD5Util.MD5KEY, merchant.getEncryptionPassword());
+                if (!result) {
+                    model.addAttribute("error","用户名或者密码不对");
+                    return "toLogin";
+                }
+            } else {
                 model.addAttribute("error","用户名或者密码不对");
                 return "toLogin";
             }
+            model.addAttribute("merchantInfo", merchant);
         } catch (Exception e) {
             e.printStackTrace();
         }

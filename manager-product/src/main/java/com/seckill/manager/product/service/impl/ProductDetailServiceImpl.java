@@ -1,7 +1,7 @@
 package com.seckill.manager.product.service.impl;
 
 import com.seckill.common.bean.ManagerProductDetail;
-import com.seckill.common.mapper.ManagerProductDetailMapper;
+import com.seckill.manager.product.mapper.ManagerProductDetailMapper;
 import com.seckill.manager.product.service.ProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

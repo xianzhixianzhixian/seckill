@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seckill.common.mapper.ManagerShopMapper">
-  <resultMap id="BaseResultMap" type="com.seckill.common.bean.ManagerShop">
+<mapper namespace="com.seckill.manager.merchant.mapper.ManagerMerchantMapper">
+  <resultMap id="BaseResultMap" type="com.seckill.common.bean.ManagerMerchant">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="merchant_id" jdbcType="BIGINT" property="merchantId" />
-    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
-    <result column="shop_description" jdbcType="VARCHAR" property="shopDescription" />
-    <result column="shop_bussiness_scope" jdbcType="VARCHAR" property="shopBussinessScope" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="encryption_password" jdbcType="VARCHAR" property="encryptionPassword" />
+    <result column="original_password" jdbcType="VARCHAR" property="originalPassword" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="province" jdbcType="VARCHAR" property="province" />
     <result column="city" jdbcType="VARCHAR" property="city" />
-    <result column="business_license" jdbcType="VARCHAR" property="businessLicense" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+    <result column="telphone" jdbcType="VARCHAR" property="telphone" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
@@ -74,16 +74,16 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, merchant_id, shop_name, shop_description, shop_bussiness_scope, province, city, 
-    business_license, create_time, state, created_time, updated_time
+    id, account, encryption_password, original_password, name, province, city, address, 
+    createtime, telphone, created_time, updated_time
   </sql>
-  <select id="selectByExample" parameterType="com.seckill.common.bean.ManagerShopExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.seckill.common.bean.ManagerMerchantExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from manager_shop
+    from manager_merchant
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,48 +94,48 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from manager_shop
+    from manager_merchant
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from manager_shop
+    delete from manager_merchant
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.seckill.common.bean.ManagerShopExample">
-    delete from manager_shop
+  <delete id="deleteByExample" parameterType="com.seckill.common.bean.ManagerMerchantExample">
+    delete from manager_merchant
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.seckill.common.bean.ManagerShop">
-    insert into manager_shop (id, merchant_id, shop_name, 
-      shop_description, shop_bussiness_scope, province, 
-      city, business_license, create_time, 
-      state, created_time, updated_time
+  <insert id="insert" parameterType="com.seckill.common.bean.ManagerMerchant">
+    insert into manager_merchant (id, account, encryption_password, 
+      original_password, name, province, 
+      city, address, createtime, 
+      telphone, created_time, updated_time
       )
-    values (#{id,jdbcType=BIGINT}, #{merchantId,jdbcType=BIGINT}, #{shopName,jdbcType=VARCHAR}, 
-      #{shopDescription,jdbcType=VARCHAR}, #{shopBussinessScope,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
-      #{city,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
+    values (#{id,jdbcType=BIGINT}, #{account,jdbcType=VARCHAR}, #{encryptionPassword,jdbcType=VARCHAR}, 
+      #{originalPassword,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{telphone,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.seckill.common.bean.ManagerShop">
-    insert into manager_shop
+  <insert id="insertSelective" parameterType="com.seckill.common.bean.ManagerMerchant">
+    insert into manager_merchant
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="merchantId != null">
-        merchant_id,
+      <if test="account != null">
+        account,
       </if>
-      <if test="shopName != null">
-        shop_name,
+      <if test="encryptionPassword != null">
+        encryption_password,
       </if>
-      <if test="shopDescription != null">
-        shop_description,
+      <if test="originalPassword != null">
+        original_password,
       </if>
-      <if test="shopBussinessScope != null">
-        shop_bussiness_scope,
+      <if test="name != null">
+        name,
       </if>
       <if test="province != null">
         province,
@@ -143,14 +143,14 @@
       <if test="city != null">
         city,
       </if>
-      <if test="businessLicense != null">
-        business_license,
+      <if test="address != null">
+        address,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="createtime != null">
+        createtime,
       </if>
-      <if test="state != null">
-        state,
+      <if test="telphone != null">
+        telphone,
       </if>
       <if test="createdTime != null">
         created_time,
@@ -163,17 +163,17 @@
       <if test="id != null">
         #{id,jdbcType=BIGINT},
       </if>
-      <if test="merchantId != null">
-        #{merchantId,jdbcType=BIGINT},
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
       </if>
-      <if test="shopName != null">
-        #{shopName,jdbcType=VARCHAR},
+      <if test="encryptionPassword != null">
+        #{encryptionPassword,jdbcType=VARCHAR},
       </if>
-      <if test="shopDescription != null">
-        #{shopDescription,jdbcType=VARCHAR},
+      <if test="originalPassword != null">
+        #{originalPassword,jdbcType=VARCHAR},
       </if>
-      <if test="shopBussinessScope != null">
-        #{shopBussinessScope,jdbcType=VARCHAR},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
       <if test="province != null">
         #{province,jdbcType=VARCHAR},
@@ -181,14 +181,14 @@
       <if test="city != null">
         #{city,jdbcType=VARCHAR},
       </if>
-      <if test="businessLicense != null">
-        #{businessLicense,jdbcType=VARCHAR},
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="createtime != null">
+        #{createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        #{state,jdbcType=INTEGER},
+      <if test="telphone != null">
+        #{telphone,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -198,29 +198,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.seckill.common.bean.ManagerShopExample" resultType="java.lang.Long">
-    select count(*) from manager_shop
+  <select id="countByExample" parameterType="com.seckill.common.bean.ManagerMerchantExample" resultType="java.lang.Long">
+    select count(*) from manager_merchant
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update manager_shop
+    update manager_merchant
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.merchantId != null">
-        merchant_id = #{record.merchantId,jdbcType=BIGINT},
+      <if test="record.account != null">
+        account = #{record.account,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopName != null">
-        shop_name = #{record.shopName,jdbcType=VARCHAR},
+      <if test="record.encryptionPassword != null">
+        encryption_password = #{record.encryptionPassword,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopDescription != null">
-        shop_description = #{record.shopDescription,jdbcType=VARCHAR},
+      <if test="record.originalPassword != null">
+        original_password = #{record.originalPassword,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopBussinessScope != null">
-        shop_bussiness_scope = #{record.shopBussinessScope,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.province != null">
         province = #{record.province,jdbcType=VARCHAR},
@@ -228,14 +228,14 @@
       <if test="record.city != null">
         city = #{record.city,jdbcType=VARCHAR},
       </if>
-      <if test="record.businessLicense != null">
-        business_license = #{record.businessLicense,jdbcType=VARCHAR},
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      <if test="record.createtime != null">
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.state != null">
-        state = #{record.state,jdbcType=INTEGER},
+      <if test="record.telphone != null">
+        telphone = #{record.telphone,jdbcType=VARCHAR},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -249,37 +249,37 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update manager_shop
+    update manager_merchant
     set id = #{record.id,jdbcType=BIGINT},
-      merchant_id = #{record.merchantId,jdbcType=BIGINT},
-      shop_name = #{record.shopName,jdbcType=VARCHAR},
-      shop_description = #{record.shopDescription,jdbcType=VARCHAR},
-      shop_bussiness_scope = #{record.shopBussinessScope,jdbcType=VARCHAR},
+      account = #{record.account,jdbcType=VARCHAR},
+      encryption_password = #{record.encryptionPassword,jdbcType=VARCHAR},
+      original_password = #{record.originalPassword,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
       province = #{record.province,jdbcType=VARCHAR},
       city = #{record.city,jdbcType=VARCHAR},
-      business_license = #{record.businessLicense,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      state = #{record.state,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      telphone = #{record.telphone,jdbcType=VARCHAR},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.seckill.common.bean.ManagerShop">
-    update manager_shop
+  <update id="updateByPrimaryKeySelective" parameterType="com.seckill.common.bean.ManagerMerchant">
+    update manager_merchant
     <set>
-      <if test="merchantId != null">
-        merchant_id = #{merchantId,jdbcType=BIGINT},
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
       </if>
-      <if test="shopName != null">
-        shop_name = #{shopName,jdbcType=VARCHAR},
+      <if test="encryptionPassword != null">
+        encryption_password = #{encryptionPassword,jdbcType=VARCHAR},
       </if>
-      <if test="shopDescription != null">
-        shop_description = #{shopDescription,jdbcType=VARCHAR},
+      <if test="originalPassword != null">
+        original_password = #{originalPassword,jdbcType=VARCHAR},
       </if>
-      <if test="shopBussinessScope != null">
-        shop_bussiness_scope = #{shopBussinessScope,jdbcType=VARCHAR},
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="province != null">
         province = #{province,jdbcType=VARCHAR},
@@ -287,14 +287,14 @@
       <if test="city != null">
         city = #{city,jdbcType=VARCHAR},
       </if>
-      <if test="businessLicense != null">
-        business_license = #{businessLicense,jdbcType=VARCHAR},
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="createtime != null">
+        createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
-      <if test="state != null">
-        state = #{state,jdbcType=INTEGER},
+      <if test="telphone != null">
+        telphone = #{telphone,jdbcType=VARCHAR},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -305,17 +305,17 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.seckill.common.bean.ManagerShop">
-    update manager_shop
-    set merchant_id = #{merchantId,jdbcType=BIGINT},
-      shop_name = #{shopName,jdbcType=VARCHAR},
-      shop_description = #{shopDescription,jdbcType=VARCHAR},
-      shop_bussiness_scope = #{shopBussinessScope,jdbcType=VARCHAR},
+  <update id="updateByPrimaryKey" parameterType="com.seckill.common.bean.ManagerMerchant">
+    update manager_merchant
+    set account = #{account,jdbcType=VARCHAR},
+      encryption_password = #{encryptionPassword,jdbcType=VARCHAR},
+      original_password = #{originalPassword,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
       province = #{province,jdbcType=VARCHAR},
       city = #{city,jdbcType=VARCHAR},
-      business_license = #{businessLicense,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      state = #{state,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      telphone = #{telphone,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

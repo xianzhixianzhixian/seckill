@@ -2,7 +2,7 @@ package com.seckill.manager.user.service.impl;
 
 import com.seckill.common.utils.MD5Util;
 import com.seckill.common.bean.ManagerUser;
-import com.seckill.common.mapper.ManagerUserMapper;
+import com.seckill.manager.user.mapper.ManagerUserMapper;
 import com.seckill.common.bean.ManagerUserExample;
 import com.seckill.manager.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package com.seckill.manager.product.service.impl;
 
 import com.seckill.common.bean.ManagerProductInfo;
-import com.seckill.common.mapper.ManagerProductInfoMapper;
+import com.seckill.manager.product.mapper.ManagerProductInfoMapper;
 import com.seckill.common.bean.ManagerProductInfoExample;
 import com.seckill.manager.product.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,14 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     }
 
     @Override
-    public List<ManagerProductInfo> listProductInfo(Long shopId){
+    public List<ManagerProductInfo> listProductInfo(Long shopId, Integer state){
         ManagerProductInfoExample example = new ManagerProductInfoExample();
-        if (shopId != -1) {
-            ManagerProductInfoExample.Criteria criteria = example.createCriteria();
+        ManagerProductInfoExample.Criteria criteria = example.createCriteria();
+        if (shopId != null && shopId != -1) {
             criteria.andShopIdEqualTo(shopId);
-            criteria.andStateEqualTo(1);
+        }
+        if (state != null && state != -1) {
+            criteria.andStateEqualTo(state);
         }
         return productInfoMapper.selectByExample(example);
     }

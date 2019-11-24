@@ -21,7 +21,7 @@ public class ProductController {
 
     @PostMapping(value = "/listProductByShopId")
     public List<ManagerProductInfo> listProductByShopId(Long shopId) {
-        List<ManagerProductInfo> list = productInfoService.listProductInfo(shopId);
+        List<ManagerProductInfo> list = productInfoService.listProductInfo(shopId, 1);
         return list;
     }
 

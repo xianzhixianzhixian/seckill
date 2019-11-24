@@ -5,8 +5,8 @@ import com.seckill.manager.user.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping(value = "/user")
 @RestController
+@RequestMapping(value = "/user")
 public class UserController {
 
     @Autowired

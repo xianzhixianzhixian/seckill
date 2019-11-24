@@ -19,39 +19,10 @@ public class ProductManageController {
     @Autowired
     private ProductInfoServiceImpl productInfoService;
 
-    @GetMapping(value = "/toApplyProduct")
-    public String toApplyProduct() {
-        return "toApplyProduct";
-    }
-
-
-    @PostMapping(value = "/applyProduct")
-    public String applyProduct(ManagerProductInfo productInfo, Model model) {
-        if (StringUtils.isBlank(productInfo.getProductName())) {
-            model.addAttribute("error","商品名称不能为空");
-            return "toRegisterUser";
-        }
-        if (StringUtils.isBlank(productInfo.getProductTitle())) {
-            model.addAttribute("error","商品标题不能为空");
-            return "toRegisterUser";
-        }
-        if (productInfo.getProductPrice() == null) {
-            model.addAttribute("error","商品价格不能为空");
-            return "toRegisterUser";
-        }
+    @GetMapping("/listProduct")
+    public String listProduct(Long shopId, Integer state, Model model) {
         try {
-            productInfoService.saveProductInfo(productInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "viewUser";
-    }
-
-
-    @GetMapping(value = "/listProduct")
-    public String listProduct(Model model) {
-        try {
-            List<ManagerProductInfo> list = productInfoService.listProductInfo(-1L);
+            List<ManagerProductInfo> list = productInfoService.listProductInfo(shopId, state);
             model.addAttribute("productList", list);
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,7 +30,7 @@ public class ProductManageController {
         return "listproduct";
     }
 
-    @PostMapping(value = "/updateState")
+    @GetMapping(value = "/updateState")
     public String updateState(Long id, Integer state) {
         try {
             ManagerProductInfo productInfo = new ManagerProductInfo();

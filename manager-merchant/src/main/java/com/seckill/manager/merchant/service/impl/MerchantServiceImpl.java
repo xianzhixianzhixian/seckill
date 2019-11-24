@@ -2,7 +2,7 @@ package com.seckill.manager.merchant.service.impl;
 
 import com.seckill.common.bean.ManagerMerchant;
 import com.seckill.common.bean.ManagerMerchantExample;
-import com.seckill.common.mapper.ManagerMerchantMapper;
+import com.seckill.manager.merchant.mapper.ManagerMerchantMapper;
 import com.seckill.common.utils.MD5Util;
 import com.seckill.manager.merchant.service.MerchantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class MerchantServiceImpl implements MerchantService {
     }
 
     @Override
-    public Boolean verifyMerchantAccount(ManagerMerchant merchantInfo) throws Exception {
+    public ManagerMerchant verifyMerchantAccount(ManagerMerchant merchantInfo) throws Exception {
         String account = merchantInfo.getAccount();
         String password = merchantInfo.getOriginalPassword();
         ManagerMerchantExample example = new ManagerMerchantExample();
@@ -38,10 +38,9 @@ public class MerchantServiceImpl implements MerchantService {
         criteria.andAccountEqualTo(account);
         List<ManagerMerchant> merchantInfoList = merchantMapper.selectByExample(example);
         if(merchantInfoList == null || merchantInfoList.size() == 0) {
-            return false;
+            return null;
         }
         ManagerMerchant merchantInfoSearch = merchantInfoList.get(0);
-        String encryptionPassword = merchantInfoSearch.getEncryptionPassword();
-        return MD5Util.verify(password, MD5Util.MD5KEY, encryptionPassword);
+        return merchantInfoSearch;
     }
 }

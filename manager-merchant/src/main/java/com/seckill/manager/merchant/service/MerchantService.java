@@ -25,5 +25,5 @@ public interface MerchantService {
      * @return
      * @throws Exception
      */
-    Boolean verifyMerchantAccount(ManagerMerchant merchantInfo) throws Exception;
+    ManagerMerchant verifyMerchantAccount(ManagerMerchant merchantInfo) throws Exception;
 }

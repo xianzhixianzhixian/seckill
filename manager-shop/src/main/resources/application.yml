@@ -17,3 +17,7 @@ eureka:
 
 mybatis:
   mapper-locations: classpath*:src/main/java/**/*Mapper.xml
+
+logging:
+  level:
+    com.seckill.manager.shop.mapper: debug

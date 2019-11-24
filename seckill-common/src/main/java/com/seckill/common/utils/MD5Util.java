@@ -24,13 +24,13 @@ public class MD5Util {
      * 验证密码是否正确
      * @param text
      * @param key
-     * @param md5
+     * @param md5Passwd
      * @return
      * @throws Exception
      */
-    public static Boolean verify(String text, String key, String md5) throws Exception {
+    public static Boolean verify(String text, String key, String md5Passwd) throws Exception {
         String md5Text = md5(text, key);
-        if (md5Text.equalsIgnoreCase(md5)) {
+        if (md5Text.equalsIgnoreCase(md5Passwd)) {
             return true;
         } else {
             return false;
