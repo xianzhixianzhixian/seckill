@@ -1,32 +1,34 @@
 package com.seckill.product.service;
 
-import com.seckill.common.bean.ManagerProductInfo;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import com.seckill.common.bean.SeckillProduct;
 
 import java.util.List;
 
 /**
- * 使用feign去调用manager-product项目中的接口
+ * @author xianzhixianzhixian
+ * @date 201911
  */
-@FeignClient(value = "manager-product")
 public interface SeckillProductService {
 
     /**
-     * 根据商店id查询商品列表
-     * @param shopId
+     * 保存秒杀商品
+     * @param seckillProduct
      * @return
      */
-    @PostMapping("/product/listProductByShopId")
-    public List<ManagerProductInfo> listProductByShopId(Long shopId);
+    Integer saveSeckillProfduct(SeckillProduct seckillProduct);
 
     /**
-     * 根据商品id查询商品信息
-     * @param productId
+     * 列出秒杀商品信息
+     * @param shopId
+     * @param state
      * @return
      */
-    @PostMapping("/product/findProductByProductId")
-    public ManagerProductInfo findProductByProductId(Long productId);
+    List<SeckillProduct> listSeckillProduct(Long shopId, Integer state);
 
+    /**
+     * 更新秒杀商品信息
+     * @param seckillProduct
+     * @return
+     */
+    Integer updateSeckillProductInfo(SeckillProduct seckillProduct);
 }
