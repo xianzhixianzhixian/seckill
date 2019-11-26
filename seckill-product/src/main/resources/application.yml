@@ -12,3 +12,7 @@ spring:
 
 mybatis:
   mapper-locations: classpath*:src/main/java/**/*Mapper.xml
+
+logging:
+  level:
+    com.seckill.*: debug

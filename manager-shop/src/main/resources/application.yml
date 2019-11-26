@@ -15,4 +15,4 @@ mybatis:
 
 logging:
   level:
-    com.seckill.manager.shop.mapper: debug
+    com.seckill.*: debug
