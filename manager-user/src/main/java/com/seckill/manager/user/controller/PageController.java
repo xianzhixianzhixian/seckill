@@ -1,80 +1,64 @@
 package com.seckill.manager.user.controller;
 
 import com.seckill.common.bean.ManagerUser;
+import com.seckill.common.request.SeckillCodeMapping;
+import com.seckill.common.request.SeckillResult;
 import com.seckill.manager.user.service.impl.UserServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * 页面控制controller
  * @author xianzhixianzhixian on 2019/11/06
  */
+@RestController
 @RequestMapping("/user")
-@Controller
 public class PageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 
     @Autowired
     private UserServiceImpl userService;
 
-    @RequestMapping(value = "/userPage", method = RequestMethod.GET)
-    public String userPage(Long id, Model model) {
-        ManagerUser ManagerUser = userService.findUserById(id);
-        model.addAttribute("userInfo", ManagerUser);
-        return "viewUser";
+    @PostMapping("/userPage")
+    public SeckillResult userPage(Long id) {
+        return new SeckillResult(userService.findUserById(id));
     }
 
-    @RequestMapping(value = "/toRegisterUser", method = RequestMethod.GET)
-    public String toRegisterUser() {
-        return "toRegisterUser";
-    }
-
-    @RequestMapping(value = "/toLogin", method = RequestMethod.GET)
-    public String toLogin() {
-        return "toLogin";
-    }
-
-    @RequestMapping(value = "/registerUser", method = RequestMethod.POST)
-    public String registerUser(ManagerUser userInfo, Model model) {
-        if (StringUtils.isBlank(userInfo.getAccount())) {
-            model.addAttribute("error", "用户账户不能为空");
-            return "toRegisterUser";
+    @PostMapping("/registerUser")
+    public SeckillResult registerUser(@RequestBody ManagerUser userInfo) {
+        if (StringUtils.isEmpty(userInfo.getAccount())) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "用户账户不能为空");
         }
-        if (StringUtils.isBlank(userInfo.getEncryptionPassword()) || StringUtils.isBlank(userInfo.getOriginalPassword())) {
-            model.addAttribute("error", "用户密码不能为空");
-            return "toRegisterUser";
+        if (StringUtils.isEmpty(userInfo.getEncryptionPassword()) || StringUtils.isEmpty(userInfo.getOriginalPassword())) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "用户密码不能为空");
         }
         if (!userInfo.getEncryptionPassword().equals(userInfo.getOriginalPassword())) {
-            model.addAttribute("error", "两次输入密码不一致");
-            return "toRegisterUser";
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "两次输入密码不一致");
         }
-        userService.addUser(userInfo);
-        return "toRegisterUser";
+        return new SeckillResult(userService.addUser(userInfo));
     }
 
-    @RequestMapping(value = "/loginUser", method = RequestMethod.POST)
-    public String loginUser(String account, String passwd, Model model) {
-        if (StringUtils.isBlank(account)) {
-            model.addAttribute("error", "用户账户不能为空");
-            return "toLogin";
+    @PostMapping("/loginUser")
+    public SeckillResult loginUser(String account, String passwd) {
+        if (StringUtils.isEmpty(account)) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "用户账户不能为空");
         }
-        if (StringUtils.isBlank(passwd)) {
-            model.addAttribute("error", "密码不能为空");
-            return "toLogin";
+        if (StringUtils.isEmpty(passwd)) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "密码不能为空");
         }
         try {
             Boolean result = userService.verifyAccount(account, passwd);
             if (!result) {
-                model.addAttribute("error", "账户或密码错误");
+                return new SeckillResult(SeckillCodeMapping.BUSINESS_FAIL, "账户或密码错误");
             } else {
-                model.addAttribute("error", "登录成功");
+                return new SeckillResult("登录成功");
             }
-        } catch (Throwable t) {
-
+        } catch (Exception e) {
+            logger.error("用户登录错误，原因{}", e);
+            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "用户登录错误", e);
         }
-        return "toLogin";
     }
 }

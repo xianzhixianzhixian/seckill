@@ -16,7 +16,6 @@
     <version>1.0</version>
 
     <modules>
-        <module>seckill-register-center</module>
         <module>seckill-common</module>
         <module>seckill-product</module>
         <module>manager-user</module>
@@ -27,7 +26,7 @@
     </modules>
 
     <properties>
-        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
         <mybatis-spring.version>2.1.0</mybatis-spring.version>
         <mybatis.version>3.2.8</mybatis.version>
         <seckill-common.version>1.0</seckill-common.version>

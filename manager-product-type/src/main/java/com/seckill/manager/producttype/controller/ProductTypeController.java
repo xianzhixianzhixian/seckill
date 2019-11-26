@@ -1,43 +1,36 @@
 package com.seckill.manager.producttype.controller;
 
 import com.seckill.common.bean.ManagerProductType;
+import com.seckill.common.request.SeckillCodeMapping;
+import com.seckill.common.request.SeckillResult;
 import com.seckill.manager.producttype.service.impl.ProductTypeServiceImpl;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/productType")
 public class ProductTypeController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductTypeController.class);
 
     @Autowired
     private ProductTypeServiceImpl productTypeService;
 
-    @RequestMapping(value = "/toAddProductTypeInfo",method = RequestMethod.GET)
-    public String toAddProductTypeInfo(){
-        return "toAddProductTypeInfo";
-    }
+    @PostMapping("/addProductTypeInfo")
+    public SeckillResult addProductTypeInfo(@RequestBody ManagerProductType productTypeInfo){
 
-
-    @RequestMapping(value = "/addProductTypeInfo", method = RequestMethod.POST)
-    public String addProductTypeInfo(ManagerProductType productTypeInfo, Model model){
-        if(StringUtils.isBlank(productTypeInfo.getProductTypeName())){
-            model.addAttribute("error","商品类别名称不能为空");
-            return "toAddProductTypeInfo";
+        if(StringUtils.isEmpty(productTypeInfo.getProductTypeName())) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "商品类别名称不能为空");
         }
         try {
-            productTypeService.saveProductType(productTypeInfo);
+            return new SeckillResult(productTypeService.saveProductType(productTypeInfo));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("添加商品分类信息错误，原因{}", e);
+            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "添加商品分类信息错误", e);
         }
-        return "AddProductTypeInfoSuccess";
     }
-
-
-
-
 
 }

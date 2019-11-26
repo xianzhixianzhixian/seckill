@@ -10,10 +10,6 @@ spring:
     username: root
     password: 123456
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8081/eureka/
 
 mybatis:
   mapper-locations: classpath*:src/main/java/**/*Mapper.xml

@@ -1,25 +1,22 @@
 package com.seckill.product.controller;
 
-import com.seckill.common.bean.ManagerProductInfo;
 import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.request.SeckillResult;
 import com.seckill.product.service.SeckillProductFeignService;
 import com.seckill.product.service.impl.SeckillProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 商品秒杀服务controller
  */
+@RestController
 @RequestMapping("/seckillProduct")
-@Controller
 public class SeckillProductController {
 
     @Autowired
@@ -28,51 +25,37 @@ public class SeckillProductController {
     private SeckillProductServiceImpl seckillProductService;
 
     @PostMapping("/listProductByShopId")
-    public List<ManagerProductInfo> listProductByShopId(Long shopId) {
-        return seckillProductFeignService.listProductByShopId(shopId);
+    public SeckillResult listProductByShopId(Long shopId) {
+        return new SeckillResult(seckillProductFeignService.listProductByShopId(shopId));
     }
 
-    @PostMapping("/listProductBy")
-    public String listShopProduct(Long shopId, Model model) {
-        List<ManagerProductInfo> productInfoList = seckillProductFeignService.listProductByShopId(shopId);
-        model.addAttribute("productInfoList", productInfoList);
-        return "listproduct";
-    }
-
-    @PostMapping("/preSaveSeckillProduct")
-    public String saveSeckillProduct(Long productId, Model model) {
-        ManagerProductInfo productInfo = seckillProductFeignService.findProductByProductId(productId);
-        model.addAttribute("productInfo", productInfo);
-        return "preSaveSeckill";
+    @PostMapping("/findProductByProductId")
+    public SeckillResult findProductByProductId(Long productId) {
+        return new SeckillResult(seckillProductFeignService.findProductByProductId(productId));
     }
 
     @PostMapping("/saveSeckillProduct")
-    public Integer saveSeckillProfduct(SeckillProduct seckillProduct) {
-        return seckillProductService.saveSeckillProfduct(seckillProduct);
+    public SeckillResult saveSeckillProfduct(@RequestBody SeckillProduct seckillProduct) {
+        return new SeckillResult(seckillProductService.saveSeckillProfduct(seckillProduct));
     }
 
-    @GetMapping("/listAllSeckillProduct")
-    public String listAllSeckillProduct(Long shopId, Model model) {
+    @PostMapping("/listAllSeckillProduct")
+    public SeckillResult listAllSeckillProduct(Long shopId) {
         //查询商店申请中的商品
-        List<SeckillProduct> seckillProductList = seckillProductService.listSeckillProduct(shopId, 0);
-        model.addAttribute("seckillProductList", seckillProductList);
-        return "listSeckillProductInfo";
+        return new SeckillResult(seckillProductService.listSeckillProduct(shopId, 0));
     }
 
-    @GetMapping("/updateSeckillProductInfo")
-    public String updateSeckillProductInfo(Long id, Integer state) {
+    @PostMapping("/updateSeckillProductInfo")
+    public SeckillResult updateSeckillProductInfo(Long id, Integer state) {
         SeckillProduct seckillProduct = new SeckillProduct();
         seckillProduct.setId(id);
         seckillProduct.setState(state);
         seckillProduct.setApproveTime(new Date());
-        seckillProductService.updateSeckillProductInfo(seckillProduct);
-        return "seckillUpdateSuccess";
+        return new SeckillResult(seckillProductService.updateSeckillProductInfo(seckillProduct));
     }
 
-    @GetMapping("/listAllSeckillProductByState")
-    public String listAllSeckillProductByState(Long shopId, Integer state, Model model) {
-        List<SeckillProduct> seckillProductList = seckillProductService.listSeckillProduct(shopId, state);
-        model.addAttribute("seckillProductList", seckillProductList);
-        return "seckillPortal";
+    @PostMapping("/listAllSeckillProductByState")
+    public SeckillResult listAllSeckillProductByState(Long shopId, Integer state) {
+        return new SeckillResult(seckillProductService.listSeckillProduct(shopId, state));
     }
 }

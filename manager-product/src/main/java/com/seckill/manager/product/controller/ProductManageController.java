@@ -1,45 +1,48 @@
 package com.seckill.manager.product.controller;
 
 import com.seckill.common.bean.ManagerProductInfo;
+import com.seckill.common.request.SeckillCodeMapping;
+import com.seckill.common.request.SeckillResult;
 import com.seckill.manager.product.service.impl.ProductInfoServiceImpl;
-import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/product")
 public class ProductManageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductManageController.class);
 
     @Autowired
     private ProductInfoServiceImpl productInfoService;
 
-    @GetMapping("/listProduct")
-    public String listProduct(Long shopId, Integer state, Model model) {
+    @PostMapping("/listProduct")
+    public SeckillResult listProduct(Long shopId, Integer state) {
         try {
             List<ManagerProductInfo> list = productInfoService.listProductInfo(shopId, state);
-            model.addAttribute("productList", list);
+            return new SeckillResult(list);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("查询商品信息列表错误，原因{}", e);
+            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "查询商品信息列表错误", e);
         }
-        return "listproduct";
     }
 
-    @GetMapping(value = "/updateState")
-    public String updateState(Long id, Integer state) {
+    @PostMapping("/updateState")
+    public SeckillResult updateState(Long id, Integer state) {
         try {
             ManagerProductInfo productInfo = new ManagerProductInfo();
             productInfo.setId(id);
             productInfo.setState(state);
-            productInfoService.updateProductInfo(productInfo);
+            return new SeckillResult(productInfoService.updateProductInfo(productInfo));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("更新商户状态错误，原因{}", e);
+            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "更新商户状态错误", e);
         }
-        return "listproduct";
     }
 }

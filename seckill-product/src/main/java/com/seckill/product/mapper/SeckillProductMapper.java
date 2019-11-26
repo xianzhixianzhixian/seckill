@@ -1,11 +1,13 @@
-package com.seckill.common.mapper;
+package com.seckill.product.mapper;
 
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillProductExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface SeckillProductMapper {
     long countByExample(SeckillProductExample example);
 

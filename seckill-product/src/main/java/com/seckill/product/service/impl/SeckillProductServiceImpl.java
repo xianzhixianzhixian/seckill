@@ -2,7 +2,7 @@ package com.seckill.product.service.impl;
 
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillProductExample;
-import com.seckill.common.mapper.SeckillProductMapper;
+import com.seckill.product.mapper.SeckillProductMapper;
 import com.seckill.product.service.SeckillProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

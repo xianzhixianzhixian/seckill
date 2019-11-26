@@ -1,75 +1,60 @@
 package com.seckill.manager.shop.controller;
 
 import com.seckill.common.bean.ManagerShop;
+import com.seckill.common.request.SeckillCodeMapping;
+import com.seckill.common.request.SeckillResult;
 import com.seckill.manager.shop.service.impl.ShopServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@RestController
 @RequestMapping("/shop")
-@Controller
 public class ShopController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ShopController.class);
 
     @Autowired
     private ShopServiceImpl shopService;
 
-    @RequestMapping(value = "/toApplyShop", method = RequestMethod.GET)
-    public String toApplyShop(){
-        return "toApplyShop";
-    }
-
-    @RequestMapping(value = "/applyShop", method = RequestMethod.POST)
-    public String applyShop(ManagerShop shopInfo, Model model){
-        if(StringUtils.isBlank(shopInfo.getShopName())){
-            model.addAttribute("error","店铺名称不能为空");
-            return "toApplyShop";
+    @PostMapping("/applyShop")
+    public SeckillResult applyShop(@RequestBody ManagerShop shopInfo){
+        if (StringUtils.isEmpty(shopInfo.getShopName())) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "店铺名称不能为空");
         }
-        if(StringUtils.isBlank(shopInfo.getShopBussinessScope())){
-            model.addAttribute("error","店铺经营范围不能为空");
-            return "toApplyShop";
+        if (StringUtils.isEmpty(shopInfo.getShopBussinessScope())) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "店铺经营范围不能为空");
         }
-        if(StringUtils.isBlank(shopInfo.getBusinessLicense())){
-            model.addAttribute("error","店铺营业执照不能为空");
-            return "toApplyShop";
+        if (StringUtils.isEmpty(shopInfo.getBusinessLicense())) {
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "店铺营业执照不能为空");
         }
         try {
-            shopService.addShopInfo(shopInfo);
+            return new SeckillResult(shopService.addShopInfo(shopInfo));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("添加商店信息错误，原因{}", e);
+            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "添加商店信息错误", e);
         }
-        return "toSearchShop";
     }
 
-    @RequestMapping(value = "/toSearchShop", method = RequestMethod.GET)
-    public String toSearchShop(){
-        return "toSearchShop";
-    }
-
-    @RequestMapping(value = "/searchShop", method = RequestMethod.POST)
-    public String searchShop(ManagerShop shopInfo, Model model){
+    @PostMapping("/searchShop")
+    public SeckillResult searchShop(@RequestBody ManagerShop shopInfo){
         if (StringUtils.isEmpty(shopInfo.getShopName())) {
-            model.addAttribute("error","店铺名称不能为空");
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "店铺名称不能为空");
         }
         if (shopInfo.getState() == null) {
-            model.addAttribute("error","店铺状态不能为空");
+            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "店铺状态不能为空");
         }
-        List<ManagerShop> listShop = shopService.listShopInfoBy(shopInfo);
-        model.addAttribute("listShop",listShop);
-        return "listShop";
+        return new SeckillResult(shopService.listShopInfoBy(shopInfo));
     }
 
-    @RequestMapping(value = "/updateState",method = RequestMethod.GET)
-    public String updateState(Long id, Integer state){
+    @PostMapping("/updateState")
+    public SeckillResult updateState(Long id, Integer state){
         ManagerShop shopInfo = new ManagerShop();
         shopInfo.setId(id);
         shopInfo.setState(state);
-        shopService.updateShopInfoSelective(shopInfo);
-        return "updateSuccess";
+        return new SeckillResult(shopService.updateShopInfoSelective(shopInfo));
     }
 
 }
