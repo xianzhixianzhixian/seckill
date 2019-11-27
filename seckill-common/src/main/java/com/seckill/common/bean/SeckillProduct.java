@@ -173,4 +173,27 @@ public class SeckillProduct {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "SeckillProduct{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", seckillNum=" + seckillNum +
+                ", seckillPrice=" + seckillPrice +
+                ", seckillInventory=" + seckillInventory +
+                ", createTime=" + createTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", shopId=" + shopId +
+                ", state=" + state +
+                ", productPrice=" + productPrice +
+                ", productTitle='" + productTitle + '\'' +
+                ", productName='" + productName + '\'' +
+                ", approveTime=" + approveTime +
+                ", seckillVersion=" + seckillVersion +
+                ", createdTime=" + createdTime +
+                ", updatedTime=" + updatedTime +
+                '}';
+    }
 }
