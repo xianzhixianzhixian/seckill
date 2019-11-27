@@ -1,6 +1,6 @@
 package com.seckill.product.service;
 
-import com.seckill.common.bean.ManagerProductInfo;
+import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.request.SeckillResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +19,7 @@ public interface SeckillProductFeignService {
      * @return
      */
     @PostMapping("/product/listProductByShopId")
-    SeckillResult listProductByShopId(Long shopId);
+    List<SeckillProduct> listProductByShopId(Long shopId);
 
     /**
      * 根据商品id查询商品信息

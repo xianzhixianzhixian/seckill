@@ -3,7 +3,7 @@ package com.seckill.common.request;
 /**
  * 返回码定义
  */
-public class SeckillCodeMapping {
+public class SeckillReturnCodeMapping {
 
     /**
      * 成功
@@ -11,7 +11,7 @@ public class SeckillCodeMapping {
     public static final String SUCCESS_CODE = "00";
 
     /**
-     * 缺少参数信息
+     * 参数信息错误
      */
     public static final String PARAMETER_ERROR = "02";
 

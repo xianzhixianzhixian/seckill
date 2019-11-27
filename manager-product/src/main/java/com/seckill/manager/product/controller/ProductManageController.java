@@ -1,8 +1,6 @@
 package com.seckill.manager.product.controller;
 
 import com.seckill.common.bean.ManagerProductInfo;
-import com.seckill.common.request.SeckillCodeMapping;
-import com.seckill.common.request.SeckillResult;
 import com.seckill.manager.product.service.impl.ProductInfoServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,26 +21,15 @@ public class ProductManageController {
     private ProductInfoServiceImpl productInfoService;
 
     @PostMapping("/listProduct")
-    public SeckillResult listProduct(Long shopId, Integer state) {
-        try {
-            List<ManagerProductInfo> list = productInfoService.listProductInfo(shopId, state);
-            return new SeckillResult(list);
-        } catch (Exception e) {
-            logger.error("查询商品信息列表错误，原因{}", e);
-            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "查询商品信息列表错误", e);
-        }
+    public List<ManagerProductInfo> listProduct(Long shopId, Integer state) {
+        return productInfoService.listProductInfo(shopId, state);
     }
 
     @PostMapping("/updateState")
-    public SeckillResult updateState(Long id, Integer state) {
-        try {
-            ManagerProductInfo productInfo = new ManagerProductInfo();
-            productInfo.setId(id);
-            productInfo.setState(state);
-            return new SeckillResult(productInfoService.updateProductInfo(productInfo));
-        } catch (Exception e) {
-            logger.error("更新商户状态错误，原因{}", e);
-            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "更新商户状态错误", e);
-        }
+    public Integer updateState(Long id, Integer state) {
+        ManagerProductInfo productInfo = new ManagerProductInfo();
+        productInfo.setId(id);
+        productInfo.setState(state);
+        return productInfoService.updateProductInfo(productInfo);
     }
 }

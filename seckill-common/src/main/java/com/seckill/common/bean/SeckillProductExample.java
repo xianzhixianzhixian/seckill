@@ -236,52 +236,52 @@ public class SeckillProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumEqualTo(Integer value) {
+        public Criteria andSeckillNumEqualTo(Long value) {
             addCriterion("seckill_num =", value, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumNotEqualTo(Integer value) {
+        public Criteria andSeckillNumNotEqualTo(Long value) {
             addCriterion("seckill_num <>", value, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumGreaterThan(Integer value) {
+        public Criteria andSeckillNumGreaterThan(Long value) {
             addCriterion("seckill_num >", value, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSeckillNumGreaterThanOrEqualTo(Long value) {
             addCriterion("seckill_num >=", value, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumLessThan(Integer value) {
+        public Criteria andSeckillNumLessThan(Long value) {
             addCriterion("seckill_num <", value, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumLessThanOrEqualTo(Integer value) {
+        public Criteria andSeckillNumLessThanOrEqualTo(Long value) {
             addCriterion("seckill_num <=", value, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumIn(List<Integer> values) {
+        public Criteria andSeckillNumIn(List<Long> values) {
             addCriterion("seckill_num in", values, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumNotIn(List<Integer> values) {
+        public Criteria andSeckillNumNotIn(List<Long> values) {
             addCriterion("seckill_num not in", values, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumBetween(Integer value1, Integer value2) {
+        public Criteria andSeckillNumBetween(Long value1, Long value2) {
             addCriterion("seckill_num between", value1, value2, "seckillNum");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillNumNotBetween(Integer value1, Integer value2) {
+        public Criteria andSeckillNumNotBetween(Long value1, Long value2) {
             addCriterion("seckill_num not between", value1, value2, "seckillNum");
             return (Criteria) this;
         }
@@ -356,52 +356,52 @@ public class SeckillProductExample {
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryEqualTo(Integer value) {
+        public Criteria andSeckillInventoryEqualTo(Long value) {
             addCriterion("seckill_inventory =", value, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryNotEqualTo(Integer value) {
+        public Criteria andSeckillInventoryNotEqualTo(Long value) {
             addCriterion("seckill_inventory <>", value, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryGreaterThan(Integer value) {
+        public Criteria andSeckillInventoryGreaterThan(Long value) {
             addCriterion("seckill_inventory >", value, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryGreaterThanOrEqualTo(Integer value) {
+        public Criteria andSeckillInventoryGreaterThanOrEqualTo(Long value) {
             addCriterion("seckill_inventory >=", value, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryLessThan(Integer value) {
+        public Criteria andSeckillInventoryLessThan(Long value) {
             addCriterion("seckill_inventory <", value, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryLessThanOrEqualTo(Integer value) {
+        public Criteria andSeckillInventoryLessThanOrEqualTo(Long value) {
             addCriterion("seckill_inventory <=", value, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryIn(List<Integer> values) {
+        public Criteria andSeckillInventoryIn(List<Long> values) {
             addCriterion("seckill_inventory in", values, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryNotIn(List<Integer> values) {
+        public Criteria andSeckillInventoryNotIn(List<Long> values) {
             addCriterion("seckill_inventory not in", values, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryBetween(Integer value1, Integer value2) {
+        public Criteria andSeckillInventoryBetween(Long value1, Long value2) {
             addCriterion("seckill_inventory between", value1, value2, "seckillInventory");
             return (Criteria) this;
         }
 
-        public Criteria andSeckillInventoryNotBetween(Integer value1, Integer value2) {
+        public Criteria andSeckillInventoryNotBetween(Long value1, Long value2) {
             addCriterion("seckill_inventory not between", value1, value2, "seckillInventory");
             return (Criteria) this;
         }

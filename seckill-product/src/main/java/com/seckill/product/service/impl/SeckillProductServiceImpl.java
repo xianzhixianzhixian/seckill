@@ -34,7 +34,12 @@ public class SeckillProductServiceImpl implements SeckillProductService {
     }
 
     @Override
-    public Integer updateSeckillProductInfo(SeckillProduct seckillProduct) {
+    public Integer updateSeckillProductInfoSelective(SeckillProduct seckillProduct) {
         return seckillProductMapper.updateByPrimaryKeySelective(seckillProduct);
+    }
+
+    @Override
+    public SeckillProduct findSeckillProductById(Long id) {
+        return seckillProductMapper.selectByPrimaryKey(id);
     }
 }

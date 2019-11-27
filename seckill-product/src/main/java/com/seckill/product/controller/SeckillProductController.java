@@ -51,7 +51,7 @@ public class SeckillProductController {
         seckillProduct.setId(id);
         seckillProduct.setState(state);
         seckillProduct.setApproveTime(new Date());
-        return new SeckillResult(seckillProductService.updateSeckillProductInfo(seckillProduct));
+        return new SeckillResult(seckillProductService.updateSeckillProductInfoSelective(seckillProduct));
     }
 
     @PostMapping("/listAllSeckillProductByState")

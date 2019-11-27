@@ -1,12 +1,14 @@
 package com.seckill.manager.product.controller;
 
-import com.seckill.common.request.SeckillResult;
+import com.seckill.common.bean.ManagerProductInfo;
 import com.seckill.manager.product.service.impl.ProductInfoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -16,12 +18,12 @@ public class ProductController {
     private ProductInfoServiceImpl productInfoService;
 
     @PostMapping(value = "/listProductByShopId")
-    public SeckillResult listProductByShopId(@RequestBody Long shopId) {
-        return new SeckillResult(productInfoService.listProductInfo(shopId, 1));
+    public List<ManagerProductInfo> listProductByShopId(@RequestBody Long shopId) {
+        return productInfoService.listProductInfo(shopId, 1);
     }
 
     @PostMapping(value = "/findProductByProductId")
-    public SeckillResult findProductByProductId(@RequestBody Long productId) {
-        return new SeckillResult(productInfoService.findProductByProductId(productId));
+    public ManagerProductInfo findProductByProductId(@RequestBody Long productId) {
+        return productInfoService.findProductByProductId(productId);
     }
 }

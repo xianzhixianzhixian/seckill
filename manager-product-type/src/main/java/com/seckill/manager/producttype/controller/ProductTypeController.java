@@ -1,7 +1,7 @@
 package com.seckill.manager.producttype.controller;
 
 import com.seckill.common.bean.ManagerProductType;
-import com.seckill.common.request.SeckillCodeMapping;
+import com.seckill.common.request.SeckillReturnCodeMapping;
 import com.seckill.common.request.SeckillResult;
 import com.seckill.manager.producttype.service.impl.ProductTypeServiceImpl;
 import org.apache.commons.lang3.StringUtils;
@@ -23,13 +23,13 @@ public class ProductTypeController {
     public SeckillResult addProductTypeInfo(@RequestBody ManagerProductType productTypeInfo){
 
         if(StringUtils.isEmpty(productTypeInfo.getProductTypeName())) {
-            return new SeckillResult(SeckillCodeMapping.PARAMETER_ERROR, "商品类别名称不能为空");
+            return new SeckillResult(SeckillReturnCodeMapping.PARAMETER_ERROR, "商品类别名称不能为空");
         }
         try {
             return new SeckillResult(productTypeService.saveProductType(productTypeInfo));
         } catch (Exception e) {
             logger.error("添加商品分类信息错误，原因{}", e);
-            return new SeckillResult(SeckillCodeMapping.SYSTEM_ERROR, "添加商品分类信息错误", e);
+            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "添加商品分类信息错误", e);
         }
     }
 

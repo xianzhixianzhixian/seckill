@@ -8,11 +8,11 @@ public class SeckillProduct {
 
     private Long productId;
 
-    private Integer seckillNum;
+    private Long seckillNum;
 
     private BigDecimal seckillPrice;
 
-    private Integer seckillInventory;
+    private Long seckillInventory;
 
     private Date createTime;
 
@@ -54,11 +54,11 @@ public class SeckillProduct {
         this.productId = productId;
     }
 
-    public Integer getSeckillNum() {
+    public Long getSeckillNum() {
         return seckillNum;
     }
 
-    public void setSeckillNum(Integer seckillNum) {
+    public void setSeckillNum(Long seckillNum) {
         this.seckillNum = seckillNum;
     }
 
@@ -70,11 +70,11 @@ public class SeckillProduct {
         this.seckillPrice = seckillPrice;
     }
 
-    public Integer getSeckillInventory() {
+    public Long getSeckillInventory() {
         return seckillInventory;
     }
 
-    public void setSeckillInventory(Integer seckillInventory) {
+    public void setSeckillInventory(Long seckillInventory) {
         this.seckillInventory = seckillInventory;
     }
 

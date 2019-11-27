@@ -55,7 +55,7 @@ public class SeckillResult {
     }
 
     public SeckillResult(Object data) {
-        this.status = SeckillCodeMapping.SUCCESS_CODE;
+        this.status = SeckillReturnCodeMapping.SUCCESS_CODE;
         this.msg = "交易成功";
         this.data = data;
     }

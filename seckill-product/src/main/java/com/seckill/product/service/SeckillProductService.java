@@ -30,5 +30,12 @@ public interface SeckillProductService {
      * @param seckillProduct
      * @return
      */
-    Integer updateSeckillProductInfo(SeckillProduct seckillProduct);
+    Integer updateSeckillProductInfoSelective(SeckillProduct seckillProduct);
+
+    /**
+     * 根据id查找秒杀商品信息
+     * @param id
+     * @return
+     */
+    SeckillProduct findSeckillProductById(Long id);
 }
