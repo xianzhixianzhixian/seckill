@@ -13,4 +13,11 @@ public interface SeckillUserResultService {
      * @return
      */
     Integer saveSeckillUserResult(SeckillUserResult seckillUserResult);
+
+    /**
+     * 悲观锁查询数据
+     * @param id
+     * @return
+     */
+    SeckillUserResult selectSeckillUserResultByIdForUpdate(Long id);
 }

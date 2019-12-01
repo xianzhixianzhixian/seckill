@@ -1,6 +1,7 @@
 package com.seckill.product.service;
 
 import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillProductExample;
 
 import java.util.List;
 
@@ -26,11 +27,18 @@ public interface SeckillProductService {
     List<SeckillProduct> listSeckillProduct(Long shopId, Integer state);
 
     /**
-     * 更新秒杀商品信息
+     * 根据主键更新秒杀商品信息
      * @param seckillProduct
      * @return
      */
-    Integer updateSeckillProductInfoSelective(SeckillProduct seckillProduct);
+    Integer updateSeckillProductByPrimaryKeySelective(SeckillProduct seckillProduct);
+
+    /**
+     * 根据example更新秒杀商品信息
+     * @param seckillProduct
+     * @return
+     */
+    Integer updateSeckillProductByExampleSelective(SeckillProduct seckillProduct, SeckillProductExample example);
 
     /**
      * 根据id查找秒杀商品信息
@@ -38,4 +46,11 @@ public interface SeckillProductService {
      * @return
      */
     SeckillProduct findSeckillProductById(Long seckillProductId);
+
+    /**
+     * 根据id查找秒杀商品信息
+     * @param seckillProductId
+     * @return
+     */
+    SeckillProduct findSeckillProductByIdForUpdate(Long seckillProductId);
 }

@@ -16,4 +16,9 @@ public class SeckillUserResultServiceImpl implements SeckillUserResultService {
     public Integer saveSeckillUserResult(SeckillUserResult seckillUserResult) {
         return seckillUserResultMapper.insert(seckillUserResult);
     }
+
+    @Override
+    public SeckillUserResult selectSeckillUserResultByIdForUpdate(Long id) {
+        return seckillUserResultMapper.selectByPrimaryKeyForUpdate(id);
+    }
 }

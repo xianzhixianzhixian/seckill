@@ -31,9 +31,30 @@ public class SeckillController {
             return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "系统错误", e);
         }
     }
-    
+
+    @ResponseBody
     @PostMapping("/multipltThreadSeckillProduct")
     public void multipltThreadSeckillProduct(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         seckillService.multipltThreadSeckillProduct(userId, seckillProductId);
+    }
+
+    @ResponseBody
+    @PostMapping("/seckillProductPessimisticLock")
+    public SeckillResult seckillProductPessimisticLock(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        Integer seckillResultNum = seckillService.seckillProductPessimisticLock(userId, seckillProductId);
+        if (seckillResultNum == 0) {
+            return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "商品已经卖完了哦");
+        }
+        return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "恭喜抢到商品");
+    }
+
+    @ResponseBody
+    @PostMapping("/seckillProductOptimisticLock")
+    public SeckillResult seckillProductOptimisticLock(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        Integer seckillResultNum = seckillService.seckillProductOptimisticLock(userId, seckillProductId);
+        if (seckillResultNum == 0) {
+            return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "商品已经卖完了哦");
+        }
+        return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "恭喜抢到商品");
     }
 }

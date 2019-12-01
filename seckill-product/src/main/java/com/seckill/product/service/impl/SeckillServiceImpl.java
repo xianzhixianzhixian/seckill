@@ -1,6 +1,7 @@
 package com.seckill.product.service.impl;
 
 import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillProductExample;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.constant.SeckillNameMapping;
 import com.seckill.product.service.SeckillService;
@@ -21,7 +22,7 @@ public class SeckillServiceImpl implements SeckillService {
 
     private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
 
-    private Map<String, Long> cacheMap = new ConcurrentHashMap<>();
+    private Map<String, Long> cacheMap = new ConcurrentHashMap<>(16);
 
     @Autowired
     private SeckillProductService seckillProductService;
@@ -47,7 +48,7 @@ public class SeckillServiceImpl implements SeckillService {
         seckillProductResult.setId(seckillProduct.getId());
         seckillProductResult.setSeckillNum(seckillNum);
         seckillProductResult.setSeckillInventory(seckillInventory - seckillNum);
-        updateNum = seckillProductService.updateSeckillProductInfoSelective(seckillProductResult);
+        updateNum = seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductResult);
         return updateNum;
     }
 
@@ -64,6 +65,45 @@ public class SeckillServiceImpl implements SeckillService {
         SeckillThread seckillThread = new SeckillThread(userId, seckillNum, seckillInventory, seckillProductId);
         Thread thread = new Thread(seckillThread);
         thread.start();
+    }
+
+    @Override
+    public Integer seckillProductPessimisticLock(Long userId, Long seckillProductId) {
+        Integer seckillResultNum = 0;
+        SeckillProduct seckillProduct = seckillProductService.findSeckillProductByIdForUpdate(seckillProductId);
+        Long seckillInventory = seckillProduct.getSeckillInventory();
+        Long seckillNum = seckillProduct.getSeckillNum();
+        if (seckillNum > seckillInventory) {
+            return seckillResultNum;
+        }
+        SeckillProduct seckillProductUpdate = new SeckillProduct();
+        seckillProductUpdate.setId(seckillProductId);
+        seckillProductUpdate.setSeckillInventory(seckillInventory - seckillNum);
+        seckillResultNum = seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductUpdate);
+        return seckillResultNum;
+    }
+
+    @Override
+    public Integer seckillProductOptimisticLock(Long userId, Long seckillProductId) {
+        Integer seckillResultNum = 0;
+        SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+        Long seckillInventory = seckillProduct.getSeckillInventory();
+        Long seckillNum = seckillProduct.getSeckillNum();
+        if (seckillNum > seckillInventory) {
+            return seckillResultNum;
+        }
+        Integer seckillVersion = seckillProduct.getSeckillVersion();
+        Integer seckillVersionNew = seckillVersion + 1;
+        SeckillProduct seckillProductUpdate = new SeckillProduct();
+        seckillProductUpdate.setId(seckillProductId);
+        seckillProductUpdate.setSeckillInventory(seckillInventory - seckillNum);
+        seckillProductUpdate.setSeckillVersion(seckillVersionNew);
+        SeckillProductExample example = new SeckillProductExample();
+        SeckillProductExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(seckillProductId);
+        criteria.andSeckillVersionEqualTo(seckillVersion);
+        seckillResultNum = seckillProductService.updateSeckillProductByExampleSelective(seckillProductUpdate, example);
+        return seckillResultNum;
     }
 
     class SeckillThread implements Runnable {

@@ -17,6 +17,7 @@ public class SeckillProductServiceImpl implements SeckillProductService {
 
     @Override
     public Integer saveSeckillProfduct(SeckillProduct seckillProduct) {
+        seckillProduct.setSeckillVersion(0);
         return seckillProductMapper.insert(seckillProduct);
     }
 
@@ -34,12 +35,22 @@ public class SeckillProductServiceImpl implements SeckillProductService {
     }
 
     @Override
-    public Integer updateSeckillProductInfoSelective(SeckillProduct seckillProduct) {
+    public Integer updateSeckillProductByPrimaryKeySelective(SeckillProduct seckillProduct) {
         return seckillProductMapper.updateByPrimaryKeySelective(seckillProduct);
+    }
+
+    @Override
+    public Integer updateSeckillProductByExampleSelective(SeckillProduct seckillProduct, SeckillProductExample example) {
+        return seckillProductMapper.updateByExampleSelective(seckillProduct, example);
     }
 
     @Override
     public SeckillProduct findSeckillProductById(Long id) {
         return seckillProductMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public SeckillProduct findSeckillProductByIdForUpdate(Long seckillProductId) {
+        return seckillProductMapper.selectByPrimaryKeyForUpdate(seckillProductId);
     }
 }

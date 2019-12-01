@@ -20,4 +20,19 @@ public interface SeckillService {
      */
     void multipltThreadSeckillProduct(Long userId, Long id);
 
+    /**
+     * 悲观锁秒杀
+     * @param userId
+     * @param id
+     * @return
+     */
+    Integer seckillProductPessimisticLock(Long userId, Long id);
+
+    /**
+     * 乐观锁秒杀商品
+     * @param userId
+     * @param id
+     * @return
+     */
+    Integer seckillProductOptimisticLock(Long userId, Long id);
 }

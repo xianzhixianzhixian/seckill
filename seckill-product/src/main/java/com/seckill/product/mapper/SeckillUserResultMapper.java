@@ -30,4 +30,6 @@ public interface SeckillUserResultMapper {
     int updateByPrimaryKeySelective(SeckillUserResult record);
 
     int updateByPrimaryKey(SeckillUserResult record);
+
+    SeckillUserResult selectByPrimaryKeyForUpdate(Long id);
 }

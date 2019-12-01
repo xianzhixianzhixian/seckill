@@ -23,6 +23,8 @@ public interface SeckillProductMapper {
 
     SeckillProduct selectByPrimaryKey(Long id);
 
+    SeckillProduct selectByPrimaryKeyForUpdate(Long id);
+
     int updateByExampleSelective(@Param("record") SeckillProduct record, @Param("example") SeckillProductExample example);
 
     int updateByExample(@Param("record") SeckillProduct record, @Param("example") SeckillProductExample example);
