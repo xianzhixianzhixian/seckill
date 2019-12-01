@@ -1,7 +1,8 @@
-package com.seckill.common.request;
+package com.seckill.common.bean;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.seckill.common.constant.SeckillReturnCodeMapping;
 
 import java.util.List;
 

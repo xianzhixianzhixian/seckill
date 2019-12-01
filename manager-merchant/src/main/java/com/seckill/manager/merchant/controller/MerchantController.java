@@ -1,8 +1,8 @@
 package com.seckill.manager.merchant.controller;
 
 import com.seckill.common.bean.ManagerMerchant;
-import com.seckill.common.request.SeckillReturnCodeMapping;
-import com.seckill.common.request.SeckillResult;
+import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.utils.MD5Util;
 import com.seckill.manager.merchant.service.impl.MerchantServiceImpl;
 import org.apache.commons.lang3.StringUtils;

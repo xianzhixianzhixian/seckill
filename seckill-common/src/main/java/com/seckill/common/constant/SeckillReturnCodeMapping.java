@@ -1,4 +1,4 @@
-package com.seckill.common.request;
+package com.seckill.common.constant;
 
 /**
  * 返回码定义

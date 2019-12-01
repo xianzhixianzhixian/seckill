@@ -6,10 +6,18 @@ package com.seckill.product.service;
 public interface SeckillService {
 
     /**
-     * 秒杀程序锁
+     * 同步秒杀商品方法
      * @param userId
      * @param productId
      * @return
      */
-    Integer buySeckillProduct(Long userId, Long productId) throws Exception;
+    Integer seckillProductAOP(Long userId, Long productId);
+
+    /**
+     * 多线程异步处理秒杀
+     * @param userId
+     * @param id
+     */
+    void multipltThreadSeckillProduct(Long userId, Long id);
+
 }

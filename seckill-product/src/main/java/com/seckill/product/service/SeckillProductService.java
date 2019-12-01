@@ -34,8 +34,8 @@ public interface SeckillProductService {
 
     /**
      * 根据id查找秒杀商品信息
-     * @param id
+     * @param seckillProductId
      * @return
      */
-    SeckillProduct findSeckillProductById(Long id);
+    SeckillProduct findSeckillProductById(Long seckillProductId);
 }

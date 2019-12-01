@@ -1,7 +1,7 @@
 package com.seckill.product.service;
 
 import com.seckill.common.bean.SeckillProduct;
-import com.seckill.common.request.SeckillResult;
+import com.seckill.common.bean.SeckillResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 

@@ -1,8 +1,8 @@
 package com.seckill.manager.producttype.controller;
 
 import com.seckill.common.bean.ManagerProductType;
-import com.seckill.common.request.SeckillReturnCodeMapping;
-import com.seckill.common.request.SeckillResult;
+import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.bean.SeckillResult;
 import com.seckill.manager.producttype.service.impl.ProductTypeServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

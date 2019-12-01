@@ -1,7 +1,7 @@
 package com.seckill.product.controller;
 
 import com.seckill.common.bean.SeckillProduct;
-import com.seckill.common.request.SeckillResult;
+import com.seckill.common.bean.SeckillResult;
 import com.seckill.product.service.SeckillProductFeignService;
 import com.seckill.product.service.impl.SeckillProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

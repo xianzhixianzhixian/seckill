@@ -1,8 +1,8 @@
 package com.seckill.manager.user.controller;
 
 import com.seckill.common.bean.ManagerUser;
-import com.seckill.common.request.SeckillReturnCodeMapping;
-import com.seckill.common.request.SeckillResult;
+import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.bean.SeckillResult;
 import com.seckill.manager.user.service.impl.UserServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;

@@ -1,6 +1,7 @@
 package com.seckill.product.aop;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 秒杀服务切面锁
@@ -18,9 +21,25 @@ import javax.servlet.http.HttpServletRequest;
 public class SeckillAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(SeckillAspect.class);
+    private static Lock lock = new ReentrantLock();
 
-    @Pointcut("execution(public * com.seckill.product.controller.*.*(..))")
+    @Pointcut("execution(public * com.seckill.product.service.impl.SeckillServiceImpl.seckillProduct(..))")
     public void pointcut() {
+    }
+
+    @Around("pointcut()")
+    public Object around(ProceedingJoinPoint proceedingJoinPoint) {
+        lock.lock();
+        Object object = null;
+        try {
+            logger.info("执行around步骤");
+            object = proceedingJoinPoint.proceed();
+        } catch (Throwable t) {
+            logger.error("around发生异常，原因{}", t);
+        } finally {
+            lock.unlock();
+        }
+        return object;
     }
 
     @Before("pointcut()")
