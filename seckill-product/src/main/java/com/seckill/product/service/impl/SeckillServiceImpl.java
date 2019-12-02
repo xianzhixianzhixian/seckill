@@ -60,7 +60,9 @@ public class SeckillServiceImpl implements SeckillService {
         return updateNum;
     }
 
-    //TODO 为什么这里不加 @Transactional
+    /**
+     * 这里不加 @Transactional 是因为加了也无效，@Transactional在自调用的情况时不会生效
+     */
     @Override
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
         Long seckillInventory = cacheMap.get(SeckillNameMapping.SECKILLINVENTORY + "_" + seckillProductId);
@@ -117,8 +119,6 @@ public class SeckillServiceImpl implements SeckillService {
         return seckillResultNum;
     }
 
-    //TODO 为什么这里要加 @Transactional
-    @Transactional
     @Override
     public void seckillProductQueueAndThread(Long userId, Long seckillProductId) {
         SeckillReuqest seckillReuqest = new SeckillReuqest(userId, seckillProductId);
@@ -239,7 +239,10 @@ public class SeckillServiceImpl implements SeckillService {
 
         @Override
         public void run() {
-            //TODO 这里一定要用这个吗？
+            /**
+             * Thread.interrupted()和Thread.currentThread().isInterrupted()区别
+             * https://blog.csdn.net/zhuyong7/article/details/80852884
+             */
             while (!Thread.interrupted()) {
                 try {
                     SeckillReuqest seckillReuqest = seckillReuqestQueue.take();
