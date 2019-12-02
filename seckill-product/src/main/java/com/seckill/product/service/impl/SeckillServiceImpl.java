@@ -15,14 +15,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 
 @Service
 public class SeckillServiceImpl implements SeckillService {
 
+    public SeckillServiceImpl() {
+        new Thread(new SeckillConsumerThreadQueue()).start();
+    }
+
     private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
 
-    private Map<String, Long> cacheMap = new ConcurrentHashMap<>(16);
+    private ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<>(16);
+
+    private BlockingQueue<SeckillReuqest> seckillReuqestQueue = new LinkedBlockingDeque<>();
 
     @Autowired
     private SeckillProductService seckillProductService;
@@ -52,6 +60,7 @@ public class SeckillServiceImpl implements SeckillService {
         return updateNum;
     }
 
+    //TODO 为什么这里不加 @Transactional
     @Override
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
         Long seckillInventory = cacheMap.get(SeckillNameMapping.SECKILLINVENTORY + "_" + seckillProductId);
@@ -67,6 +76,7 @@ public class SeckillServiceImpl implements SeckillService {
         thread.start();
     }
 
+    @Transactional
     @Override
     public Integer seckillProductPessimisticLock(Long userId, Long seckillProductId) {
         Integer seckillResultNum = 0;
@@ -83,6 +93,7 @@ public class SeckillServiceImpl implements SeckillService {
         return seckillResultNum;
     }
 
+    @Transactional
     @Override
     public Integer seckillProductOptimisticLock(Long userId, Long seckillProductId) {
         Integer seckillResultNum = 0;
@@ -104,6 +115,18 @@ public class SeckillServiceImpl implements SeckillService {
         criteria.andSeckillVersionEqualTo(seckillVersion);
         seckillResultNum = seckillProductService.updateSeckillProductByExampleSelective(seckillProductUpdate, example);
         return seckillResultNum;
+    }
+
+    //TODO 为什么这里要加 @Transactional
+    @Transactional
+    @Override
+    public void seckillProductQueueAndThread(Long userId, Long seckillProductId) {
+        SeckillReuqest seckillReuqest = new SeckillReuqest(userId, seckillProductId);
+        try {
+            seckillReuqestQueue.put(seckillReuqest);
+        } catch (Throwable t) {
+            logger.error("seckillProductQueueAndThread请求队列放入错误，原因{}", t);
+        }
     }
 
     class SeckillThread implements Runnable {
@@ -138,10 +161,15 @@ public class SeckillServiceImpl implements SeckillService {
             logger.info("======线程{} 用户 {}开始秒杀======", Thread.currentThread().getName(), userId);
             if (seckillNum > inventory) {
                 logger.info("线程{} 用户 {}秒杀商品库存不足", Thread.currentThread().getName(), userId);
-                seckillUserResult.setResult(0);
+                seckillUserResult.setResult(1);
                 seckillUserResult.setResultData("用户" + userId + "秒杀失败");
+            } else {
+                logger.info("======线程{} 用户 {}成功秒杀======", Thread.currentThread().getName(), userId);
+                seckillProduct.setSeckillInventory(inventory - seckillNum);
+                seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
             }
             seckillUserResultService.saveSeckillUserResult(seckillUserResult);
+            logger.info("======线程{} 用户 {}结束秒杀======", Thread.currentThread().getName(), userId);
         }
 
         public Long getUserId() {
@@ -174,6 +202,76 @@ public class SeckillServiceImpl implements SeckillService {
 
         public void setProductId(Long seckillProductId) {
             this.seckillProductId = seckillProductId;
+        }
+
+    }
+
+    class SeckillReuqest {
+        private Long userId;
+        private Long seckillProductId;
+
+        public SeckillReuqest() {
+        }
+
+        public SeckillReuqest(Long userId, Long seckillProductId) {
+            this.userId = userId;
+            this.seckillProductId = seckillProductId;
+        }
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        public Long getSeckillProductId() {
+            return seckillProductId;
+        }
+
+        public void setSeckillProductId(Long seckillProductId) {
+            this.seckillProductId = seckillProductId;
+        }
+    }
+
+    class SeckillConsumerThreadQueue implements Runnable {
+
+        @Override
+        public void run() {
+            //TODO 这里一定要用这个吗？
+            while (!Thread.interrupted()) {
+                try {
+                    SeckillReuqest seckillReuqest = seckillReuqestQueue.take();
+                    Long seckillProductId = seckillReuqest.getSeckillProductId();
+                    Long userId = seckillReuqest.getUserId();
+                    SeckillUserResult seckillUserResult = new SeckillUserResult();
+                    SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+                    Long seckillNum = seckillProduct.getSeckillNum();
+                    Long seckillInventory = seckillProduct.getSeckillInventory();
+                    seckillUserResult.setProductId(seckillProduct.getProductId());
+                    seckillUserResult.setSeckillProductId(seckillProductId);
+                    seckillUserResult.setUserId(userId);
+                    seckillUserResult.setResult(0);
+                    seckillUserResult.setResultData("用户" + userId + "秒杀成功");
+                    seckillUserResult.setSeckillTime(new Date());
+                    logger.info("======线程{} 用户 {}开始秒杀======", Thread.currentThread().getName(), userId);
+                    if (seckillNum > seckillInventory) {
+                        logger.info("线程{} 用户 {}秒杀商品库存不足", Thread.currentThread().getName(), userId);
+                        seckillUserResult.setResult(1);
+                        seckillUserResult.setResultData("用户" + userId + "秒杀失败");
+                    } else {
+                        logger.info("======线程{} 用户 {}成功秒杀======", Thread.currentThread().getName(), userId);
+                        seckillProduct.setSeckillInventory(seckillInventory - seckillNum);
+                        seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
+                    }
+                    seckillUserResultService.saveSeckillUserResult(seckillUserResult);
+                    logger.info("======线程{} 用户 {}结束秒杀======", Thread.currentThread().getName(), userId);
+
+                } catch (Throwable t) {
+                    logger.error("seckillProductQueueAndThread请求队列拿出错误，原因{}", t);
+                }
+            }
         }
 
     }

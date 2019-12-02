@@ -35,4 +35,11 @@ public interface SeckillService {
      * @return
      */
     Integer seckillProductOptimisticLock(Long userId, Long id);
+
+    /**
+     * 使用队列和多线程进行秒杀
+     * @param userId
+     * @param seckillProductId
+     */
+    void seckillProductQueueAndThread(Long userId, Long seckillProductId);
 }

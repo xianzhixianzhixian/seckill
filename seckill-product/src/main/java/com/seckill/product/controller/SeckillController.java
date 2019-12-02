@@ -57,4 +57,10 @@ public class SeckillController {
         }
         return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "恭喜抢到商品");
     }
+
+    @ResponseBody
+    @PostMapping("/seckillProductQueueAndThread")
+    public void seckillProductQueueAndThread(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        seckillService.seckillProductQueueAndThread(userId, seckillProductId);
+    }
 }
