@@ -7,10 +7,11 @@ spring:
       discovery:
         enabled: true
         service-name: ${spring.application.name}
-        instance-id: ${spring.application.name}-${server.port}-${random.int}
+        instance-id: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
         health-check-path: /actuator/health
         health-check-interval: 15s
         #配置服务注册
         register: true
         #服务停止时取消注册
         deregister: true
+        prefer-ip-address: true
