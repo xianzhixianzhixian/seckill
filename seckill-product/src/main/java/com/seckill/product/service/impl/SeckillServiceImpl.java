@@ -7,12 +7,14 @@ import com.seckill.common.constant.SeckillNameMapping;
 import com.seckill.product.service.SeckillService;
 import com.seckill.product.service.SeckillProductFeignService;
 import com.seckill.product.service.SeckillProductService;
+import com.seckill.product.util.RedisLockUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -38,6 +40,8 @@ public class SeckillServiceImpl implements SeckillService {
     private SeckillProductFeignService seckillProductFeignService;
     @Autowired
     private SeckillUserResultServiceImpl seckillUserResultService;
+    @Autowired
+    private RedisLockUtil redisLockUtil;
 
     @Transactional
     @Override
@@ -103,6 +107,7 @@ public class SeckillServiceImpl implements SeckillService {
         Long seckillInventory = seckillProduct.getSeckillInventory();
         Long seckillNum = seckillProduct.getSeckillNum();
         if (seckillNum > seckillInventory) {
+            logger.info("秒杀数量{} 库存{}，库存不足", seckillNum, seckillInventory);
             return seckillResultNum;
         }
         Integer seckillVersion = seckillProduct.getSeckillVersion();
@@ -127,6 +132,32 @@ public class SeckillServiceImpl implements SeckillService {
         } catch (Throwable t) {
             logger.error("seckillProductQueueAndThread请求队列放入错误，原因{}", t);
         }
+    }
+
+    @Transactional
+    @Override
+    public Integer seckillProductRedisLock(Long userId, Long seckillProductId) {
+        Integer seckillResultNum = 0;
+        Boolean lockResult = redisLockUtil.tryRedisLock(String.valueOf(seckillProductId), String.valueOf(userId), Duration.ofSeconds(5));
+        if (lockResult) {
+            SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+            Long seckillNum = seckillProduct.getSeckillNum();
+            Long seckillInventory = seckillProduct.getSeckillInventory();
+            if (seckillNum > seckillInventory) {
+                logger.info("秒杀数量{} 库存{}，库存不足", seckillNum, seckillInventory);
+                return seckillResultNum;
+            }
+            SeckillProduct seckillProductUpdate = new SeckillProduct();
+            seckillProductUpdate.setId(seckillProductId);
+            seckillProductUpdate.setSeckillInventory(seckillInventory - seckillNum);
+            seckillResultNum = seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductUpdate);
+        }
+        //TODO 改成Redisson
+        Boolean releaseResult = redisLockUtil.releaseRedisLock(String.valueOf(seckillProductId), String.valueOf(userId));
+        while (!releaseResult) {
+            releaseResult = redisLockUtil.releaseRedisLock(String.valueOf(seckillProductId), String.valueOf(userId));
+        }
+        return seckillResultNum;
     }
 
     class SeckillThread implements Runnable {

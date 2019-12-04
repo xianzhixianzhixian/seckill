@@ -63,4 +63,14 @@ public class SeckillController {
     public void seckillProductQueueAndThread(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         seckillService.seckillProductQueueAndThread(userId, seckillProductId);
     }
+
+    @ResponseBody
+    @PostMapping("/seckillProductRedisLock")
+    public SeckillResult seckillProductRedisLock(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        Integer seckillResultNum = seckillService.seckillProductRedisLock(userId, seckillProductId);
+        if (seckillResultNum == 0) {
+            return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "商品已经卖完了哦");
+        }
+        return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "恭喜抢到商品");
+    }
 }

@@ -42,4 +42,12 @@ public interface SeckillService {
      * @param seckillProductId
      */
     void seckillProductQueueAndThread(Long userId, Long seckillProductId);
+
+    /**
+     * 使用Redis分布式锁进行秒杀
+     * @param userId
+     * @param seckillProductId
+     * @return
+     */
+    Integer seckillProductRedisLock(Long userId, Long seckillProductId);
 }
