@@ -7,19 +7,20 @@ import com.seckill.common.constant.SeckillNameMapping;
 import com.seckill.product.service.SeckillService;
 import com.seckill.product.service.SeckillProductFeignService;
 import com.seckill.product.service.SeckillProductService;
-import com.seckill.product.util.RedisLockUtil;
+import com.seckill.product.util.RedissonLockUtil;
+import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class SeckillServiceImpl implements SeckillService {
@@ -41,7 +42,7 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private SeckillUserResultServiceImpl seckillUserResultService;
     @Autowired
-    private RedisLockUtil redisLockUtil;
+    private RedissonLockUtil redissonLockUtil;
 
     @Transactional
     @Override
@@ -138,7 +139,8 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public Integer seckillProductRedisLock(Long userId, Long seckillProductId) {
         Integer seckillResultNum = 0;
-        Boolean lockResult = redisLockUtil.tryRedisLock(String.valueOf(seckillProductId), String.valueOf(userId), Duration.ofSeconds(5));
+        RLock rLock = redissonLockUtil.getFairLock(userId + "_" +seckillProductId);
+        Boolean lockResult = redissonLockUtil.tryLock(rLock, RedissonLockUtil.WAIT_LOCK_TIME, RedissonLockUtil.LOCK_TIME, TimeUnit.SECONDS);
         if (lockResult) {
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
             Long seckillNum = seckillProduct.getSeckillNum();
@@ -152,11 +154,7 @@ public class SeckillServiceImpl implements SeckillService {
             seckillProductUpdate.setSeckillInventory(seckillInventory - seckillNum);
             seckillResultNum = seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductUpdate);
         }
-        //TODO 改成Redisson
-        Boolean releaseResult = redisLockUtil.releaseRedisLock(String.valueOf(seckillProductId), String.valueOf(userId));
-        while (!releaseResult) {
-            releaseResult = redisLockUtil.releaseRedisLock(String.valueOf(seckillProductId), String.valueOf(userId));
-        }
+        redissonLockUtil.unlock(rLock);
         return seckillResultNum;
     }
 

@@ -30,6 +30,7 @@
         <mybatis-spring.version>2.1.0</mybatis-spring.version>
         <mybatis.version>3.2.8</mybatis.version>
         <seckill-common.version>1.0</seckill-common.version>
+        <redisson.version>3.11.5</redisson.version>
     </properties>
 
     <dependencyManagement>
