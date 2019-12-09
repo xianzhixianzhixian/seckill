@@ -2,6 +2,7 @@ package com.seckill.product.controller;
 
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
 import com.seckill.product.service.impl.SeckillServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,8 @@ public class SeckillController {
 
     @Autowired
     private SeckillServiceImpl seckillService;
+    @Autowired
+    private SeckillProductIntegrationServiceImpl seckillProductIntegrationService;
 
     @ResponseBody
     @PostMapping("/seckillProductAOP")
@@ -78,5 +81,11 @@ public class SeckillController {
     @PostMapping("/seckillProductFutrue")
     public void seckillProductFutrue(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         seckillService.seckillProductFutrue(userId, seckillProductId);
+    }
+
+    @ResponseBody
+    @PostMapping("/seckillProductDistributeFuture")
+    public void seckillProductDistributeFuture(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        seckillProductIntegrationService.seckillProductDistributeFuture(userId, seckillProductId);
     }
 }

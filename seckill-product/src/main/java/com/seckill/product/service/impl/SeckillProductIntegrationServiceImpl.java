@@ -9,12 +9,14 @@ import org.redisson.api.RLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.*;
 
+@Service
 public class SeckillProductIntegrationServiceImpl implements SeckillProductIntegrationService {
 
     private static Logger logger = LoggerFactory.getLogger(SeckillProductIntegrationServiceImpl.class);
