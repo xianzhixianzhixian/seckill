@@ -19,7 +19,7 @@ public class CallableDemo {
     public static void main(String[] args) throws Exception {
         System.out.println(System.nanoTime());
         FutureTask<Long> futureTask = new FutureTask<>(new SumClass());
-        Executor executor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
+        ExecutorService executor = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
         executor.execute(futureTask);
         System.out.println(futureTask.get());
         System.out.println(System.nanoTime());

@@ -50,4 +50,11 @@ public interface SeckillService {
      * @return
      */
     Integer seckillProductRedisLock(Long userId, Long seckillProductId);
+
+    /**
+     * 使用Future模式进行秒杀
+     * @param userId
+     * @param seckillProductId
+     */
+    void seckillProductFutrue(Long userId, Long seckillProductId);
 }

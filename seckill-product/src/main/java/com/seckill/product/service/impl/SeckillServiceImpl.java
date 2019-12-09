@@ -15,12 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
+import java.util.concurrent.*;
 
 @Service
 public class SeckillServiceImpl implements SeckillService {
@@ -34,6 +30,10 @@ public class SeckillServiceImpl implements SeckillService {
     private ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<>(16);
 
     private BlockingQueue<SeckillReuqest> seckillReuqestQueue = new LinkedBlockingDeque<>();
+
+    private Map<String, Future> seckillFutureMap = new HashMap<>();
+
+    private ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 
     @Autowired
     private SeckillProductService seckillProductService;
@@ -156,6 +156,15 @@ public class SeckillServiceImpl implements SeckillService {
         }
         redissonLockUtil.unlock(rLock);
         return seckillResultNum;
+    }
+
+    @Override
+    public void seckillProductFutrue(Long userId, Long seckillProductId) {
+        logger.info("=============seckillProductFutrue==============入参{},{}", userId, seckillProductId);
+        Future<Integer> future = executorService.submit(new SeckillFuture(userId, seckillProductId));
+        //通过key去获取秒杀的结果，如果还未秒杀结束，那么future.get()会一直处于阻塞状态直到结束处理
+        seckillFutureMap.put(userId + "_" + seckillProductId, future);
+
     }
 
     class SeckillThread implements Runnable {
@@ -306,5 +315,69 @@ public class SeckillServiceImpl implements SeckillService {
             }
         }
 
+    }
+
+    class SeckillFuture implements Callable {
+
+        private Long userId;
+        private Long seckillProductId;
+
+        public SeckillFuture() {
+        }
+
+        public SeckillFuture(Long userId, Long seckillProductId) {
+            this.userId = userId;
+            this.seckillProductId = seckillProductId;
+        }
+
+        public Long getUserId() {
+            return userId;
+        }
+
+        public void setUserId(Long userId) {
+            this.userId = userId;
+        }
+
+        public Long getSeckillProductId() {
+            return seckillProductId;
+        }
+
+        public void setSeckillProductId(Long seckillProductId) {
+            this.seckillProductId = seckillProductId;
+        }
+
+        /**
+         * 成功返回0，失败返回1
+         * @return
+         * @throws Exception
+         */
+        @Override
+        public Integer call() throws Exception {
+            SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+            Long seckillInventory = seckillProduct.getSeckillInventory();
+            Long seckillNum = seckillProduct.getSeckillNum();
+
+            SeckillUserResult seckillUserResult = new SeckillUserResult();
+            seckillUserResult.setProductId(seckillProduct.getProductId());
+            seckillUserResult.setSeckillProductId(seckillProductId);
+            seckillUserResult.setUserId(userId);
+            seckillUserResult.setResult(0);
+            seckillUserResult.setResultData("用户" + userId + "秒杀成功");
+            seckillUserResult.setSeckillTime(new Date());
+            logger.info("用户{}开始SeckillFuture秒杀{}", userId, seckillProductId);
+            if (seckillNum > seckillInventory) {
+                logger.error("商品{}库存{}不足，秒杀数量为{}", seckillProductId, seckillInventory, seckillNum);
+                seckillUserResult.setResult(1);
+                seckillUserResult.setResultData("用户" + userId + "秒杀失败");
+            } else {
+                logger.error("用户{}秒杀商品{}成功，秒杀数量为{}", userId, seckillProductId, seckillNum);
+                SeckillProduct seckillProductNew = new SeckillProduct();
+                seckillProductNew.setId(seckillProductId);
+                seckillProductNew.setSeckillInventory(seckillInventory - seckillNum);
+                seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductNew);
+            }
+            seckillUserResultService.saveSeckillUserResult(seckillUserResult);
+            return seckillUserResult.getResult();
+        }
     }
 }
