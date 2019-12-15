@@ -30,4 +30,19 @@ public class SeckillGeneralCodeMapping {
      */
     public static final Long REDISSON_LOCK_LOCK_TIME = 10L;
 
+    /**
+     * 秒杀策略模式AOP锁
+     */
+    public static final String SECKILL_STRATEGY = "SECKILL_STRATEGY";
+
+    /**
+     * 秒杀策略模式AOP锁
+     */
+    public static final String SECKILL_STRATEGY_AOP_LOCK = "SECKILL_STRATEGY_AOP_LOCK";
+
+    /**
+     * 秒杀Future模式
+     */
+    public static final String SECKILL_STRATEGY_FUTURE = "SECKILL_STRATEGY_FUTURE";
+
 }

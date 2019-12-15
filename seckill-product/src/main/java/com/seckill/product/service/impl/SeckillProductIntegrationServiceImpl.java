@@ -33,6 +33,7 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
 
     @Override
     public void seckillProductDistributeFuture(Long userId, Long seckillProductId) {
+        logger.info("seckillProductDistributeFuture入参userId：{} seckillProductId：{}", userId, seckillProductId);
         SeckillFuture seckillFuture = new SeckillFuture(userId, seckillProductId);
         Future<Integer> result = executorService.submit(seckillFuture);
         seckillProductFutureMap.put(userId + "_" + seckillProductId, result);

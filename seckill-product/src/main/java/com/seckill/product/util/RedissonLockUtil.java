@@ -1,6 +1,7 @@
 package com.seckill.product.util;
 
 import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
@@ -78,5 +79,25 @@ public class RedissonLockUtil {
         } catch (Throwable t) {
             logger.error("线程{} tryLock 错误，原因{}", threadName, t);
         }
+    }
+
+    /**
+     * 给Redis设置键值返回设置的值(未加Redis锁但是这个方法是同步的)
+     */
+    public String addToBucket(String key, String value) {
+        String threadName =Thread.currentThread().getName();
+        logger.info("线程{} addToBucket ，key {}, value {}", threadName, key, value);
+        RBucket rBucket = redissonClient.getBucket(key);
+        return (String) rBucket.getAndSet(value);
+    }
+
+    /**
+     * 获取键值对中的value
+     * @param key
+     * @return
+     */
+    public String getFromBucket(String key) {
+        RBucket rBucket = redissonClient.getBucket(key);
+        return (String) rBucket.get();
     }
 }

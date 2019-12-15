@@ -6,35 +6,35 @@ package com.seckill.product.service;
 public interface SeckillService {
 
     /**
-     * 同步秒杀商品方法
+     * 同步AOP锁秒杀商品方法
      * @param userId
-     * @param productId
+     * @param seckillProductId
      * @return
      */
-    Integer seckillProductAOP(Long userId, Long productId);
+    Integer seckillProductAOP(Long userId, Long seckillProductId);
 
     /**
      * 多线程异步处理秒杀
      * @param userId
-     * @param id
+     * @param seckillProductId
      */
-    void multipltThreadSeckillProduct(Long userId, Long id);
+    void multipltThreadSeckillProduct(Long userId, Long seckillProductId);
 
     /**
      * 悲观锁秒杀
      * @param userId
-     * @param id
+     * @param seckillProductId
      * @return
      */
-    Integer seckillProductPessimisticLock(Long userId, Long id);
+    Integer seckillProductPessimisticLock(Long userId, Long seckillProductId);
 
     /**
      * 乐观锁秒杀商品
      * @param userId
-     * @param id
+     * @param seckillProductId
      * @return
      */
-    Integer seckillProductOptimisticLock(Long userId, Long id);
+    Integer seckillProductOptimisticLock(Long userId, Long seckillProductId);
 
     /**
      * 使用队列和多线程进行秒杀

@@ -1,24 +1,29 @@
 package com.seckill.product.controller;
 
 import com.seckill.common.bean.SeckillResult;
+import com.seckill.common.constant.SeckillGeneralCodeMapping;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
 import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
 import com.seckill.product.service.impl.SeckillServiceImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.seckill.product.strategy.SeckillProductAOPStrategy;
+import com.seckill.product.strategy.SeckillProductFutureStrategy;
+import com.seckill.product.strategy.SeckillProductStrategy;
+import com.seckill.product.util.RedissonLockUtil;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/seckill")
-public class SeckillController {
-
-    private static final Logger logger = LoggerFactory.getLogger(SeckillController.class);
+public class SeckillController implements InitializingBean {
 
     @Autowired
     private SeckillServiceImpl seckillService;
     @Autowired
     private SeckillProductIntegrationServiceImpl seckillProductIntegrationService;
+    @Autowired
+    private RedissonLockUtil redissonLockUtil;
+    private SeckillProductStrategy seckillProductStrategy;
 
     @ResponseBody
     @PostMapping("/seckillProductAOP")
@@ -87,5 +92,24 @@ public class SeckillController {
     @PostMapping("/seckillProductDistributeFuture")
     public void seckillProductDistributeFuture(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         seckillProductIntegrationService.seckillProductDistributeFuture(userId, seckillProductId);
+    }
+
+    @ResponseBody
+    @PostMapping("/seckillProductStrategy")
+    public Integer seckillProductStrategy(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return seckillProductStrategy.seckillProduct(userId, seckillProductId);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        redissonLockUtil.addToBucket(SeckillGeneralCodeMapping.SECKILL_STRATEGY, SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE);
+        //通过Redis进行实时切换秒杀策略
+        String strategy = redissonLockUtil.getFromBucket(SeckillGeneralCodeMapping.SECKILL_STRATEGY);
+        //默认使用AOP锁策略
+        seckillProductStrategy = new SeckillProductAOPStrategy(seckillService);
+        //Future策略
+        if (SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE.equals(strategy)) {
+            seckillProductStrategy = new SeckillProductFutureStrategy(seckillService);
+        }
     }
 }

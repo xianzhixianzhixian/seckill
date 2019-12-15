@@ -38,8 +38,6 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private SeckillProductService seckillProductService;
     @Autowired
-    private SeckillProductFeignService seckillProductFeignService;
-    @Autowired
     private SeckillUserResultServiceImpl seckillUserResultService;
     @Autowired
     private RedissonLockUtil redissonLockUtil;
@@ -70,6 +68,7 @@ public class SeckillServiceImpl implements SeckillService {
      */
     @Override
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
+        logger.info("multipltThreadSeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Long seckillInventory = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId);
         if (seckillInventory == null) {
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
@@ -86,6 +85,7 @@ public class SeckillServiceImpl implements SeckillService {
     @Transactional
     @Override
     public Integer seckillProductPessimisticLock(Long userId, Long seckillProductId) {
+        logger.info("seckillProductPessimisticLock入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Integer seckillResultNum = 0;
         SeckillProduct seckillProduct = seckillProductService.findSeckillProductByIdForUpdate(seckillProductId);
         Long seckillInventory = seckillProduct.getSeckillInventory();
@@ -103,6 +103,7 @@ public class SeckillServiceImpl implements SeckillService {
     @Transactional
     @Override
     public Integer seckillProductOptimisticLock(Long userId, Long seckillProductId) {
+        logger.info("seckillProductOptimisticLock入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Integer seckillResultNum = 0;
         SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
         Long seckillInventory = seckillProduct.getSeckillInventory();
@@ -127,6 +128,7 @@ public class SeckillServiceImpl implements SeckillService {
 
     @Override
     public void seckillProductQueueAndThread(Long userId, Long seckillProductId) {
+        logger.info("seckillProductQueueAndThread入参userId：{} seckillProductId：{}", userId, seckillProductId);
         SeckillReuqest seckillReuqest = new SeckillReuqest(userId, seckillProductId);
         try {
             seckillReuqestQueue.put(seckillReuqest);
@@ -138,6 +140,7 @@ public class SeckillServiceImpl implements SeckillService {
     @Transactional
     @Override
     public Integer seckillProductRedisLock(Long userId, Long seckillProductId) {
+        logger.info("seckillProductRedisLock入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Integer seckillResultNum = 0;
         RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeMapping.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProductId);
         Boolean lockResult = redissonLockUtil.tryLock(rLock, RedissonLockUtil.WAIT_LOCK_TIME, RedissonLockUtil.LOCK_TIME, TimeUnit.SECONDS);
@@ -160,7 +163,7 @@ public class SeckillServiceImpl implements SeckillService {
 
     @Override
     public void seckillProductFutrue(Long userId, Long seckillProductId) {
-        logger.info("=============seckillProductFutrue==============入参{},{}", userId, seckillProductId);
+        logger.info("seckillProductFutrue入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Future<Integer> future = executorService.submit(new SeckillFuture(userId, seckillProductId));
         //通过key去获取秒杀的结果，如果还未秒杀结束，那么future.get()会一直处于阻塞状态直到结束处理
         seckillFutureMap.put(userId + "_" + seckillProductId, future);

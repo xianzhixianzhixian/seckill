@@ -4,6 +4,7 @@ import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.product.service.SeckillProductFeignService;
 import com.seckill.product.service.impl.SeckillProductServiceImpl;
+import com.seckill.product.service.impl.SeckillProductStrategyServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,8 @@ public class SeckillProductController {
     private SeckillProductFeignService seckillProductFeignService;
     @Autowired
     private SeckillProductServiceImpl seckillProductService;
+    @Autowired
+    private SeckillProductStrategyServiceImpl seckillProductStrategyService;
 
     @ResponseBody
     @PostMapping("/listProductByShopId")
@@ -60,5 +63,11 @@ public class SeckillProductController {
     @PostMapping("/listAllSeckillProductByState")
     public SeckillResult listAllSeckillProductByState(Long shopId, Integer state) {
         return new SeckillResult(seckillProductService.listSeckillProduct(shopId, state));
+    }
+
+    @ResponseBody
+    @PostMapping("/setSeckillProductStrategy")
+    public SeckillResult setSeckillProductStrategy(@RequestParam("strategyName") String strategyName,@RequestParam("strategyValue") String strategyValue) {
+        return new SeckillResult(seckillProductStrategyService.setSeckillProductStrategy(strategyName, strategyValue));
     }
 }
