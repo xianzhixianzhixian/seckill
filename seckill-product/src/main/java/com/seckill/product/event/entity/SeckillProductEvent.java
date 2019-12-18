@@ -1,4 +1,4 @@
-package com.seckill.product.event;
+package com.seckill.product.event.entity;
 
 /**
  * 秒杀事件
