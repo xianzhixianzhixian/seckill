@@ -1,4 +1,4 @@
-package com.seckill.common.constant;
+package com.seckill.product.event.state;
 
 /**
  * 订单事件状态

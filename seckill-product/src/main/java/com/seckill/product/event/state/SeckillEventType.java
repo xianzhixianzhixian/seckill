@@ -1,4 +1,4 @@
-package com.seckill.common.constant;
+package com.seckill.product.event.state;
 
 /**
  * 秒杀事件状态
