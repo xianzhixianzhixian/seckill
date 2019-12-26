@@ -22,6 +22,8 @@ public class OrderEventHandler implements Handler {
 
     private CentralEventProcessor centralEventProcessor;
 
+    private OrderStateMechine orderStateMechine = new OrderStateMechine();
+
     public OrderEventHandler() {
     }
 
@@ -37,6 +39,8 @@ public class OrderEventHandler implements Handler {
         logger.info("订单事件处理器开始处理事件{}", event);
         try {
             //这里只进行订单事件的处理
+            StateHandler orderStateHandler = orderStateMechine.getStateHandler(event.getEventType());
+            orderStateHandler.hanlde(event);
         } catch (Exception e) {
             logger.error("秒杀事件处理器放入事件失败，原因{}", e);
         }
@@ -63,12 +67,13 @@ public class OrderEventHandler implements Handler {
 
         @Override
         public void hanlde(Event event) {
-            logger.info("OrderEventHandler New处理{}", event);
+            Event orderCompleteEvent = new OrderEvent(OrderEventType.COMPLETE, OrderEventType.COMPLETE);
+            logger.info("OrderEventHandler New处理{}", orderCompleteEvent);
             BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
             try {
-                eventBlockingDeque.put(event);
+                eventBlockingDeque.put(orderCompleteEvent);
             } catch (InterruptedException e) {
-                logger.error("OrderEventHandler New处理{}错误，原因{}", event, e);
+                logger.error("OrderEventHandler New处理{}错误，原因{}", orderCompleteEvent, e);
             }
         }
 

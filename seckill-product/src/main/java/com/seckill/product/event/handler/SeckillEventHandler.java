@@ -41,9 +41,7 @@ public class SeckillEventHandler implements Handler {
         logger.info("秒杀事件处理器开始处理事件{}", event);
         try {
             //这里只进行秒杀事件的处理
-            Event seckillNewEvent = new SeckillProductEvent(SeckillEventType.NEW, SeckillEventType.NEW);
-            BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
-            StateHandler seckillStateHandler = seckillStateMechine.getStateHandlerByEventType(SeckillEventType.NEW);
+            StateHandler seckillStateHandler = seckillStateMechine.getStateHandlerByEventType(event.getEventType());
             seckillStateHandler.hanlde(event);
         } catch (Exception e) {
             logger.error("秒杀事件处理器放入事件失败，原因{}", e);
