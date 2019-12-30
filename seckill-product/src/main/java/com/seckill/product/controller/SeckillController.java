@@ -3,6 +3,11 @@ package com.seckill.product.controller;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.constant.SeckillGeneralCodeMapping;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.product.event.CentralEventProcessor;
+import com.seckill.product.event.entity.Event;
+import com.seckill.product.event.entity.SeckillProductEvent;
+import com.seckill.product.event.handler.CentralEventForwardHandler;
+import com.seckill.product.event.state.SeckillEventType;
 import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
 import com.seckill.product.service.impl.SeckillServiceImpl;
 import com.seckill.product.strategy.SeckillProductAOPStrategy;
@@ -24,6 +29,8 @@ public class SeckillController implements InitializingBean {
     @Autowired
     private RedissonLockUtil redissonLockUtil;
     private SeckillProductStrategy seckillProductStrategy;
+    private CentralEventForwardHandler centralEventForwardHandler;
+    private CentralEventProcessor centralEventProcessor;
 
     @ResponseBody
     @PostMapping("/seckillProductAOP")
@@ -100,6 +107,18 @@ public class SeckillController implements InitializingBean {
         return seckillProductStrategy.seckillProduct(userId, seckillProductId);
     }
 
+    @ResponseBody
+    @PostMapping("/seckillProductEnent")
+    public SeckillResult seckillProductEnentAOP(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        try {
+            Event seckillEvent = new SeckillProductEvent("multipltThreadSeckillProduct", SeckillEventType.NEW, userId, seckillProductId, seckillService);
+            centralEventForwardHandler.handler(seckillEvent);
+        } catch (Exception e) {
+            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "系统错误", e);
+        }
+        return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "正在抢购");
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         redissonLockUtil.addToBucket(SeckillGeneralCodeMapping.SECKILL_STRATEGY, SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE);
@@ -111,5 +130,9 @@ public class SeckillController implements InitializingBean {
         if (SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE.equals(strategy)) {
             seckillProductStrategy = new SeckillProductFutureStrategy(seckillService);
         }
+        //事件存储队列
+        centralEventProcessor = new CentralEventProcessor();
+        //事件处理器
+        centralEventForwardHandler = new CentralEventForwardHandler(centralEventProcessor);
     }
 }

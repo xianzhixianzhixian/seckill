@@ -1,6 +1,5 @@
 package com.seckill.product.event.handler;
 
-import com.seckill.common.bean.SeckillProduct;
 import com.seckill.product.event.CentralEventProcessor;
 import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
@@ -8,6 +7,7 @@ import com.seckill.product.event.entity.SeckillProductEvent;
 import com.seckill.product.event.state.OrderEventType;
 import com.seckill.product.event.state.SeckillEventType;
 import com.seckill.product.event.state.handler.StateHandler;
+import com.seckill.product.service.SeckillService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,8 +69,13 @@ public class SeckillEventHandler implements Handler {
 
         @Override
         public void hanlde(Event event) {
-            Event seckillCompleteEvent = new SeckillProductEvent(SeckillEventType.COMPLETE, SeckillEventType.COMPLETE);
-            logger.info("SeckillEventHandler New处理{}", seckillCompleteEvent);
+            logger.info("SeckillEventHandler New处理{}", event);
+            SeckillProductEvent seckillProductEvent = (SeckillProductEvent) event;
+            Long userId = seckillProductEvent.getUserId();
+            Long seckillProductId = seckillProductEvent.getSeckillProductId();
+            SeckillService seckillService = seckillProductEvent.getSeckillService();
+            seckillService.multipltThreadSeckillProduct(userId, seckillProductId);
+            Event seckillCompleteEvent = new SeckillProductEvent(seckillProductEvent.getName(), SeckillEventType.COMPLETE, userId, seckillProductId, seckillService);
             BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
             try {
                 eventBlockingDeque.put(seckillCompleteEvent);
@@ -85,7 +90,8 @@ public class SeckillEventHandler implements Handler {
 
         @Override
         public void hanlde(Event event) {
-            Event orderNewEvent = new OrderEvent(OrderEventType.NEW, OrderEventType.NEW);
+            SeckillProductEvent seckillCompleteEvent = (SeckillProductEvent) event;
+            Event orderNewEvent = new OrderEvent(seckillCompleteEvent.getName(), OrderEventType.NEW, seckillCompleteEvent.getUserId(), seckillCompleteEvent.getSeckillProductId());
             logger.info("SeckillEventHandler Complete处理{}", event);
             BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
             try {

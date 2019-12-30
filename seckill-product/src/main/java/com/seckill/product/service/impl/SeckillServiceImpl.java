@@ -75,7 +75,6 @@ public class SeckillServiceImpl implements SeckillService {
             cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillProduct.getSeckillInventory());
             cacheMap.put(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId, seckillProduct.getSeckillNum());
         }
-        seckillInventory = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId);
         Long seckillNum = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId);
         SeckillThread seckillThread = new SeckillThread(userId, seckillNum, seckillInventory, seckillProductId);
         Thread thread = new Thread(seckillThread);
