@@ -1,4 +1,4 @@
-package com.seckill.product.mapper;
+package com.seckill.order.mapper;
 
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillOrderExample;

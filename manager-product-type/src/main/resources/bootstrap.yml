@@ -13,4 +13,4 @@ spring:
         #配置服务注册
         register: true
         #服务停止时取消注册
-        deregister: true
+#        deregister: true

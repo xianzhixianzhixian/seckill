@@ -10,9 +10,6 @@ spring:
     username: root
     password: 123456
 
-mybatis:
-  mapper-locations: classpath*:src/main/java/**/*Mapper.xml
-
 logging:
   level:
     com.seckill.*: debug

@@ -15,10 +15,6 @@ spring:
       max-redirects: 3
     password: passwd1234
 
-
-mybatis:
-  mapper-locations: classpath*:src/main/java/**/*Mapper.xml
-
 logging:
   level:
     com.seckill.*: debug
