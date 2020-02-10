@@ -12,7 +12,3 @@ spring:
     connection-timeout: 15000
     #发送确认
     publisher-confirms: true
-    #返回确认
-    publisher-returns: true
-    template:
-      mandatory: true
