@@ -1,6 +1,9 @@
 package com.rabbitmq.producer;
 
 import com.rabbitmq.config.RabbitMQConfig;
+import com.rabbitmq.config.RabbitMessageConvertConfig;
+import com.rabbitmq.pojo.Passage;
+import com.rabbitmq.pojo.Person;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +29,26 @@ public class MessageProducer {
     private AmqpTemplate amqpTemplate;
 
     /**
-     * RabbitTemplate发送消息
+     * RabbitTemplate发送String消息
      * @param message
      */
     public void templateSendMessage(String message) {
         amqpTemplate.convertAndSend(RabbitMQConfig.SPRING_BOOT_EXCHANGE, RabbitMQConfig.SPRING_BOOT_BIND_KEY, message);
     }
 
+    /**
+     * RabbitTemplate发送Object消息
+     * @param person
+     */
+    public void templateSendPerson(Person person) {
+        amqpTemplate.convertAndSend(RabbitMessageConvertConfig.SPRING_BOOT_EXCHANGE_OBJECT, RabbitMessageConvertConfig.SPRING_BOOT_BIND_KEY_OBJECT, person);
+    }
+
+    /**
+     * RabbitTemplate发送Object消息
+     * @param passage
+     */
+    public void templateSendPassage(Passage passage) {
+        amqpTemplate.convertAndSend(RabbitMessageConvertConfig.SPRING_BOOT_EXCHANGE_OBJECT, RabbitMessageConvertConfig.SPRING_BOOT_BIND_KEY_OBJECT, passage);
+    }
 }

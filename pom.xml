@@ -24,6 +24,7 @@
         <module>manager-shop</module>
         <module>manager-product-type</module>
         <module>manager-product</module>
+        <module>rabbitmq-demo</module>
     </modules>
 
     <properties>
