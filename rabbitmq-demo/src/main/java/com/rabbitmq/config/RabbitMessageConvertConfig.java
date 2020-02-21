@@ -60,7 +60,7 @@ public class RabbitMessageConvertConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-    //如果磨人的SimpleMessageListenerContainer不符合我们的要求，可以通过如下的方式创建新的SimpleMessageListenerContainer
+    //如果默认的SimpleMessageListenerContainer不符合我们的要求，可以通过如下的方式创建新的SimpleMessageListenerContainer
 //    @Bean
 //    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory) {
 //        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
