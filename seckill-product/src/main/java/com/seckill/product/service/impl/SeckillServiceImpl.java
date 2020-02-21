@@ -70,12 +70,14 @@ public class SeckillServiceImpl implements SeckillService {
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
         logger.info("multipltThreadSeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Long seckillInventory = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId);
+        Long seckillNum = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId);
         if (seckillInventory == null) {
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
-            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillProduct.getSeckillInventory());
-            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId, seckillProduct.getSeckillNum());
+            seckillInventory = seckillProduct.getSeckillInventory();
+            seckillNum = seckillProduct.getSeckillNum();
+            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
+            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId, seckillNum);
         }
-        Long seckillNum = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId);
         SeckillThread seckillThread = new SeckillThread(userId, seckillNum, seckillInventory, seckillProductId);
         Thread thread = new Thread(seckillThread);
         thread.start();

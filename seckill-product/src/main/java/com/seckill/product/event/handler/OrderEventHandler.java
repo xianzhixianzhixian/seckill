@@ -1,10 +1,12 @@
 package com.seckill.product.event.handler;
 
+import com.seckill.common.entity.OrderRequest;
 import com.seckill.product.event.CentralEventProcessor;
 import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
 import com.seckill.product.event.state.OrderEventType;
 import com.seckill.product.event.state.handler.StateHandler;
+import com.seckill.product.service.SeckillMessageFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,14 +69,16 @@ public class OrderEventHandler implements Handler {
 
         @Override
         public void hanlde(Event event) {
-            Event orderCompleteEvent = new OrderEvent(OrderEventType.COMPLETE, OrderEventType.COMPLETE);
-            logger.info("OrderEventHandler New处理{}", orderCompleteEvent);
-            BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
-            try {
-                eventBlockingDeque.put(orderCompleteEvent);
-            } catch (InterruptedException e) {
-                logger.error("OrderEventHandler New处理{}错误，原因{}", orderCompleteEvent, e);
-            }
+            logger.info("OrderEventHandler New处理{}", event);
+            OrderEvent orderEvent = (OrderEvent) event;
+            Long userId = orderEvent.getUserId();
+            Long seckillProductId = orderEvent.getSeckillProductId();
+            SeckillMessageFeignService seckillMessageFeignService = orderEvent.getSeckillMessageFeignService();
+            //发送消息到RabbitMQ
+            OrderRequest orderRequest = new OrderRequest();
+            orderRequest.setUserId(userId);
+            orderRequest.setSeckillProductId(seckillProductId);
+            seckillMessageFeignService.sendOrderMessage(orderRequest);
         }
 
     }

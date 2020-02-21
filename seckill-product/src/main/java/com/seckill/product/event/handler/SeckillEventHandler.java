@@ -75,7 +75,14 @@ public class SeckillEventHandler implements Handler {
             Long seckillProductId = seckillProductEvent.getSeckillProductId();
             SeckillService seckillService = seckillProductEvent.getSeckillService();
             seckillService.multipltThreadSeckillProduct(userId, seckillProductId);
-            Event seckillCompleteEvent = new SeckillProductEvent(seckillProductEvent.getName(), SeckillEventType.COMPLETE, userId, seckillProductId, seckillService);
+            Event seckillCompleteEvent = new SeckillProductEvent(
+                    seckillProductEvent.getName(),
+                    SeckillEventType.COMPLETE,
+                    userId,
+                    seckillProductId,
+                    seckillService,
+                    seckillProductEvent.getSeckillMessageFeignService()
+            );
             BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
             try {
                 eventBlockingDeque.put(seckillCompleteEvent);
@@ -90,9 +97,15 @@ public class SeckillEventHandler implements Handler {
 
         @Override
         public void hanlde(Event event) {
-            SeckillProductEvent seckillCompleteEvent = (SeckillProductEvent) event;
-            Event orderNewEvent = new OrderEvent(seckillCompleteEvent.getName(), OrderEventType.NEW, seckillCompleteEvent.getUserId(), seckillCompleteEvent.getSeckillProductId());
             logger.info("SeckillEventHandler Complete处理{}", event);
+            SeckillProductEvent seckillCompleteEvent = (SeckillProductEvent) event;
+            Event orderNewEvent = new OrderEvent(
+                    seckillCompleteEvent.getName(),
+                    OrderEventType.NEW,
+                    seckillCompleteEvent.getUserId(),
+                    seckillCompleteEvent.getSeckillProductId(),
+                    seckillCompleteEvent.getSeckillMessageFeignService()
+            );
             BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
             try {
                 eventBlockingDeque.put(orderNewEvent);

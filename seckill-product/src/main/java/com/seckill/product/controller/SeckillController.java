@@ -8,6 +8,7 @@ import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.SeckillProductEvent;
 import com.seckill.product.event.handler.CentralEventForwardHandler;
 import com.seckill.product.event.state.SeckillEventType;
+import com.seckill.product.service.SeckillMessageFeignService;
 import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
 import com.seckill.product.service.impl.SeckillServiceImpl;
 import com.seckill.product.strategy.SeckillProductAOPStrategy;
@@ -28,6 +29,8 @@ public class SeckillController implements InitializingBean {
     private SeckillProductIntegrationServiceImpl seckillProductIntegrationService;
     @Autowired
     private RedissonLockUtil redissonLockUtil;
+    @Autowired
+    private SeckillMessageFeignService seckillMessageFeignService;
     private SeckillProductStrategy seckillProductStrategy;
     private CentralEventForwardHandler centralEventForwardHandler;
     private CentralEventProcessor centralEventProcessor;
@@ -111,7 +114,7 @@ public class SeckillController implements InitializingBean {
     @PostMapping("/seckillProductEnent")
     public SeckillResult seckillProductEnentAOP(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         try {
-            Event seckillEvent = new SeckillProductEvent("multipltThreadSeckillProduct", SeckillEventType.NEW, userId, seckillProductId, seckillService);
+            Event seckillEvent = new SeckillProductEvent("multipltThreadSeckillProduct", SeckillEventType.NEW, userId, seckillProductId, seckillService, seckillMessageFeignService);
             centralEventForwardHandler.handler(seckillEvent);
         } catch (Exception e) {
             return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "系统错误", e);

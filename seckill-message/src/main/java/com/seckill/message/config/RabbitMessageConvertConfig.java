@@ -33,7 +33,7 @@ public class RabbitMessageConvertConfig {
      * @return
      */
     @Bean
-    Exchange exchange() {
+    TopicExchange exchange() {
         return new TopicExchange(SPRING_BOOT_EXCHANGE_OBJECT);
     }
 
