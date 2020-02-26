@@ -27,6 +27,8 @@ public class SeckillServiceImpl implements SeckillService {
 
     private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
 
+    private ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<>(16);
+
     private BlockingQueue<SeckillReuqest> seckillReuqestQueue = new LinkedBlockingDeque<>();
 
     private Map<SeckillUnique, Future> seckillFutureMap = new HashMap<>(16);
@@ -67,9 +69,15 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
         logger.info("multipltThreadSeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
-        Long seckillInventory = seckillProduct.getSeckillInventory();
-        Long seckillNum = seckillProduct.getSeckillNum();
+        Long seckillInventory = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId);
+        Long seckillNum = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId);
+        if (seckillInventory == null) {
+            SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+            seckillInventory = seckillProduct.getSeckillInventory();
+            seckillNum = seckillProduct.getSeckillNum();
+            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
+            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId, seckillNum);
+        }
         SeckillThread seckillThread = new SeckillThread(userId, seckillNum, seckillInventory, seckillProductId);
         Thread thread = new Thread(seckillThread);
         thread.start();
@@ -176,7 +184,6 @@ public class SeckillServiceImpl implements SeckillService {
         private Long seckillNum;
         private Long inventory;
         private Long seckillProductId;
-        private Map<String, Long> cacheMap;
 
         public SeckillThread() {
         }
@@ -186,15 +193,13 @@ public class SeckillServiceImpl implements SeckillService {
             this.seckillNum = seckillNum;
             this.inventory = inventory;
             this.seckillProductId = seckillProductId;
-            this.cacheMap = new ConcurrentHashMap<>();
         }
 
         @Override
         public void run() {
             SeckillUserResult seckillUserResult = new SeckillUserResult();
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
-            Long productId = seckillProduct.getProductId();
-            seckillUserResult.setProductId(productId);
+            seckillUserResult.setProductId(seckillProduct.getProductId());
             seckillUserResult.setSeckillProductId(seckillProductId);
             seckillUserResult.setUserId(userId);
             seckillUserResult.setResult(0);
@@ -207,7 +212,7 @@ public class SeckillServiceImpl implements SeckillService {
                 seckillUserResult.setResultData("用户" + userId + "秒杀失败");
             } else {
                 logger.info("======线程{} 用户 {}成功秒杀======", Thread.currentThread().getName(), userId);
-                //这里更新cacheMap中剩余的库存
+                //这里更新cacheMap中剩余的库存，TODO 这里会不会出现多线程的问题
                 Long seckillInventory = inventory - seckillNum;
                 cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
                 seckillProduct.setSeckillInventory(seckillInventory);
