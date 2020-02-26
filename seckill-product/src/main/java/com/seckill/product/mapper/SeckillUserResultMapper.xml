@@ -9,7 +9,7 @@
     <result column="result" jdbcType="INTEGER" property="result" />
     <result column="result_data" jdbcType="VARCHAR" property="resultData" />
     <result column="seckill_time" jdbcType="TIMESTAMP" property="seckillTime" />
-    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
@@ -118,7 +118,7 @@
       updated_time)
     values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
       #{seckillProductId,jdbcType=BIGINT}, #{result,jdbcType=INTEGER}, #{resultData,jdbcType=VARCHAR}, 
-      #{seckillTime,jdbcType=TIMESTAMP}, #{orderId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{seckillTime,jdbcType=TIMESTAMP}, #{orderId,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillUserResult">
@@ -178,7 +178,7 @@
         #{seckillTime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderId != null">
-        #{orderId,jdbcType=VARCHAR},
+        #{orderId,jdbcType=BIGINT},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -219,7 +219,7 @@
         seckill_time = #{record.seckillTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.orderId != null">
-        order_id = #{record.orderId,jdbcType=VARCHAR},
+        order_id = #{record.orderId,jdbcType=BIGINT},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -241,7 +241,7 @@
       result = #{record.result,jdbcType=INTEGER},
       result_data = #{record.resultData,jdbcType=VARCHAR},
       seckill_time = #{record.seckillTime,jdbcType=TIMESTAMP},
-      order_id = #{record.orderId,jdbcType=VARCHAR},
+      order_id = #{record.orderId,jdbcType=BIGINT},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -270,7 +270,7 @@
         seckill_time = #{seckillTime,jdbcType=TIMESTAMP},
       </if>
       <if test="orderId != null">
-        order_id = #{orderId,jdbcType=VARCHAR},
+        order_id = #{orderId,jdbcType=BIGINT},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -289,7 +289,7 @@
       result = #{result,jdbcType=INTEGER},
       result_data = #{resultData,jdbcType=VARCHAR},
       seckill_time = #{seckillTime,jdbcType=TIMESTAMP},
-      order_id = #{orderId,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=BIGINT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

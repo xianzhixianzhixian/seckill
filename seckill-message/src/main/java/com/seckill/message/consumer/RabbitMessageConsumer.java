@@ -2,10 +2,12 @@ package com.seckill.message.consumer;
 
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.message.config.RabbitMessageConvertConfig;
+import com.seckill.message.service.feign.SeckillOrderFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,6 +20,9 @@ public class RabbitMessageConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(RabbitMessageConsumer.class);
 
+    @Autowired
+    private SeckillOrderFeignService seckillOrderFeignService;
+
     /**
      * 获取信息
      * queue也支持RabbitMQ中队列的模糊匹配
@@ -25,7 +30,12 @@ public class RabbitMessageConsumer {
      */
     @RabbitHandler
     public void receiverOrderMessage(OrderRequest orderRequest) {
-        logger.info("接收到的订单信息{}", orderRequest);
+        logger.info("接收到的请求订单创建信息{}", orderRequest);
+        try {
+            seckillOrderFeignService.createOrder(orderRequest);
+        } catch (Exception e) {
+            logger.error("receiverOrderMessage错误，原因{}", e);
+        }
     }
 
     /**

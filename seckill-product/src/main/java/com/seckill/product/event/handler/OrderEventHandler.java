@@ -6,13 +6,12 @@ import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
 import com.seckill.product.event.state.OrderEventType;
 import com.seckill.product.event.state.handler.StateHandler;
-import com.seckill.product.service.SeckillMessageFeignService;
+import com.seckill.product.service.feign.SeckillMessageFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.BlockingDeque;
 
 /**
  * 订单事件处理器
@@ -72,11 +71,13 @@ public class OrderEventHandler implements Handler {
             logger.info("OrderEventHandler New处理{}", event);
             OrderEvent orderEvent = (OrderEvent) event;
             Long userId = orderEvent.getUserId();
+            Long shopId = orderEvent.getShopId();
             Long seckillProductId = orderEvent.getSeckillProductId();
             SeckillMessageFeignService seckillMessageFeignService = orderEvent.getSeckillMessageFeignService();
             //发送消息到RabbitMQ
             OrderRequest orderRequest = new OrderRequest();
             orderRequest.setUserId(userId);
+            orderRequest.setShopId(shopId);
             orderRequest.setSeckillProductId(seckillProductId);
             seckillMessageFeignService.sendOrderMessage(orderRequest);
         }

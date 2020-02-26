@@ -13,7 +13,7 @@ public interface SeckillOrderMapper {
 
     int deleteByExample(SeckillOrderExample example);
 
-    int deleteByPrimaryKey(String id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(SeckillOrder record);
 
@@ -21,7 +21,7 @@ public interface SeckillOrderMapper {
 
     List<SeckillOrder> selectByExample(SeckillOrderExample example);
 
-    SeckillOrder selectByPrimaryKey(String id);
+    SeckillOrder selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") SeckillOrder record, @Param("example") SeckillOrderExample example);
 

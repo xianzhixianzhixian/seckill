@@ -23,7 +23,7 @@ public class SeckillProductAspect {
     private static final Logger logger = LoggerFactory.getLogger(SeckillProductAspect.class);
     private static Lock lock = new ReentrantLock();
 
-    @Pointcut("execution(public * com.seckill.product.service.impl.SeckillServiceImpl.seckillProduct(..))")
+    @Pointcut("execution(public * com.seckill.product.service.impl.SeckillServiceImpl.seckillProductAOP(..))")
     public void pointcut() {
     }
 

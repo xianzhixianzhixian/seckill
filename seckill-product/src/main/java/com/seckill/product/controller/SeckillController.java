@@ -8,13 +8,14 @@ import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.SeckillProductEvent;
 import com.seckill.product.event.handler.CentralEventForwardHandler;
 import com.seckill.product.event.state.SeckillEventType;
-import com.seckill.product.service.SeckillMessageFeignService;
+import com.seckill.product.service.feign.SeckillMessageFeignService;
 import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
 import com.seckill.product.service.impl.SeckillServiceImpl;
 import com.seckill.product.strategy.SeckillProductAOPStrategy;
 import com.seckill.product.strategy.SeckillProductFutureStrategy;
 import com.seckill.product.strategy.SeckillProductStrategy;
 import com.seckill.product.util.RedissonLockUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -112,9 +113,9 @@ public class SeckillController implements InitializingBean {
 
     @ResponseBody
     @PostMapping("/seckillProductEnent")
-    public SeckillResult seckillProductEnentAOP(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+    public SeckillResult seckillProductEnent(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
         try {
-            Event seckillEvent = new SeckillProductEvent("multipltThreadSeckillProduct", SeckillEventType.NEW, userId, seckillProductId, seckillService, seckillMessageFeignService);
+            Event seckillEvent = new SeckillProductEvent("multipltThreadSeckillProduct", SeckillEventType.NEW, userId, shopId, seckillProductId, seckillService, seckillMessageFeignService);
             centralEventForwardHandler.handler(seckillEvent);
         } catch (Exception e) {
             return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "系统错误", e);
@@ -127,11 +128,17 @@ public class SeckillController implements InitializingBean {
         redissonLockUtil.addToBucket(SeckillGeneralCodeMapping.SECKILL_STRATEGY, SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE);
         //通过Redis进行实时切换秒杀策略
         String strategy = redissonLockUtil.getFromBucket(SeckillGeneralCodeMapping.SECKILL_STRATEGY);
-        //默认使用AOP锁策略
-        seckillProductStrategy = new SeckillProductAOPStrategy(seckillService);
-        //Future策略
-        if (SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE.equals(strategy)) {
-            seckillProductStrategy = new SeckillProductFutureStrategy(seckillService);
+        //默认使用Future策略分布式锁
+        if (StringUtils.isEmpty(strategy)) {
+            seckillProductStrategy = new SeckillProductFutureStrategy(seckillProductIntegrationService);
+        } else {
+            if (SeckillGeneralCodeMapping.SECKILL_STRATEGY_AOP_LOCK.equals(strategy)) {
+                //Future策略分布式锁
+                seckillProductStrategy = new SeckillProductFutureStrategy(seckillProductIntegrationService);
+            } else if (SeckillGeneralCodeMapping.SECKILL_STRATEGY_FUTURE.equals(strategy)) {
+                //AOP策略非分布式锁
+                seckillProductStrategy = new SeckillProductAOPStrategy(seckillService);
+            }
         }
         //事件存储队列
         centralEventProcessor = new CentralEventProcessor();

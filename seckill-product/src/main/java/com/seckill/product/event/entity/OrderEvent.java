@@ -1,6 +1,6 @@
 package com.seckill.product.event.entity;
 
-import com.seckill.product.service.SeckillMessageFeignService;
+import com.seckill.product.service.feign.SeckillMessageFeignService;
 
 /**
  * 订单事件
@@ -13,6 +13,8 @@ public class OrderEvent implements Event {
 
     private Long userId;
 
+    private Long shopId;
+
     private Long seckillProductId;
 
     private SeckillMessageFeignService seckillMessageFeignService;
@@ -20,12 +22,28 @@ public class OrderEvent implements Event {
     public OrderEvent() {
     }
 
-    public OrderEvent(String name, String eventType, Long userId, Long seckillProductId, SeckillMessageFeignService seckillMessageFeignService) {
+    public OrderEvent(
+            String name,
+            String eventType,
+            Long userId,
+            Long shopId,
+            Long seckillProductId,
+            SeckillMessageFeignService seckillMessageFeignService
+    ) {
         this.name = name;
         this.eventType = eventType;
         this.userId = userId;
+        this.shopId = shopId;
         this.seckillProductId = seckillProductId;
         this.seckillMessageFeignService = seckillMessageFeignService;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
     public String getName() {
@@ -74,6 +92,7 @@ public class OrderEvent implements Event {
                 "name='" + name + '\'' +
                 ", eventType='" + eventType + '\'' +
                 ", userId=" + userId +
+                ", shopId=" + shopId +
                 ", seckillProductId=" + seckillProductId +
                 '}';
     }

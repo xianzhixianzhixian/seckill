@@ -1,4 +1,4 @@
-package com.seckill.product.service;
+package com.seckill.product.service.feign;
 
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillResult;
@@ -11,7 +11,7 @@ import java.util.List;
  * 使用feign去调用manager-product项目中的接口
  */
 @FeignClient(value = "manager-product")
-public interface SeckillProductFeignService {
+public interface ManageProductFeignService {
 
     /**
      * 根据商店id查询商品列表

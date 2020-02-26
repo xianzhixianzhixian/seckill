@@ -4,8 +4,8 @@ import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillProductExample;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.constant.SeckillGeneralCodeMapping;
+import com.seckill.product.entity.SeckillUnique;
 import com.seckill.product.service.SeckillService;
-import com.seckill.product.service.SeckillProductFeignService;
 import com.seckill.product.service.SeckillProductService;
 import com.seckill.product.util.RedissonLockUtil;
 import org.redisson.api.RLock;
@@ -27,11 +27,9 @@ public class SeckillServiceImpl implements SeckillService {
 
     private static final Logger logger = LoggerFactory.getLogger(SeckillServiceImpl.class);
 
-    private ConcurrentHashMap<String, Long> cacheMap = new ConcurrentHashMap<>(16);
-
     private BlockingQueue<SeckillReuqest> seckillReuqestQueue = new LinkedBlockingDeque<>();
 
-    private Map<String, Future> seckillFutureMap = new HashMap<>(16);
+    private Map<SeckillUnique, Future> seckillFutureMap = new HashMap<>(16);
 
     private ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 
@@ -69,15 +67,9 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
         logger.info("multipltThreadSeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        Long seckillInventory = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId);
-        Long seckillNum = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId);
-        if (seckillInventory == null) {
-            SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
-            seckillInventory = seckillProduct.getSeckillInventory();
-            seckillNum = seckillProduct.getSeckillNum();
-            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
-            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId, seckillNum);
-        }
+        SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+        Long seckillInventory = seckillProduct.getSeckillInventory();
+        Long seckillNum = seckillProduct.getSeckillNum();
         SeckillThread seckillThread = new SeckillThread(userId, seckillNum, seckillInventory, seckillProductId);
         Thread thread = new Thread(seckillThread);
         thread.start();
@@ -162,12 +154,19 @@ public class SeckillServiceImpl implements SeckillService {
         return seckillResultNum;
     }
 
+    /**
+     * 这个方法有问题，高并发会导致数据问题，这里只是作为Callable-Future的使用示例
+     * @param userId
+     * @param seckillProductId
+     */
     @Override
     public void seckillProductFutrue(Long userId, Long seckillProductId) {
         logger.info("seckillProductFutrue入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        Future<Integer> future = executorService.submit(new SeckillFuture(userId, seckillProductId));
+        SeckillFuture seckillFuture = new SeckillFuture(userId, seckillProductId);
+        Future<Integer> future = executorService.submit(seckillFuture);
+        SeckillUnique seckillUnique = new SeckillUnique(userId, seckillProductId);
         //通过key去获取秒杀的结果，如果还未秒杀结束，那么future.get()会一直处于阻塞状态直到结束处理
-        seckillFutureMap.put(userId + "_" + seckillProductId, future);
+        seckillFutureMap.put(seckillUnique, future);
 
     }
 
@@ -194,7 +193,8 @@ public class SeckillServiceImpl implements SeckillService {
         public void run() {
             SeckillUserResult seckillUserResult = new SeckillUserResult();
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
-            seckillUserResult.setProductId(seckillProduct.getProductId());
+            Long productId = seckillProduct.getProductId();
+            seckillUserResult.setProductId(productId);
             seckillUserResult.setSeckillProductId(seckillProductId);
             seckillUserResult.setUserId(userId);
             seckillUserResult.setResult(0);
@@ -207,7 +207,10 @@ public class SeckillServiceImpl implements SeckillService {
                 seckillUserResult.setResultData("用户" + userId + "秒杀失败");
             } else {
                 logger.info("======线程{} 用户 {}成功秒杀======", Thread.currentThread().getName(), userId);
-                seckillProduct.setSeckillInventory(inventory - seckillNum);
+                //这里更新cacheMap中剩余的库存
+                Long seckillInventory = inventory - seckillNum;
+                cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
+                seckillProduct.setSeckillInventory(seckillInventory);
                 seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
             }
             seckillUserResultService.saveSeckillUserResult(seckillUserResult);
@@ -321,7 +324,7 @@ public class SeckillServiceImpl implements SeckillService {
 
     }
 
-    class SeckillFuture implements Callable {
+    class SeckillFuture implements Callable<Integer> {
 
         private Long userId;
         private Long seckillProductId;
@@ -385,4 +388,5 @@ public class SeckillServiceImpl implements SeckillService {
             return seckillUserResult.getResult();
         }
     }
+
 }

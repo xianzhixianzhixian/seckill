@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class SeckillOrder {
-    private String id;
+    private Long id;
 
     private Long seckillProductId;
 
@@ -14,7 +14,7 @@ public class SeckillOrder {
 
     private Long userId;
 
-    private Long merchartId;
+    private Long shopId;
 
     private Date createTime;
 
@@ -42,12 +42,12 @@ public class SeckillOrder {
 
     private Date updatedTime;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Long getSeckillProductId() {
@@ -82,12 +82,12 @@ public class SeckillOrder {
         this.userId = userId;
     }
 
-    public Long getMerchartId() {
-        return merchartId;
+    public Long getShopId() {
+        return shopId;
     }
 
-    public void setMerchartId(Long merchartId) {
-        this.merchartId = merchartId;
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
     public Date getCreateTime() {

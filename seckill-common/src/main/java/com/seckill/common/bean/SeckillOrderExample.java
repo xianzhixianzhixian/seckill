@@ -116,62 +116,52 @@ public class SeckillOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andIdEqualTo(String value) {
+        public Criteria andIdEqualTo(Long value) {
             addCriterion("id =", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotEqualTo(String value) {
+        public Criteria andIdNotEqualTo(Long value) {
             addCriterion("id <>", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThan(String value) {
+        public Criteria andIdGreaterThan(Long value) {
             addCriterion("id >", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdGreaterThanOrEqualTo(String value) {
+        public Criteria andIdGreaterThanOrEqualTo(Long value) {
             addCriterion("id >=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThan(String value) {
+        public Criteria andIdLessThan(Long value) {
             addCriterion("id <", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLessThanOrEqualTo(String value) {
+        public Criteria andIdLessThanOrEqualTo(Long value) {
             addCriterion("id <=", value, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdLike(String value) {
-            addCriterion("id like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdNotLike(String value) {
-            addCriterion("id not like", value, "id");
-            return (Criteria) this;
-        }
-
-        public Criteria andIdIn(List<String> values) {
+        public Criteria andIdIn(List<Long> values) {
             addCriterion("id in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotIn(List<String> values) {
+        public Criteria andIdNotIn(List<Long> values) {
             addCriterion("id not in", values, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdBetween(String value1, String value2) {
+        public Criteria andIdBetween(Long value1, Long value2) {
             addCriterion("id between", value1, value2, "id");
             return (Criteria) this;
         }
 
-        public Criteria andIdNotBetween(String value1, String value2) {
+        public Criteria andIdNotBetween(Long value1, Long value2) {
             addCriterion("id not between", value1, value2, "id");
             return (Criteria) this;
         }
@@ -416,63 +406,63 @@ public class SeckillOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdIsNull() {
-            addCriterion("merchart_id is null");
+        public Criteria andShopIdIsNull() {
+            addCriterion("shop_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdIsNotNull() {
-            addCriterion("merchart_id is not null");
+        public Criteria andShopIdIsNotNull() {
+            addCriterion("shop_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdEqualTo(Long value) {
-            addCriterion("merchart_id =", value, "merchartId");
+        public Criteria andShopIdEqualTo(Long value) {
+            addCriterion("shop_id =", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdNotEqualTo(Long value) {
-            addCriterion("merchart_id <>", value, "merchartId");
+        public Criteria andShopIdNotEqualTo(Long value) {
+            addCriterion("shop_id <>", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdGreaterThan(Long value) {
-            addCriterion("merchart_id >", value, "merchartId");
+        public Criteria andShopIdGreaterThan(Long value) {
+            addCriterion("shop_id >", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("merchart_id >=", value, "merchartId");
+        public Criteria andShopIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("shop_id >=", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdLessThan(Long value) {
-            addCriterion("merchart_id <", value, "merchartId");
+        public Criteria andShopIdLessThan(Long value) {
+            addCriterion("shop_id <", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdLessThanOrEqualTo(Long value) {
-            addCriterion("merchart_id <=", value, "merchartId");
+        public Criteria andShopIdLessThanOrEqualTo(Long value) {
+            addCriterion("shop_id <=", value, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdIn(List<Long> values) {
-            addCriterion("merchart_id in", values, "merchartId");
+        public Criteria andShopIdIn(List<Long> values) {
+            addCriterion("shop_id in", values, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdNotIn(List<Long> values) {
-            addCriterion("merchart_id not in", values, "merchartId");
+        public Criteria andShopIdNotIn(List<Long> values) {
+            addCriterion("shop_id not in", values, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdBetween(Long value1, Long value2) {
-            addCriterion("merchart_id between", value1, value2, "merchartId");
+        public Criteria andShopIdBetween(Long value1, Long value2) {
+            addCriterion("shop_id between", value1, value2, "shopId");
             return (Criteria) this;
         }
 
-        public Criteria andMerchartIdNotBetween(Long value1, Long value2) {
-            addCriterion("merchart_id not between", value1, value2, "merchartId");
+        public Criteria andShopIdNotBetween(Long value1, Long value2) {
+            addCriterion("shop_id not between", value1, value2, "shopId");
             return (Criteria) this;
         }
 

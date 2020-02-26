@@ -16,6 +16,11 @@ public class SeckillProductServiceImpl implements SeckillProductService {
     private SeckillProductMapper seckillProductMapper;
 
     @Override
+    public SeckillProduct findSeckillProductBySeckillProductId(Long seckillProductId) {
+        return seckillProductMapper.selectByPrimaryKey(seckillProductId);
+    }
+
+    @Override
     public Integer saveSeckillProfduct(SeckillProduct seckillProduct) {
         seckillProduct.setSeckillVersion(0);
         return seckillProductMapper.insert(seckillProduct);

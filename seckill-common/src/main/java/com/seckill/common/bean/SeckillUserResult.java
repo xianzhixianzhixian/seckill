@@ -17,7 +17,7 @@ public class SeckillUserResult {
 
     private Date seckillTime;
 
-    private String orderId;
+    private Long orderId;
 
     private Date createdTime;
 
@@ -79,12 +79,12 @@ public class SeckillUserResult {
         this.seckillTime = seckillTime;
     }
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId == null ? null : orderId.trim();
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 
     public Date getCreatedTime() {

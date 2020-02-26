@@ -5,15 +5,27 @@ package com.seckill.common.entity;
  */
 public class OrderRequest {
 
-    private Long seckillProductId;
     private Long userId;
+
+    private Long shopId;
+
+    private Long seckillProductId;
 
     public OrderRequest() {
     }
 
-    public OrderRequest(Long seckillProductId, Long userId) {
-        this.seckillProductId = seckillProductId;
+    public OrderRequest(Long userId, Long shopId, Long seckillProductId) {
         this.userId = userId;
+        this.shopId = shopId;
+        this.seckillProductId = seckillProductId;
+    }
+
+    public Long getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 
     public Long getUserId() {
@@ -35,8 +47,9 @@ public class OrderRequest {
     @Override
     public String toString() {
         return "OrderRequest{" +
-                "seckillProductId=" + seckillProductId +
-                ", userId=" + userId +
+                "userId=" + userId +
+                ", shopId=" + shopId +
+                ", seckillProductId=" + seckillProductId +
                 '}';
     }
 }

@@ -3,6 +3,7 @@ package com.seckill.product.service.impl;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.constant.SeckillGeneralCodeMapping;
+import com.seckill.product.entity.SeckillUnique;
 import com.seckill.product.service.SeckillProductIntegrationService;
 import com.seckill.product.util.RedissonLockUtil;
 import org.redisson.api.RLock;
@@ -21,7 +22,7 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
 
     private static Logger logger = LoggerFactory.getLogger(SeckillProductIntegrationServiceImpl.class);
     private static Object objectLock = new Object();
-    private Map<String, Future> seckillProductFutureMap = new HashMap<>(16);
+    private Map<SeckillUnique, Future> seckillProductFutureMap = new HashMap<>(16);
     private ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>());
 
     @Autowired
@@ -36,7 +37,8 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
         logger.info("seckillProductDistributeFuture入参userId：{} seckillProductId：{}", userId, seckillProductId);
         SeckillFuture seckillFuture = new SeckillFuture(userId, seckillProductId);
         Future<Integer> result = executorService.submit(seckillFuture);
-        seckillProductFutureMap.put(userId + "_" + seckillProductId, result);
+        SeckillUnique seckillUnique = new SeckillUnique(userId, seckillProductId);
+        seckillProductFutureMap.put(seckillUnique, result);
     }
 
     class SeckillFuture implements Callable {

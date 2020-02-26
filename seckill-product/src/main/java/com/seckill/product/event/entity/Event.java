@@ -1,6 +1,6 @@
 package com.seckill.product.event.entity;
 
-import com.seckill.product.service.SeckillMessageFeignService;
+import com.seckill.product.service.feign.SeckillMessageFeignService;
 
 public interface Event {
 

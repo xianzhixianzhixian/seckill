@@ -52,7 +52,7 @@ public interface SeckillService {
     Integer seckillProductRedisLock(Long userId, Long seckillProductId);
 
     /**
-     * 使用Future模式进行秒杀(这里会有问题，因为call()方法中的操作都是非原子性的)
+     * 使用Future模式进行秒杀(这里会有问题，因为call()方法中的操作都是非原子性的，需要后续添加分布式锁)
      * @param userId
      * @param seckillProductId
      */

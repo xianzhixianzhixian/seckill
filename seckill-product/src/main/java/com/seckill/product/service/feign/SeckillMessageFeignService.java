@@ -1,4 +1,4 @@
-package com.seckill.product.service;
+package com.seckill.product.service.feign;
 
 import com.seckill.common.entity.OrderRequest;
 import org.springframework.cloud.openfeign.FeignClient;

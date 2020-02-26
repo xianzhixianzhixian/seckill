@@ -72,6 +72,7 @@ public class SeckillEventHandler implements Handler {
             logger.info("SeckillEventHandler New处理{}", event);
             SeckillProductEvent seckillProductEvent = (SeckillProductEvent) event;
             Long userId = seckillProductEvent.getUserId();
+            Long shopId = seckillProductEvent.getShopId();
             Long seckillProductId = seckillProductEvent.getSeckillProductId();
             SeckillService seckillService = seckillProductEvent.getSeckillService();
             seckillService.multipltThreadSeckillProduct(userId, seckillProductId);
@@ -79,6 +80,7 @@ public class SeckillEventHandler implements Handler {
                     seckillProductEvent.getName(),
                     SeckillEventType.COMPLETE,
                     userId,
+                    shopId,
                     seckillProductId,
                     seckillService,
                     seckillProductEvent.getSeckillMessageFeignService()
@@ -103,6 +105,7 @@ public class SeckillEventHandler implements Handler {
                     seckillCompleteEvent.getName(),
                     OrderEventType.NEW,
                     seckillCompleteEvent.getUserId(),
+                    seckillCompleteEvent.getShopId(),
                     seckillCompleteEvent.getSeckillProductId(),
                     seckillCompleteEvent.getSeckillMessageFeignService()
             );

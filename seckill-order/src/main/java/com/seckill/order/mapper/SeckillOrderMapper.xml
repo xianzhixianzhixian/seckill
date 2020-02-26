@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seckill.order.mapper.SeckillOrderMapper">
   <resultMap id="BaseResultMap" type="com.seckill.common.bean.SeckillOrder">
-    <id column="id" jdbcType="VARCHAR" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="seckill_product_id" jdbcType="BIGINT" property="seckillProductId" />
     <result column="product_id" jdbcType="BIGINT" property="productId" />
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="merchart_id" jdbcType="BIGINT" property="merchartId" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="pay_time" jdbcType="TIMESTAMP" property="payTime" />
     <result column="pay_status" jdbcType="INTEGER" property="payStatus" />
@@ -81,10 +81,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, seckill_product_id, product_id, pay_amount, user_id, merchart_id, create_time, 
-    pay_time, pay_status, pay_type, receiving_adress, receiving_phone, receiving_name, 
-    trade_serial_number, seckill_num, order_flag, seckill_user_result_id, created_time, 
-    updated_time
+    id, seckill_product_id, product_id, pay_amount, user_id, shop_id, create_time, pay_time, 
+    pay_status, pay_type, receiving_adress, receiving_phone, receiving_name, trade_serial_number, 
+    seckill_num, order_flag, seckill_user_result_id, created_time, updated_time
   </sql>
   <select id="selectByExample" parameterType="com.seckill.common.bean.SeckillOrderExample" resultMap="BaseResultMap">
     select
@@ -100,15 +99,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from seckill_order
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from seckill_order
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="com.seckill.common.bean.SeckillOrderExample">
     delete from seckill_order
@@ -118,14 +117,14 @@
   </delete>
   <insert id="insert" parameterType="com.seckill.common.bean.SeckillOrder">
     insert into seckill_order (id, seckill_product_id, product_id, 
-      pay_amount, user_id, merchart_id, 
+      pay_amount, user_id, shop_id, 
       create_time, pay_time, pay_status, 
       pay_type, receiving_adress, receiving_phone, 
       receiving_name, trade_serial_number, seckill_num, 
       order_flag, seckill_user_result_id, created_time, 
       updated_time)
-    values (#{id,jdbcType=VARCHAR}, #{seckillProductId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
-      #{payAmount,jdbcType=DECIMAL}, #{userId,jdbcType=BIGINT}, #{merchartId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{seckillProductId,jdbcType=BIGINT}, #{productId,jdbcType=BIGINT}, 
+      #{payAmount,jdbcType=DECIMAL}, #{userId,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, 
       #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=INTEGER}, 
       #{payType,jdbcType=INTEGER}, #{receivingAdress,jdbcType=VARCHAR}, #{receivingPhone,jdbcType=VARCHAR}, 
       #{receivingName,jdbcType=VARCHAR}, #{tradeSerialNumber,jdbcType=VARCHAR}, #{seckillNum,jdbcType=BIGINT}, 
@@ -150,8 +149,8 @@
       <if test="userId != null">
         user_id,
       </if>
-      <if test="merchartId != null">
-        merchart_id,
+      <if test="shopId != null">
+        shop_id,
       </if>
       <if test="createTime != null">
         create_time,
@@ -195,7 +194,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=VARCHAR},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="seckillProductId != null">
         #{seckillProductId,jdbcType=BIGINT},
@@ -209,8 +208,8 @@
       <if test="userId != null">
         #{userId,jdbcType=BIGINT},
       </if>
-      <if test="merchartId != null">
-        #{merchartId,jdbcType=BIGINT},
+      <if test="shopId != null">
+        #{shopId,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -263,7 +262,7 @@
     update seckill_order
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=VARCHAR},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.seckillProductId != null">
         seckill_product_id = #{record.seckillProductId,jdbcType=BIGINT},
@@ -277,8 +276,8 @@
       <if test="record.userId != null">
         user_id = #{record.userId,jdbcType=BIGINT},
       </if>
-      <if test="record.merchartId != null">
-        merchart_id = #{record.merchartId,jdbcType=BIGINT},
+      <if test="record.shopId != null">
+        shop_id = #{record.shopId,jdbcType=BIGINT},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -326,12 +325,12 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update seckill_order
-    set id = #{record.id,jdbcType=VARCHAR},
+    set id = #{record.id,jdbcType=BIGINT},
       seckill_product_id = #{record.seckillProductId,jdbcType=BIGINT},
       product_id = #{record.productId,jdbcType=BIGINT},
       pay_amount = #{record.payAmount,jdbcType=DECIMAL},
       user_id = #{record.userId,jdbcType=BIGINT},
-      merchart_id = #{record.merchartId,jdbcType=BIGINT},
+      shop_id = #{record.shopId,jdbcType=BIGINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       pay_time = #{record.payTime,jdbcType=TIMESTAMP},
       pay_status = #{record.payStatus,jdbcType=INTEGER},
@@ -364,8 +363,8 @@
       <if test="userId != null">
         user_id = #{userId,jdbcType=BIGINT},
       </if>
-      <if test="merchartId != null">
-        merchart_id = #{merchartId,jdbcType=BIGINT},
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=BIGINT},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -407,7 +406,7 @@
         updated_time = #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.seckill.common.bean.SeckillOrder">
     update seckill_order
@@ -415,7 +414,7 @@
       product_id = #{productId,jdbcType=BIGINT},
       pay_amount = #{payAmount,jdbcType=DECIMAL},
       user_id = #{userId,jdbcType=BIGINT},
-      merchart_id = #{merchartId,jdbcType=BIGINT},
+      shop_id = #{shopId,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       pay_time = #{payTime,jdbcType=TIMESTAMP},
       pay_status = #{payStatus,jdbcType=INTEGER},
@@ -429,6 +428,6 @@
       seckill_user_result_id = #{seckillUserResultId,jdbcType=VARCHAR},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

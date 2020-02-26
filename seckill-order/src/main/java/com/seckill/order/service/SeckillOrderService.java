@@ -1,6 +1,7 @@
 package com.seckill.order.service;
 
 import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.entity.OrderRequest;
 
 public interface SeckillOrderService {
 
@@ -10,4 +11,12 @@ public interface SeckillOrderService {
      * @return
      */
     Integer createNewOrder(SeckillOrder seckillOrder) throws Exception;
+
+    /**
+     * 提供给message组件创建订单
+     * @param orderRequest
+     * @return
+     * @throws Exception
+     */
+    Integer createNewOrder(OrderRequest orderRequest) throws Exception;
 }

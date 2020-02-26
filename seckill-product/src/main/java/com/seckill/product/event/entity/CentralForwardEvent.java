@@ -1,6 +1,6 @@
 package com.seckill.product.event.entity;
 
-import com.seckill.product.service.SeckillMessageFeignService;
+import com.seckill.product.service.feign.SeckillMessageFeignService;
 
 /**
  * 中央处理器转发事件
