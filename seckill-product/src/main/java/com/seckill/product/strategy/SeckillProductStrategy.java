@@ -10,9 +10,10 @@ public interface SeckillProductStrategy {
      * 锁秒杀商品方法
      * 锁秒杀商品方法
      * @param userId
+     * @param shopId
      * @param seckillProductId
      * @return
      */
-    Integer seckillProduct(Long userId, Long seckillProductId);
+    Integer seckillProduct(Long userId, Long shopId, Long seckillProductId);
 
 }

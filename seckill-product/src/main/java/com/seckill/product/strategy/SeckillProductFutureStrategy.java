@@ -1,9 +1,12 @@
 package com.seckill.product.strategy;
 
+import com.seckill.product.entity.SeckillUnique;
 import com.seckill.product.service.SeckillProductIntegrationService;
-import com.seckill.product.service.SeckillService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.concurrent.Future;
 
 public class SeckillProductFutureStrategy implements SeckillProductStrategy {
 
@@ -16,14 +19,16 @@ public class SeckillProductFutureStrategy implements SeckillProductStrategy {
     }
 
     @Override
-    public Integer seckillProduct(Long userId, Long seckillProductId) {
+    public Integer seckillProduct(Long userId, Long shopId, Long seckillProductId) {
         logger.info("seckillProduct Future入参userId：{} seckillProductId：{}", userId, seckillProductId);
         try {
-            seckillProductIntegrationService.seckillProductDistributeFuture(userId, seckillProductId);
-            return 1;
+            SeckillUnique seckillUnique = new SeckillUnique(userId, seckillProductId);
+            Map<SeckillUnique, Future> resultMap = seckillProductIntegrationService.seckillProductDistributeFuture(userId, shopId, seckillProductId);
+            Future<Integer> result = resultMap.get(seckillUnique);
+            return result.get();
         } catch (Exception e) {
             logger.info("seckillProduct Future发生错误，原因{}", e);
-            return 0;
+            return 1;
         }
     }
 }

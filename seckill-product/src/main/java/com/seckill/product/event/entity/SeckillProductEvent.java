@@ -2,6 +2,7 @@ package com.seckill.product.event.entity;
 
 import com.seckill.product.service.feign.SeckillMessageFeignService;
 import com.seckill.product.service.SeckillService;
+import com.seckill.product.strategy.SeckillProductStrategy;
 
 /**
  * 秒杀事件
@@ -18,7 +19,7 @@ public class SeckillProductEvent implements Event {
 
     private Long seckillProductId;
 
-    private SeckillService seckillService;
+    private SeckillProductStrategy seckillProductStrategy;
 
     private SeckillMessageFeignService seckillMessageFeignService;
 
@@ -31,7 +32,7 @@ public class SeckillProductEvent implements Event {
             Long userId,
             Long shopId,
             Long seckillProductId,
-            SeckillService seckillService,
+            SeckillProductStrategy seckillProductStrategy,
             SeckillMessageFeignService seckillMessageFeignService
     ) {
         this.name = name;
@@ -39,7 +40,7 @@ public class SeckillProductEvent implements Event {
         this.userId = userId;
         this.shopId = shopId;
         this.seckillProductId = seckillProductId;
-        this.seckillService = seckillService;
+        this.seckillProductStrategy = seckillProductStrategy;
         this.seckillMessageFeignService = seckillMessageFeignService;
     }
 
@@ -83,12 +84,12 @@ public class SeckillProductEvent implements Event {
         this.seckillProductId = seckillProductId;
     }
 
-    public SeckillService getSeckillService() {
-        return seckillService;
+    public SeckillProductStrategy getSeckillProductStrategy() {
+        return seckillProductStrategy;
     }
 
-    public void setSeckillService(SeckillService seckillService) {
-        this.seckillService = seckillService;
+    public void setSeckillProductStrategy(SeckillProductStrategy seckillProductStrategy) {
+        this.seckillProductStrategy = seckillProductStrategy;
     }
 
     public SeckillMessageFeignService getSeckillMessageFeignService() {

@@ -98,6 +98,8 @@ public class RedissonLockUtil {
      */
     public String getFromBucket(String key) {
         RBucket rBucket = redissonClient.getBucket(key);
-        return (String) rBucket.get();
+        String value = (String) rBucket.get();
+        logger.info("线程{} getFromBucket ，key {}, value {}", Thread.currentThread().getName(), key, value);
+        return value;
     }
 }

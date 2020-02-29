@@ -8,6 +8,7 @@ import com.seckill.product.event.state.OrderEventType;
 import com.seckill.product.event.state.SeckillEventType;
 import com.seckill.product.event.state.handler.StateHandler;
 import com.seckill.product.service.SeckillService;
+import com.seckill.product.strategy.SeckillProductStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,22 +75,25 @@ public class SeckillEventHandler implements Handler {
             Long userId = seckillProductEvent.getUserId();
             Long shopId = seckillProductEvent.getShopId();
             Long seckillProductId = seckillProductEvent.getSeckillProductId();
-            SeckillService seckillService = seckillProductEvent.getSeckillService();
-            seckillService.multipltThreadSeckillProduct(userId, seckillProductId);
-            Event seckillCompleteEvent = new SeckillProductEvent(
-                    seckillProductEvent.getName(),
-                    SeckillEventType.COMPLETE,
-                    userId,
-                    shopId,
-                    seckillProductId,
-                    seckillService,
-                    seckillProductEvent.getSeckillMessageFeignService()
-            );
-            BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
-            try {
-                eventBlockingDeque.put(seckillCompleteEvent);
-            } catch (Exception e) {
-                logger.error("SeckillEventHandler New处理{}错误，原因{}", seckillCompleteEvent, e);
+            SeckillProductStrategy seckillProductStrategy = seckillProductEvent.getSeckillProductStrategy();
+            Integer result = seckillProductStrategy.seckillProduct(userId, shopId, seckillProductId);
+            if (result == 0) {
+                //成功
+                Event seckillCompleteEvent = new SeckillProductEvent(
+                        seckillProductEvent.getName(),
+                        SeckillEventType.COMPLETE,
+                        userId,
+                        shopId,
+                        seckillProductId,
+                        seckillProductStrategy,
+                        seckillProductEvent.getSeckillMessageFeignService()
+                );
+                BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
+                try {
+                    eventBlockingDeque.put(seckillCompleteEvent);
+                } catch (Exception e) {
+                    logger.error("SeckillEventHandler New处理{}错误，原因{}", seckillCompleteEvent, e);
+                }
             }
         }
 

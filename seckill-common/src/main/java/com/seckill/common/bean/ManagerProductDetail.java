@@ -102,4 +102,20 @@ public class ManagerProductDetail {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "ManagerProductDetail{" +
+                "id=" + id +
+                ", productId=" + productId +
+                ", productPalce='" + productPalce + '\'' +
+                ", productBrand='" + productBrand + '\'' +
+                ", productDecsrption='" + productDecsrption + '\'' +
+                ", productWeight='" + productWeight + '\'' +
+                ", productDetailPcitureUrl='" + productDetailPcitureUrl + '\'' +
+                ", specificationAndPack='" + specificationAndPack + '\'' +
+                ", createdTime=" + createdTime +
+                ", updatedTime=" + updatedTime +
+                '}';
+    }
 }

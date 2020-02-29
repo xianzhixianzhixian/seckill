@@ -33,25 +33,35 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
     private RedissonLockUtil redissonLockUtil;
 
     @Override
-    public void seckillProductDistributeFuture(Long userId, Long seckillProductId) {
+    public Map<SeckillUnique, Future> seckillProductDistributeFuture(Long userId, Long shopId, Long seckillProductId) {
         logger.info("seckillProductDistributeFuture入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        SeckillFuture seckillFuture = new SeckillFuture(userId, seckillProductId);
+        SeckillFuture seckillFuture = new SeckillFuture(userId, shopId, seckillProductId);
         Future<Integer> result = executorService.submit(seckillFuture);
         SeckillUnique seckillUnique = new SeckillUnique(userId, seckillProductId);
         seckillProductFutureMap.put(seckillUnique, result);
+        return seckillProductFutureMap;
     }
 
     class SeckillFuture implements Callable {
-
         private Long userId;
+        private Long shopId;
         private Long seckillProductId;
 
         public SeckillFuture() {
         }
 
-        public SeckillFuture(Long userId, Long seckillProductId) {
+        public SeckillFuture(Long userId, Long shopId, Long seckillProductId) {
             this.userId = userId;
+            this.shopId = shopId;
             this.seckillProductId = seckillProductId;
+        }
+
+        public Long getShopId() {
+            return shopId;
+        }
+
+        public void setShopId(Long shopId) {
+            this.shopId = shopId;
         }
 
         public Long getUserId() {
@@ -90,8 +100,9 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
                     seckillUserResult.setProductId(seckillProduct.getProductId());
                     seckillUserResult.setSeckillProductId(seckillProductId);
                     seckillUserResult.setUserId(userId);
-                    seckillUserResult.setResult(0);
-                    seckillUserResult.setResultData("用户" + userId + "秒杀成功");
+                    //正在生成订单状态
+                    seckillUserResult.setResult(2);
+                    seckillUserResult.setResultData("用户" + userId + "正在秒杀生成订单");
                     seckillUserResult.setSeckillTime(new Date());
                     logger.info("用户{}开始SeckillFuture秒杀{}", userId, seckillProductId);
                     if (seckillNum > seckillInventory) {

@@ -1,9 +1,11 @@
 package com.seckill.product.service.feign;
 
+import com.seckill.common.bean.ManagerProductDetail;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface ManageProductFeignService {
      * @return
      */
     @PostMapping("/product/listProductByShopId")
-    List<SeckillProduct> listProductByShopId(Long shopId);
+    List<SeckillProduct> listProductByShopId(@RequestParam("shopId") Long shopId);
 
     /**
      * 根据商品id查询商品信息
@@ -27,6 +29,14 @@ public interface ManageProductFeignService {
      * @return
      */
     @PostMapping("/product/findProductByProductId")
-    SeckillResult findProductByProductId(Long productId);
+    SeckillResult findProductByProductId(@RequestParam("productId") Long productId);
+
+    /**
+     * 根据商品id查询商品详情
+     * @param productId
+     * @return
+     */
+    @PostMapping("/product/findProductDetailByProductId")
+    ManagerProductDetail findProductDetailByProductId(@RequestParam("productId") Long productId);
 
 }

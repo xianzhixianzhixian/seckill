@@ -1,5 +1,6 @@
 package com.seckill.manager.product.service;
 
+import com.seckill.common.bean.ManagerProductDetail;
 import com.seckill.common.bean.ManagerProductInfo;
 
 import java.util.List;
@@ -34,4 +35,18 @@ public interface ProductInfoService {
      * @return
      */
     ManagerProductInfo findProductByProductId(Long productId);
+
+    /**
+     * 添加产品详细信息
+     * @param productDetail
+     * @return
+     */
+    Integer addProductDetail(ManagerProductDetail productDetail);
+
+    /**
+     * 根据商品id查询商品详情
+     * @param productId
+     * @return
+     */
+    ManagerProductDetail findProductDetailByProductId(Long productId);
 }

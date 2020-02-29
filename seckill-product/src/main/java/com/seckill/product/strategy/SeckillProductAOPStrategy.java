@@ -15,9 +15,9 @@ public class SeckillProductAOPStrategy implements SeckillProductStrategy {
     }
 
     @Override
-    public Integer seckillProduct(Long userId, Long seckillProductId) {
+    public Integer seckillProduct(Long userId, Long shopId, Long seckillProductId) {
         logger.info("seckillProduct AOP入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        return seckillService.seckillProductAOP(userId, seckillProductId);
+        return seckillService.seckillProductAOP(userId, shopId, seckillProductId);
     }
 
 }

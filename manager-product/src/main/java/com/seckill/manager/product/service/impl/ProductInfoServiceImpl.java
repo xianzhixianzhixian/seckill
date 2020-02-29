@@ -1,6 +1,9 @@
 package com.seckill.manager.product.service.impl;
 
+import com.seckill.common.bean.ManagerProductDetail;
+import com.seckill.common.bean.ManagerProductDetailExample;
 import com.seckill.common.bean.ManagerProductInfo;
+import com.seckill.manager.product.mapper.ManagerProductDetailMapper;
 import com.seckill.manager.product.mapper.ManagerProductInfoMapper;
 import com.seckill.common.bean.ManagerProductInfoExample;
 import com.seckill.manager.product.service.ProductInfoService;
@@ -13,9 +16,10 @@ import java.util.List;
 @Service
 public class ProductInfoServiceImpl implements ProductInfoService {
 
-
     @Autowired
     private ManagerProductInfoMapper productInfoMapper;
+    @Autowired
+    private ManagerProductDetailMapper productDetailMapper;
 
     @Override
     public Integer saveProductInfo(ManagerProductInfo productInfo) {
@@ -50,4 +54,29 @@ public class ProductInfoServiceImpl implements ProductInfoService {
     public ManagerProductInfo findProductByProductId(Long productId){
         return productInfoMapper.selectByPrimaryKey(productId);
     }
+
+    @Override
+    public Integer addProductDetail(ManagerProductDetail productDetail) {
+        return productDetailMapper.insert(productDetail);
+    }
+
+    /**
+     * selectByExample不会返回null
+     * @param productId
+     * @return
+     */
+    @Override
+    public ManagerProductDetail findProductDetailByProductId(Long productId) {
+        ManagerProductDetailExample example = new ManagerProductDetailExample();
+        ManagerProductDetailExample.Criteria criteria = example.createCriteria();
+        criteria.andProductIdEqualTo(productId);
+        List<ManagerProductDetail> productDetailList = productDetailMapper.selectByExample(example);
+        if (productDetailList.size() == 0) {
+            return null;
+        } else {
+            return productDetailList.get(0);
+        }
+    }
+
+
 }

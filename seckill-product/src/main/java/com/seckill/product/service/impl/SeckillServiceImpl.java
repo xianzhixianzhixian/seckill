@@ -42,9 +42,11 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private RedissonLockUtil redissonLockUtil;
 
+
+
     @Transactional
     @Override
-    public Integer seckillProductAOP(Long userId, Long seckillProductId) {
+    public Integer seckillProductAOP(Long userId, Long shopId, Long seckillProductId) {
         logger.info("buySeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Integer updateNum = 0;
         SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);

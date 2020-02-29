@@ -8,10 +8,11 @@ public interface SeckillService {
     /**
      * 同步AOP锁秒杀商品方法
      * @param userId
+     * @param shopId
      * @param seckillProductId
      * @return
      */
-    Integer seckillProductAOP(Long userId, Long seckillProductId);
+    Integer seckillProductAOP(Long userId, Long shopId, Long seckillProductId);
 
     /**
      * 多线程异步处理秒杀
