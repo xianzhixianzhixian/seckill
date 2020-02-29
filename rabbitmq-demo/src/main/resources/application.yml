@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: rabbitmq-demo
+  rabbitmq:
+    addresses: 192.168.56.102:5672,192.168.56.103:5672,192.168.56.104:5672
+    username: admin
+    password: 123456
+    virtual-host: /
+    connection-timeout: 15000
+    #发送确认
+    publisher-confirms: true

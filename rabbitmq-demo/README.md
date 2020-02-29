@@ -1,0 +1,1 @@
+# SpringBoot整合RabbitMQ的示例

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <project xmlns="http://maven.apache.org/POM/4.0.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -16,12 +16,24 @@
     <version>1.0</version>
 
     <modules>
-        <module>seckill-register-center</module>
-        <module>seckill-user</module>
+        <module>seckill-common</module>
+        <module>seckill-product</module>
+        <module>seckill-order</module>
+        <module>seckill-message</module>
+        <module>manager-user</module>
+        <module>manager-merchant</module>
+        <module>manager-shop</module>
+        <module>manager-product-type</module>
+        <module>manager-product</module>
+        <module>rabbitmq-demo</module>
     </modules>
 
     <properties>
-        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+        <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+        <mybatis-spring.version>2.1.0</mybatis-spring.version>
+        <mybatis.version>3.2.8</mybatis.version>
+        <seckill-common.version>1.0</seckill-common.version>
+        <redisson.version>3.11.5</redisson.version>
     </properties>
 
     <dependencyManagement>
