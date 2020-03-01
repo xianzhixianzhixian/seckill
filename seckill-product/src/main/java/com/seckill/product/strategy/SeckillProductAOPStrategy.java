@@ -1,5 +1,8 @@
 package com.seckill.product.strategy;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.product.service.SeckillService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +18,9 @@ public class SeckillProductAOPStrategy implements SeckillProductStrategy {
     }
 
     @Override
-    public Integer seckillProduct(Long userId, Long shopId, Long seckillProductId) {
-        logger.info("seckillProduct AOP入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        return seckillService.seckillProductAOP(userId, shopId, seckillProductId);
+    public Integer seckillProduct(SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult) {
+        logger.info("seckillProduct AOP入参seckillProduct：{} seckillOrder：{} seckillUserResult：{}", seckillProduct, seckillOrder, seckillUserResult);
+        return seckillService.seckillProductAOP(seckillProduct, seckillOrder, seckillUserResult);
     }
 
 }

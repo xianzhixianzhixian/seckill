@@ -1,11 +1,15 @@
 package com.seckill.product.event.handler;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.product.event.CentralEventProcessor;
 import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
 import com.seckill.product.event.state.OrderEventType;
 import com.seckill.product.event.state.handler.StateHandler;
+import com.seckill.product.service.SeckillUserResultService;
 import com.seckill.product.service.feign.SeckillMessageFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,15 +74,15 @@ public class OrderEventHandler implements Handler {
         public void hanlde(Event event) {
             logger.info("OrderEventHandler New处理{}", event);
             OrderEvent orderEvent = (OrderEvent) event;
-            Long userId = orderEvent.getUserId();
-            Long shopId = orderEvent.getShopId();
-            Long seckillProductId = orderEvent.getSeckillProductId();
+            SeckillProduct seckillProduct = orderEvent.getSeckillProduct();
+            SeckillUserResult seckillUserResult = orderEvent.getSeckillUserResult();
+            SeckillOrder seckillOrder = orderEvent.getSeckillOrder();
             SeckillMessageFeignService seckillMessageFeignService = orderEvent.getSeckillMessageFeignService();
             //发送消息到RabbitMQ
             OrderRequest orderRequest = new OrderRequest();
-            orderRequest.setUserId(userId);
-            orderRequest.setShopId(shopId);
-            orderRequest.setSeckillProductId(seckillProductId);
+            orderRequest.setSeckillProduct(seckillProduct);
+            orderRequest.setSeckillUserResult(seckillUserResult);
+            orderRequest.setSeckillOrder(seckillOrder);
             seckillMessageFeignService.sendOrderMessage(orderRequest);
         }
 
@@ -89,6 +93,13 @@ public class OrderEventHandler implements Handler {
         @Override
         public void hanlde(Event event) {
             logger.info("OrderEventHandler Complete处理{}", event);
+            OrderEvent orderEvent = (OrderEvent) event;
+            SeckillUserResult seckillUserResult = orderEvent.getSeckillUserResult();
+            //成功
+            seckillUserResult.setResult(0);
+            seckillUserResult.setResultData("秒杀成功");
+            SeckillUserResultService seckillUserResultService = orderEvent.getSeckillUserResultService();
+            seckillUserResultService.updateSeckillUserResultSelective(seckillUserResult);
         }
 
     }

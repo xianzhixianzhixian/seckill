@@ -1,5 +1,9 @@
 package com.seckill.product.service;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
+
 /**
  * 秒杀服务Service
  */
@@ -13,6 +17,15 @@ public interface SeckillService {
      * @return
      */
     Integer seckillProductAOP(Long userId, Long shopId, Long seckillProductId);
+
+    /**
+     * 同步AOP锁秒杀商品方法
+     * @param seckillProduct
+     * @param seckillOrder
+     * @param seckillUserResult
+     * @return
+     */
+    Integer seckillProductAOP(SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult);
 
     /**
      * 多线程异步处理秒杀

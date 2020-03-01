@@ -102,4 +102,20 @@ public class SeckillUserResult {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "SeckillUserResult{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", productId=" + productId +
+                ", seckillProductId=" + seckillProductId +
+                ", result=" + result +
+                ", resultData='" + resultData + '\'' +
+                ", seckillTime=" + seckillTime +
+                ", orderId=" + orderId +
+                ", createdTime=" + createdTime +
+                ", updatedTime=" + updatedTime +
+                '}';
+    }
 }

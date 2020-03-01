@@ -1,5 +1,8 @@
 package com.seckill.product.event.handler;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.product.event.CentralEventProcessor;
 import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
@@ -72,19 +75,21 @@ public class SeckillEventHandler implements Handler {
         public void hanlde(Event event) {
             logger.info("SeckillEventHandler New处理{}", event);
             SeckillProductEvent seckillProductEvent = (SeckillProductEvent) event;
-            Long userId = seckillProductEvent.getUserId();
-            Long shopId = seckillProductEvent.getShopId();
-            Long seckillProductId = seckillProductEvent.getSeckillProductId();
+            SeckillProduct seckillProduct = seckillProductEvent.getSeckillProduct();
+            SeckillOrder seckillOrder = seckillProductEvent.getSeckillOrder();
+            SeckillUserResult seckillUserResult = seckillProductEvent.getSeckillUserResult();
             SeckillProductStrategy seckillProductStrategy = seckillProductEvent.getSeckillProductStrategy();
-            Integer result = seckillProductStrategy.seckillProduct(userId, shopId, seckillProductId);
+            Integer result = seckillProductStrategy.seckillProduct(seckillProduct, seckillOrder, seckillUserResult);
             if (result == 0) {
                 //成功
                 Event seckillCompleteEvent = new SeckillProductEvent(
                         seckillProductEvent.getName(),
                         SeckillEventType.COMPLETE,
-                        userId,
-                        shopId,
-                        seckillProductId,
+                        seckillProduct,
+                        seckillOrder,
+                        seckillUserResult,
+                        seckillProductEvent.getSeckillService(),
+                        seckillProductEvent.getSeckillUserResultService(),
                         seckillProductStrategy,
                         seckillProductEvent.getSeckillMessageFeignService()
                 );
@@ -105,12 +110,18 @@ public class SeckillEventHandler implements Handler {
         public void hanlde(Event event) {
             logger.info("SeckillEventHandler Complete处理{}", event);
             SeckillProductEvent seckillCompleteEvent = (SeckillProductEvent) event;
+            SeckillProduct seckillProduct = seckillCompleteEvent.getSeckillProduct();
+            SeckillOrder seckillOrder = seckillCompleteEvent.getSeckillOrder();
+            SeckillUserResult seckillUserResult = seckillCompleteEvent.getSeckillUserResult();
             Event orderNewEvent = new OrderEvent(
                     seckillCompleteEvent.getName(),
                     OrderEventType.NEW,
-                    seckillCompleteEvent.getUserId(),
-                    seckillCompleteEvent.getShopId(),
-                    seckillCompleteEvent.getSeckillProductId(),
+                    seckillProduct,
+                    seckillOrder,
+                    seckillUserResult,
+                    seckillCompleteEvent.getSeckillService(),
+                    seckillCompleteEvent.getSeckillUserResultService(),
+                    seckillCompleteEvent.getSeckillProductStrategy(),
                     seckillCompleteEvent.getSeckillMessageFeignService()
             );
             BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();

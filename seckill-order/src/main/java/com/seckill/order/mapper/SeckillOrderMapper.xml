@@ -115,7 +115,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.seckill.common.bean.SeckillOrder">
+  <insert id="insert" parameterType="com.seckill.common.bean.SeckillOrder" useGeneratedKeys="true" keyProperty="id">
     insert into seckill_order (id, seckill_product_id, product_id, 
       pay_amount, user_id, shop_id, 
       create_time, pay_time, pay_status, 
@@ -131,7 +131,7 @@
       #{orderFlag,jdbcType=INTEGER}, #{seckillUserResultId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillOrder">
+  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillOrder" useGeneratedKeys="true" keyProperty="id">
     insert into seckill_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

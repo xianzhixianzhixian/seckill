@@ -1,5 +1,6 @@
 package com.seckill.product.service.impl;
 
+import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillProductExample;
 import com.seckill.common.bean.SeckillUserResult;
@@ -47,7 +48,7 @@ public class SeckillServiceImpl implements SeckillService {
     @Transactional
     @Override
     public Integer seckillProductAOP(Long userId, Long shopId, Long seckillProductId) {
-        logger.info("buySeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
+        logger.info("seckillProductAOP入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Integer updateNum = 0;
         SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
         Long seckillInventory = seckillProduct.getSeckillInventory();
@@ -62,6 +63,24 @@ public class SeckillServiceImpl implements SeckillService {
         seckillProductResult.setSeckillNum(seckillNum);
         seckillProductResult.setSeckillInventory(seckillInventory - seckillNum);
         updateNum = seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductResult);
+        return updateNum;
+    }
+
+    @Override
+    public Integer seckillProductAOP(SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult) {
+        logger.info("seckillProductAOP入参seckillProduct：{} seckillOrder：{} seckillUserResult：{}", seckillProduct, seckillOrder, seckillUserResult);
+        Integer updateNum = 0;
+        Long seckillInventory = seckillProduct.getSeckillInventory();
+        Long seckillNum = seckillProduct.getSeckillNum();
+        //一次秒杀商品的数量根据数据库来定
+        if (seckillNum > seckillInventory) {
+            logger.info("商品库存{}，抢购数量{}，库存不足", seckillInventory, seckillNum);
+            return updateNum;
+        }
+        seckillProduct.setId(seckillProduct.getId());
+        seckillProduct.setSeckillNum(seckillNum);
+        seckillProduct.setSeckillInventory(seckillInventory - seckillNum);
+        updateNum = seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
         return updateNum;
     }
 

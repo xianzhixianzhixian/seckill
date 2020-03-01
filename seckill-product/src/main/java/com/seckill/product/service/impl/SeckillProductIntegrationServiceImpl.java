@@ -1,5 +1,6 @@
 package com.seckill.product.service.impl;
 
+import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.constant.SeckillGeneralCodeMapping;
@@ -33,51 +34,54 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
     private RedissonLockUtil redissonLockUtil;
 
     @Override
-    public Map<SeckillUnique, Future> seckillProductDistributeFuture(Long userId, Long shopId, Long seckillProductId) {
-        logger.info("seckillProductDistributeFuture入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        SeckillFuture seckillFuture = new SeckillFuture(userId, shopId, seckillProductId);
+    public Map<SeckillUnique, Future> seckillProductDistributeFuture(SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult) {
+        logger.info("seckillProductDistributeFuture入参seckillProduct：{} seckillOrder：{} seckillUserResult：{}", seckillProduct, seckillOrder, seckillUserResult);
+        SeckillFuture seckillFuture = new SeckillFuture(seckillProduct, seckillOrder, seckillUserResult);
         Future<Integer> result = executorService.submit(seckillFuture);
-        SeckillUnique seckillUnique = new SeckillUnique(userId, seckillProductId);
+        SeckillUnique seckillUnique = new SeckillUnique(seckillUserResult.getUserId(), seckillProduct.getId());
         seckillProductFutureMap.put(seckillUnique, result);
         return seckillProductFutureMap;
     }
 
     class SeckillFuture implements Callable {
-        private Long userId;
-        private Long shopId;
-        private Long seckillProductId;
+
+        private SeckillProduct seckillProduct;
+
+        private SeckillOrder seckillOrder;
+
+        private SeckillUserResult seckillUserResult;
 
         public SeckillFuture() {
         }
 
-        public SeckillFuture(Long userId, Long shopId, Long seckillProductId) {
-            this.userId = userId;
-            this.shopId = shopId;
-            this.seckillProductId = seckillProductId;
+        public SeckillFuture(SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult) {
+            this.seckillProduct = seckillProduct;
+            this.seckillOrder = seckillOrder;
+            this.seckillUserResult = seckillUserResult;
         }
 
-        public Long getShopId() {
-            return shopId;
+        public SeckillProduct getSeckillProduct() {
+            return seckillProduct;
         }
 
-        public void setShopId(Long shopId) {
-            this.shopId = shopId;
+        public void setSeckillProduct(SeckillProduct seckillProduct) {
+            this.seckillProduct = seckillProduct;
         }
 
-        public Long getUserId() {
-            return userId;
+        public SeckillOrder getSeckillOrder() {
+            return seckillOrder;
         }
 
-        public void setUserId(Long userId) {
-            this.userId = userId;
+        public void setSeckillOrder(SeckillOrder seckillOrder) {
+            this.seckillOrder = seckillOrder;
         }
 
-        public Long getSeckillProductId() {
-            return seckillProductId;
+        public SeckillUserResult getSeckillUserResult() {
+            return seckillUserResult;
         }
 
-        public void setSeckillProductId(Long seckillProductId) {
-            this.seckillProductId = seckillProductId;
+        public void setSeckillUserResult(SeckillUserResult seckillUserResult) {
+            this.seckillUserResult = seckillUserResult;
         }
 
         /**
@@ -88,18 +92,17 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
         @Override
         public Integer call() throws Exception {
 
-            RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeMapping.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProductId);
+            RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeMapping.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProduct.getId());
             Boolean lockResult = redissonLockUtil.tryLock(rLock, RedissonLockUtil.WAIT_LOCK_TIME, RedissonLockUtil.LOCK_TIME, TimeUnit.SECONDS);
             try {
                 if (lockResult) {
-                    SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
                     Long seckillInventory = seckillProduct.getSeckillInventory();
                     Long seckillNum = seckillProduct.getSeckillNum();
+                    Long seckillProductId = seckillProduct.getId();
+                    Long userId = seckillOrder.getUserId();
 
-                    SeckillUserResult seckillUserResult = new SeckillUserResult();
                     seckillUserResult.setProductId(seckillProduct.getProductId());
-                    seckillUserResult.setSeckillProductId(seckillProductId);
-                    seckillUserResult.setUserId(userId);
+                    seckillUserResult.setSeckillProductId(seckillProduct.getId());
                     //正在生成订单状态
                     seckillUserResult.setResult(2);
                     seckillUserResult.setResultData("用户" + userId + "正在秒杀生成订单");
@@ -111,19 +114,19 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
                         seckillUserResult.setResultData("用户" + userId + "秒杀失败");
                     } else {
                         logger.error("用户{}秒杀商品{}成功，秒杀数量为{}", userId, seckillProductId, seckillNum);
-                        SeckillProduct seckillProductNew = new SeckillProduct();
-                        seckillProductNew.setId(seckillProductId);
-                        seckillProductNew.setSeckillInventory(seckillInventory - seckillNum);
-                        seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProductNew);
+                        seckillProduct.setId(seckillProductId);
+                        seckillProduct.setSeckillInventory(seckillInventory - seckillNum);
+                        seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
                     }
                     seckillUserResultService.saveSeckillUserResult(seckillUserResult);
                     return seckillUserResult.getResult();
                 } else {
                     synchronized (objectLock) {
+                        Long seckillProductId = seckillProduct.getId();
+                        Long productId = seckillProduct.getProductId();
+                        Long userId = seckillOrder.getUserId();
                         logger.error("用户{}秒杀商品{}加锁Redis失败", userId, seckillProductId);
-                        SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
-                        SeckillUserResult seckillUserResult = new SeckillUserResult();
-                        seckillUserResult.setProductId(seckillProduct.getProductId());
+                        seckillUserResult.setProductId(productId);
                         seckillUserResult.setSeckillProductId(seckillProductId);
                         seckillUserResult.setUserId(userId);
                         seckillUserResult.setResult(1);

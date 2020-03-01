@@ -193,4 +193,29 @@ public class SeckillOrder {
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
     }
+
+    @Override
+    public String toString() {
+        return "SeckillOrder{" +
+                "id=" + id +
+                ", seckillProductId=" + seckillProductId +
+                ", productId=" + productId +
+                ", payAmount=" + payAmount +
+                ", userId=" + userId +
+                ", shopId=" + shopId +
+                ", createTime=" + createTime +
+                ", payTime=" + payTime +
+                ", payStatus=" + payStatus +
+                ", payType=" + payType +
+                ", receivingAdress='" + receivingAdress + '\'' +
+                ", receivingPhone='" + receivingPhone + '\'' +
+                ", receivingName='" + receivingName + '\'' +
+                ", tradeSerialNumber='" + tradeSerialNumber + '\'' +
+                ", seckillNum=" + seckillNum +
+                ", orderFlag=" + orderFlag +
+                ", seckillUserResultId='" + seckillUserResultId + '\'' +
+                ", createdTime=" + createdTime +
+                ", updatedTime=" + updatedTime +
+                '}';
+    }
 }

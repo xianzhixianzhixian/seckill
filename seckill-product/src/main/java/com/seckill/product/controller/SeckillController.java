@@ -1,5 +1,7 @@
 package com.seckill.product.controller;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.constant.SeckillGeneralCodeMapping;
@@ -9,6 +11,7 @@ import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.SeckillProductEvent;
 import com.seckill.product.event.handler.CentralEventForwardHandler;
 import com.seckill.product.event.state.SeckillEventType;
+import com.seckill.product.service.SeckillProductService;
 import com.seckill.product.service.feign.SeckillMessageFeignService;
 import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
 import com.seckill.product.service.impl.SeckillServiceImpl;
@@ -30,6 +33,8 @@ public class SeckillController implements InitializingBean {
 
     @Autowired
     private SeckillServiceImpl seckillService;
+    @Autowired
+    private SeckillProductService seckillProductService;
     @Autowired
     private SeckillProductIntegrationServiceImpl seckillProductIntegrationService;
     @Autowired
@@ -108,20 +113,57 @@ public class SeckillController implements InitializingBean {
     @ResponseBody
     @PostMapping("/seckillProductDistributeFuture")
     public void seckillProductDistributeFuture(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
-        seckillProductIntegrationService.seckillProductDistributeFuture(userId, shopId, seckillProductId);
+        SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+        SeckillOrder seckillOrder = new SeckillOrder();
+        seckillOrder.setUserId(userId);
+        seckillOrder.setShopId(shopId);
+        seckillOrder.setSeckillProductId(seckillProductId);
+        SeckillUserResult seckillUserResult = new SeckillUserResult();
+        seckillUserResult.setUserId(userId);
+        seckillUserResult.setSeckillProductId(seckillProductId);
+        seckillProductIntegrationService.seckillProductDistributeFuture(seckillProduct, seckillOrder, seckillUserResult);
     }
 
     @ResponseBody
     @PostMapping("/seckillProductStrategy")
     public Integer seckillProductStrategy(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
-        return seckillProductStrategy.seckillProduct(userId, shopId, seckillProductId);
+        SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+        SeckillOrder seckillOrder = new SeckillOrder();
+        seckillOrder.setUserId(userId);
+        seckillOrder.setShopId(shopId);
+        seckillOrder.setSeckillProductId(seckillProductId);
+        SeckillUserResult seckillUserResult = new SeckillUserResult();
+        seckillUserResult.setUserId(userId);
+        seckillUserResult.setSeckillProductId(seckillProductId);
+        return seckillProductStrategy.seckillProduct(seckillProduct, seckillOrder, seckillUserResult);
     }
 
     @ResponseBody
-    @PostMapping("/seckillProductEnent")
-    public SeckillResult seckillProductEnent(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
+    @PostMapping("/seckillProductEvent")
+    public SeckillResult seckillProductEvent(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
         try {
-            Event seckillEvent = new SeckillProductEvent("multipltThreadSeckillProduct", SeckillEventType.NEW, userId, shopId, seckillProductId, seckillProductStrategy, seckillMessageFeignService);
+            SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
+            if (seckillProduct == null) {
+                return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "秒杀商品不存在");
+            }
+            SeckillOrder seckillOrder = new SeckillOrder();
+            seckillOrder.setUserId(userId);
+            seckillOrder.setShopId(shopId);
+            seckillOrder.setSeckillProductId(seckillProductId);
+            SeckillUserResult seckillUserResult = new SeckillUserResult();
+            seckillUserResult.setUserId(userId);
+            seckillUserResult.setSeckillProductId(seckillProductId);
+            Event seckillEvent = new SeckillProductEvent(
+                    "multipltThreadSeckillProduct",
+                    SeckillEventType.NEW,
+                    seckillProduct,
+                    seckillOrder,
+                    seckillUserResult,
+                    seckillService,
+                    seckillUserResultService,
+                    seckillProductStrategy,
+                    seckillMessageFeignService
+            );
             centralEventForwardHandler.handler(seckillEvent);
         } catch (Exception e) {
             return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "系统错误", e);

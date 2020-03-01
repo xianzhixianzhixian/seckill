@@ -2,6 +2,7 @@ package com.seckill.order.service.impl;
 
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.common.utils.TradeSeqNumberUtils;
 import com.seckill.order.mapper.SeckillOrderMapper;
@@ -46,17 +47,11 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     @Transactional
     @Override
     public Integer createNewOrder(OrderRequest orderRequest) throws Exception {
-        Long userId = orderRequest.getUserId();
-        Long seckillProductId = orderRequest.getSeckillProductId();
-        Long shopId = orderRequest.getShopId();
-        SeckillProduct seckillProduct = seckillProductFeignService.findSeckillProductBySeckillProductId(seckillProductId);
-        SeckillOrder seckillOrder = new SeckillOrder();
-        seckillOrder.setSeckillProductId(seckillProductId);
+        SeckillProduct seckillProduct = orderRequest.getSeckillProduct();
+        SeckillOrder seckillOrder = orderRequest.getSeckillOrder();
         seckillOrder.setProductId(seckillProduct.getProductId());
         seckillOrder.setPayAmount(seckillProduct.getSeckillPrice());
         seckillOrder.setSeckillNum(seckillProduct.getSeckillNum());
-        seckillOrder.setUserId(userId);
-        seckillOrder.setShopId(shopId);
         seckillOrder.setCreateTime(new Date());
         //未支付
         seckillOrder.setPayStatus(0);

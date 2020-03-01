@@ -1,55 +1,59 @@
 package com.seckill.common.entity;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
+
 /**
  * 传入RabbitMQ的订单消息
  */
 public class OrderRequest {
 
-    private Long userId;
+    private SeckillProduct seckillProduct;
 
-    private Long shopId;
+    private SeckillOrder seckillOrder;
 
-    private Long seckillProductId;
+    private SeckillUserResult seckillUserResult;
 
     public OrderRequest() {
     }
 
-    public OrderRequest(Long userId, Long shopId, Long seckillProductId) {
-        this.userId = userId;
-        this.shopId = shopId;
-        this.seckillProductId = seckillProductId;
+    public OrderRequest(SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult) {
+        this.seckillProduct = seckillProduct;
+        this.seckillOrder = seckillOrder;
+        this.seckillUserResult = seckillUserResult;
     }
 
-    public Long getShopId() {
-        return shopId;
+    public SeckillProduct getSeckillProduct() {
+        return seckillProduct;
     }
 
-    public void setShopId(Long shopId) {
-        this.shopId = shopId;
+    public void setSeckillProduct(SeckillProduct seckillProduct) {
+        this.seckillProduct = seckillProduct;
     }
 
-    public Long getUserId() {
-        return userId;
+    public SeckillOrder getSeckillOrder() {
+        return seckillOrder;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setSeckillOrder(SeckillOrder seckillOrder) {
+        this.seckillOrder = seckillOrder;
     }
 
-    public Long getSeckillProductId() {
-        return seckillProductId;
+    public SeckillUserResult getSeckillUserResult() {
+        return seckillUserResult;
     }
 
-    public void setSeckillProductId(Long seckillProductId) {
-        this.seckillProductId = seckillProductId;
+    public void setSeckillUserResult(SeckillUserResult seckillUserResult) {
+        this.seckillUserResult = seckillUserResult;
     }
 
     @Override
     public String toString() {
         return "OrderRequest{" +
-                "userId=" + userId +
-                ", shopId=" + shopId +
-                ", seckillProductId=" + seckillProductId +
+                "seckillProduct=" + seckillProduct +
+                ", seckillOrder=" + seckillOrder +
+                ", seckillUserResult=" + seckillUserResult +
                 '}';
     }
 }

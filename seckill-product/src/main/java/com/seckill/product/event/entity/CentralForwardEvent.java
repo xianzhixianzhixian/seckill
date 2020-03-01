@@ -1,38 +1,32 @@
 package com.seckill.product.event.entity;
 
+import com.seckill.common.bean.SeckillOrder;
+import com.seckill.common.bean.SeckillProduct;
+import com.seckill.common.bean.SeckillUserResult;
+import com.seckill.product.service.SeckillService;
+import com.seckill.product.service.SeckillUserResultService;
 import com.seckill.product.service.feign.SeckillMessageFeignService;
+import com.seckill.product.strategy.SeckillProductStrategy;
 
 /**
  * 中央处理器转发事件
  */
-public class CentralForwardEvent implements Event {
-    @Override
-    public String getName() {
-        return null;
+public class CentralForwardEvent extends Event {
+
+    public CentralForwardEvent() {
     }
 
-    @Override
-    public void setName(String name) {
-
-    }
-
-    @Override
-    public String getEventType() {
-        return null;
-    }
-
-    @Override
-    public void setEventType(String eventType) {
-
-    }
-
-    @Override
-    public SeckillMessageFeignService getSeckillMessageFeignService() {
-        return null;
-    }
-
-    @Override
-    public void setSeckillMessageFeignService(SeckillMessageFeignService seckillMessageFeignService) {
-
+    public CentralForwardEvent(
+            String name,
+            String eventType,
+            SeckillProduct seckillProduct,
+            SeckillOrder seckillOrder,
+            SeckillUserResult seckillUserResult,
+            SeckillService seckillService,
+            SeckillUserResultService seckillUserResultService,
+            SeckillProductStrategy seckillProductStrategy,
+            SeckillMessageFeignService seckillMessageFeignService
+    ) {
+        super(name, eventType, seckillProduct, seckillOrder, seckillUserResult, seckillService, seckillUserResultService, seckillProductStrategy, seckillMessageFeignService);
     }
 }

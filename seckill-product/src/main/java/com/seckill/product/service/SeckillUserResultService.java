@@ -29,4 +29,11 @@ public interface SeckillUserResultService {
      * @return
      */
     List<SeckillUserResult> selectSeckillUserResultByUserId(Long userId);
+
+    /**
+     * 根据id更新秒杀结果
+     * @param seckillUserResult
+     * @return
+     */
+    Integer updateSeckillUserResultSelective(SeckillUserResult seckillUserResult);
 }
