@@ -5,6 +5,7 @@ import com.seckill.common.constant.SeckillReturnCodeMapping;
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.common.entity.event.Event;
 import com.seckill.common.entity.event.type.OrderEventType;
+import com.seckill.common.utils.JsonUtils;
 import com.seckill.message.config.RabbitMessageConvertConfig;
 import com.seckill.message.service.feign.SeckillOrderFeignService;
 import com.seckill.message.service.feign.SeckillProductFeignService;
@@ -40,6 +41,7 @@ public class RabbitMessageConsumer {
         logger.info("接收到的请求订单创建信息{}", orderRequest);
         try {
             SeckillResult seckillResult = seckillOrderFeignService.createOrder(orderRequest);
+            orderRequest = JsonUtils.jsonToPojo((String) seckillResult.getData(), OrderRequest.class);
             if (seckillResult != null && SeckillReturnCodeMapping.SUCCESS_CODE.equals(seckillResult.getStatus())) {
                 Event event = new Event(orderRequest.getEventName(), OrderEventType.COMPLETE, orderRequest.getSeckillProduct(), orderRequest.getSeckillOrder(), orderRequest.getSeckillUserResult());
                 seckillResult = seckillProductFeignService.sendEvent(event);

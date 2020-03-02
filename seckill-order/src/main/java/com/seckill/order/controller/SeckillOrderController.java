@@ -4,6 +4,7 @@ import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
 import com.seckill.common.entity.OrderRequest;
+import com.seckill.common.utils.JsonUtils;
 import com.seckill.order.service.feign.SeckillProductFeignService;
 import com.seckill.order.service.impl.SeckillOrderServiceImpl;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class SeckillOrderController {
         try {
             Integer resultNum = seckillOrderService.createNewOrder(seckillOrder);
             if (resultNum > 0) {
-                return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "订单创建成功！");
+                return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "订单创建成功！", seckillOrder);
             } else {
                 return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "订单创建失败！");
             }
@@ -46,7 +47,7 @@ public class SeckillOrderController {
         try {
             Integer resultNum = seckillOrderService.createNewOrder(orderRequest);
             if (resultNum > 0) {
-                return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "订单创建成功！");
+                return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "订单创建成功！", JsonUtils.objectToJson(orderRequest));
             } else {
                 return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "订单创建失败！");
             }

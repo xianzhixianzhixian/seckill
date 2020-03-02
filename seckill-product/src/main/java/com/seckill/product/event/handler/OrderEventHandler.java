@@ -95,6 +95,9 @@ public class OrderEventHandler implements Handler {
             logger.info("OrderEventHandler Complete处理{}", event);
             OrderEvent orderEvent = (OrderEvent) event;
             SeckillUserResult seckillUserResult = orderEvent.getSeckillUserResult();
+            SeckillOrder seckillOrder = orderEvent.getSeckillOrder();
+            Long orderId = seckillOrder.getId();
+            seckillUserResult.setOrderId(orderId);
             //成功
             seckillUserResult.setResult(0);
             seckillUserResult.setResultData("秒杀成功");
