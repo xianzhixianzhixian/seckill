@@ -3,14 +3,13 @@ package com.seckill.product.event.handler;
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillUserResult;
+import com.seckill.common.entity.event.Event;
+import com.seckill.common.entity.event.type.OrderEventType;
+import com.seckill.common.entity.event.type.SeckillEventType;
 import com.seckill.product.event.CentralEventProcessor;
-import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
 import com.seckill.product.event.entity.SeckillProductEvent;
-import com.seckill.product.event.state.OrderEventType;
-import com.seckill.product.event.state.SeckillEventType;
-import com.seckill.product.event.state.handler.StateHandler;
-import com.seckill.product.service.SeckillService;
+
 import com.seckill.product.strategy.SeckillProductStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +79,8 @@ public class SeckillEventHandler implements Handler {
             SeckillUserResult seckillUserResult = seckillProductEvent.getSeckillUserResult();
             SeckillProductStrategy seckillProductStrategy = seckillProductEvent.getSeckillProductStrategy();
             Integer result = seckillProductStrategy.seckillProduct(seckillProduct, seckillOrder, seckillUserResult);
-            if (result == 0) {
+            //秒杀正在生成订单表示秒杀步骤已经通过，只剩订单生成步骤
+            if (result == 2) {
                 //成功
                 Event seckillCompleteEvent = new SeckillProductEvent(
                         seckillProductEvent.getName(),

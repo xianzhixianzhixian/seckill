@@ -1,15 +1,14 @@
-package com.seckill.common.entity;
+package com.seckill.common.entity.event;
 
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillUserResult;
 
-/**
- * 传入RabbitMQ的订单消息
- */
-public class OrderRequest {
+public class Event {
 
-    private String eventName;
+    private String name;
+
+    private String eventType;
 
     private SeckillProduct seckillProduct;
 
@@ -17,22 +16,37 @@ public class OrderRequest {
 
     private SeckillUserResult seckillUserResult;
 
-    public OrderRequest() {
+    public Event() {
     }
 
-    public OrderRequest(String eventName, SeckillProduct seckillProduct, SeckillOrder seckillOrder, SeckillUserResult seckillUserResult) {
-        this.eventName = eventName;
+    public Event(
+            String name,
+            String eventType,
+            SeckillProduct seckillProduct,
+            SeckillOrder seckillOrder,
+            SeckillUserResult seckillUserResult
+    ) {
+        this.name = name;
+        this.eventType = eventType;
         this.seckillProduct = seckillProduct;
         this.seckillOrder = seckillOrder;
         this.seckillUserResult = seckillUserResult;
     }
 
-    public String getEventName() {
-        return eventName;
+    public String getName() {
+        return name;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public SeckillProduct getSeckillProduct() {
@@ -61,8 +75,9 @@ public class OrderRequest {
 
     @Override
     public String toString() {
-        return "OrderRequest{" +
-                "eventName='" + eventName + '\'' +
+        return "Event{" +
+                "name='" + name + '\'' +
+                ", eventType='" + eventType + '\'' +
                 ", seckillProduct=" + seckillProduct +
                 ", seckillOrder=" + seckillOrder +
                 ", seckillUserResult=" + seckillUserResult +

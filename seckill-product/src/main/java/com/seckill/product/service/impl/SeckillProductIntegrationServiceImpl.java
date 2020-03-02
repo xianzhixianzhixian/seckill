@@ -109,11 +109,11 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
                     seckillUserResult.setSeckillTime(new Date());
                     logger.info("用户{}开始SeckillFuture秒杀{}", userId, seckillProductId);
                     if (seckillNum > seckillInventory) {
-                        logger.error("商品{}库存{}不足，秒杀数量为{}", seckillProductId, seckillInventory, seckillNum);
+                        logger.info("商品{}库存{}不足，秒杀数量为{}", seckillProductId, seckillInventory, seckillNum);
                         seckillUserResult.setResult(1);
                         seckillUserResult.setResultData("用户" + userId + "秒杀失败");
                     } else {
-                        logger.error("用户{}秒杀商品{}成功，秒杀数量为{}", userId, seckillProductId, seckillNum);
+                        logger.info("用户{}秒杀商品{}成功，秒杀数量为{}", userId, seckillProductId, seckillNum);
                         seckillProduct.setId(seckillProductId);
                         seckillProduct.setSeckillInventory(seckillInventory - seckillNum);
                         seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);

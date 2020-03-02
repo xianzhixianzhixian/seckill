@@ -4,11 +4,10 @@ import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.entity.OrderRequest;
+import com.seckill.common.entity.event.Event;
+import com.seckill.common.entity.event.type.OrderEventType;
 import com.seckill.product.event.CentralEventProcessor;
-import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
-import com.seckill.product.event.state.OrderEventType;
-import com.seckill.product.event.state.handler.StateHandler;
 import com.seckill.product.service.SeckillUserResultService;
 import com.seckill.product.service.feign.SeckillMessageFeignService;
 import org.slf4j.Logger;
@@ -80,6 +79,7 @@ public class OrderEventHandler implements Handler {
             SeckillMessageFeignService seckillMessageFeignService = orderEvent.getSeckillMessageFeignService();
             //发送消息到RabbitMQ
             OrderRequest orderRequest = new OrderRequest();
+            orderRequest.setEventName(orderEvent.getName());
             orderRequest.setSeckillProduct(seckillProduct);
             orderRequest.setSeckillUserResult(seckillUserResult);
             orderRequest.setSeckillOrder(seckillOrder);
@@ -99,7 +99,7 @@ public class OrderEventHandler implements Handler {
             seckillUserResult.setResult(0);
             seckillUserResult.setResultData("秒杀成功");
             SeckillUserResultService seckillUserResultService = orderEvent.getSeckillUserResultService();
-            seckillUserResultService.updateSeckillUserResultSelective(seckillUserResult);
+            seckillUserResultService.updateSeckillUserResultByIdSelective(seckillUserResult);
         }
 
     }

@@ -4,6 +4,7 @@ import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
 import com.seckill.common.entity.OrderRequest;
+import com.seckill.order.service.feign.SeckillProductFeignService;
 import com.seckill.order.service.impl.SeckillOrderServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class SeckillOrderController {
 
     @Autowired
     private SeckillOrderServiceImpl seckillOrderService;
+    @Autowired
+    private SeckillProductFeignService seckillProductFeignService;
 
     @PostMapping("/createNewOrder")
     public SeckillResult createNewOrder(@RequestBody SeckillOrder seckillOrder) {

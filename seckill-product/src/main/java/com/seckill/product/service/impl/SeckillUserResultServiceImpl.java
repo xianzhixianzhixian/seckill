@@ -35,7 +35,7 @@ public class SeckillUserResultServiceImpl implements SeckillUserResultService {
     }
 
     @Override
-    public Integer updateSeckillUserResultSelective(SeckillUserResult seckillUserResult) {
+    public Integer updateSeckillUserResultByIdSelective(SeckillUserResult seckillUserResult) {
         return seckillUserResultMapper.updateByPrimaryKeySelective(seckillUserResult);
     }
 

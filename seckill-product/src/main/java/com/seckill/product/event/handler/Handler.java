@@ -1,6 +1,7 @@
 package com.seckill.product.event.handler;
 
-import com.seckill.product.event.entity.Event;
+
+import com.seckill.common.entity.event.Event;
 
 /**
  * 事件处理器

@@ -6,11 +6,13 @@ import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.bean.SeckillUserResult;
 import com.seckill.common.constant.SeckillGeneralCodeMapping;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.entity.event.Event;
+import com.seckill.common.entity.event.type.SeckillEventType;
 import com.seckill.product.event.CentralEventProcessor;
-import com.seckill.product.event.entity.Event;
+import com.seckill.product.event.entity.OrderEvent;
 import com.seckill.product.event.entity.SeckillProductEvent;
 import com.seckill.product.event.handler.CentralEventForwardHandler;
-import com.seckill.product.event.state.SeckillEventType;
+
 import com.seckill.product.service.SeckillProductService;
 import com.seckill.product.service.feign.SeckillMessageFeignService;
 import com.seckill.product.service.impl.SeckillProductIntegrationServiceImpl;
@@ -21,15 +23,20 @@ import com.seckill.product.strategy.SeckillProductFutureStrategy;
 import com.seckill.product.strategy.SeckillProductStrategy;
 import com.seckill.product.util.RedissonLockUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.BlockingDeque;
 
 @RestController
 @RequestMapping("/seckill")
 public class SeckillController implements InitializingBean {
+
+    private static final Logger logger = LoggerFactory.getLogger(SeckillController.class);
 
     @Autowired
     private SeckillServiceImpl seckillService;
@@ -178,6 +185,29 @@ public class SeckillController implements InitializingBean {
             return new SeckillResult(seckillUserResultList);
         } catch (Exception e) {
             return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "系统错误", e);
+        }
+    }
+
+    @PostMapping("/sendEvent")
+    public SeckillResult sendEvent(@RequestBody Event event) {
+        logger.info("sendEvent接收到event{}", event);
+        try {
+            OrderEvent orderEvent = new OrderEvent();
+            orderEvent.setName(event.getName());
+            orderEvent.setEventType(event.getEventType());
+            orderEvent.setSeckillProduct(event.getSeckillProduct());
+            orderEvent.setSeckillOrder(event.getSeckillOrder());
+            orderEvent.setSeckillUserResult(event.getSeckillUserResult());
+            orderEvent.setSeckillService(seckillService);
+            orderEvent.setSeckillMessageFeignService(seckillMessageFeignService);
+            orderEvent.setSeckillProductStrategy(seckillProductStrategy);
+            orderEvent.setSeckillUserResultService(seckillUserResultService);
+            BlockingDeque<Event> eventBlockingDeque = centralEventProcessor.getCentralEventQueue();
+            eventBlockingDeque.put(orderEvent);
+            return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "事件发送成功");
+        } catch (Exception e) {
+            logger.error("sendEvent发生错误，原因{}", e);
+            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "接收事件错误", e);
         }
     }
 

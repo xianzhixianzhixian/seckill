@@ -1,7 +1,7 @@
 package com.seckill.product.event.handler;
 
+import com.seckill.common.entity.event.Event;
 import com.seckill.product.event.CentralEventProcessor;
-import com.seckill.product.event.entity.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

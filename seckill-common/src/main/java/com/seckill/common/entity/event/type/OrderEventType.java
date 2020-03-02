@@ -1,4 +1,4 @@
-package com.seckill.product.event.state;
+package com.seckill.common.entity.event.type;
 
 /**
  * 订单事件状态

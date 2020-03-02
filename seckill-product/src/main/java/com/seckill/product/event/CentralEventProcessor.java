@@ -1,7 +1,7 @@
 package com.seckill.product.event;
 
+import com.seckill.common.entity.event.Event;
 import com.seckill.product.event.entity.CentralForwardEvent;
-import com.seckill.product.event.entity.Event;
 import com.seckill.product.event.entity.OrderEvent;
 import com.seckill.product.event.entity.SeckillProductEvent;
 import com.seckill.product.event.handler.CentralEventForwardHandler;

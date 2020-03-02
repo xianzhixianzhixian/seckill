@@ -35,5 +35,5 @@ public interface SeckillUserResultService {
      * @param seckillUserResult
      * @return
      */
-    Integer updateSeckillUserResultSelective(SeckillUserResult seckillUserResult);
+    Integer updateSeckillUserResultByIdSelective(SeckillUserResult seckillUserResult);
 }
