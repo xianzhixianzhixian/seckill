@@ -4,6 +4,8 @@
 **/.settings/
 **/*.iws
 **/*.iml
-**/*.iprworkspace
+**/*.ipr
 **/.project
 **/.classpath
+.project
+.classpath

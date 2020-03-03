@@ -2,10 +2,12 @@ package com.seckill.order.mapper;
 
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillOrderExample;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+@Mapper
 public interface SeckillOrderMapper {
     long countByExample(SeckillOrderExample example);
 
