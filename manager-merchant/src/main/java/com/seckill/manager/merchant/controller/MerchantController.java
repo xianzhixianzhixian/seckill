@@ -1,7 +1,7 @@
 package com.seckill.manager.merchant.controller;
 
 import com.seckill.common.bean.ManagerMerchant;
-import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.constant.SeckillReturnCodeType;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.utils.MD5Util;
 import com.seckill.manager.merchant.service.impl.MerchantServiceImpl;
@@ -32,7 +32,7 @@ public class MerchantController {
             result = merchantService.addMerchantInfo(merchantInfo);
         } catch (Exception e) {
             logger.error("checkIn错误，原因{}", e);
-            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "商户入驻失败", e);
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, "商户入驻失败", e);
         }
         return new SeckillResult(result);
     }
@@ -40,24 +40,24 @@ public class MerchantController {
     @PostMapping("/login")
     public SeckillResult login(@RequestBody ManagerMerchant merchantInfo) {
         if (StringUtils.isEmpty(merchantInfo.getAccount())){
-            return new SeckillResult(SeckillReturnCodeMapping.PARAMETER_ERROR, "商家用户名不能为空");
+            return new SeckillResult(SeckillReturnCodeType.PARAMETER_ERROR, "商家用户名不能为空");
         }
         if (StringUtils.isEmpty(merchantInfo.getOriginalPassword())) {
-            return new SeckillResult(SeckillReturnCodeMapping.PARAMETER_ERROR, "密码不能为空");
+            return new SeckillResult(SeckillReturnCodeType.PARAMETER_ERROR, "密码不能为空");
         }
         try {
             ManagerMerchant merchant = merchantService.verifyMerchantAccount(merchantInfo);
             if (merchant != null) {
                 Boolean result = MD5Util.verify(merchantInfo.getOriginalPassword(), MD5Util.MD5KEY, merchant.getEncryptionPassword());
                 if (!result) {
-                    return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "用户名或者密码不对");
+                    return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "用户名或者密码不对");
                 }
             } else {
-                return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "用户名或者密码不对");
+                return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "用户名或者密码不对");
             }
         } catch (Exception e) {
             logger.error("登录错误，原因{}", e);
-            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "登录错误", e);
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, "登录错误", e);
         }
         return new SeckillResult(merchantInfo);
     }

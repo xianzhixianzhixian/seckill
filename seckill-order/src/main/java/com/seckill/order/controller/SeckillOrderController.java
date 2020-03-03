@@ -2,7 +2,7 @@ package com.seckill.order.controller;
 
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillResult;
-import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.constant.SeckillReturnCodeType;
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.common.utils.JsonUtils;
 import com.seckill.order.service.feign.SeckillProductFeignService;
@@ -32,12 +32,12 @@ public class SeckillOrderController {
         try {
             Integer resultNum = seckillOrderService.createNewOrder(seckillOrder);
             if (resultNum > 0) {
-                return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "订单创建成功！", seckillOrder);
+                return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "订单创建成功！", seckillOrder);
             } else {
-                return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "订单创建失败！");
+                return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "订单创建失败！");
             }
         } catch (Exception e) {
-            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, e.getMessage());
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, e.getMessage());
         }
     }
 
@@ -47,21 +47,21 @@ public class SeckillOrderController {
         try {
             Integer resultNum = seckillOrderService.createNewOrder(orderRequest);
             if (resultNum > 0) {
-                return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "订单创建成功！", JsonUtils.objectToJson(orderRequest));
+                return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "订单创建成功！", JsonUtils.objectToJson(orderRequest));
             } else {
-                return new SeckillResult(SeckillReturnCodeMapping.BUSINESS_FAIL, "订单创建失败！");
+                return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "订单创建失败！");
             }
         } catch (Exception e) {
-            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, e.getMessage());
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, e.getMessage());
         }
     }
     @PostMapping("/findSeckillOrderById")
     public SeckillResult findSeckillOrderById(Long id) {
         try {
             SeckillOrder seckillOrder = seckillOrderService.findSeckillOrderById(id);
-            return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "查询订单信息成功", seckillOrder);
+            return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "查询订单信息成功", seckillOrder);
         } catch (Exception e) {
-            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "查询订单信息出错", e);
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, "查询订单信息出错", e);
         }
     }
 
@@ -70,9 +70,9 @@ public class SeckillOrderController {
         Integer result = 0;
         try {
             result = seckillOrderService.updateSeckillOrderById(seckillOrder);
-            return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "更新订单信息成功", result);
+            return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "更新订单信息成功", result);
         } catch (Exception e) {
-            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "更新订单信息出错", e);
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, "更新订单信息出错", e);
         }
     }
 

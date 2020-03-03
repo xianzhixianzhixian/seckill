@@ -3,7 +3,7 @@ package com.seckill.common.constant;
 /**
  * 系统中一些常量的映射
  */
-public class SeckillGeneralCodeMapping {
+public class SeckillGeneralCodeType {
 
     /**
      * 秒杀商品库存

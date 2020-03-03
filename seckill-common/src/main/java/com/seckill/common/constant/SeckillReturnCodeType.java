@@ -3,7 +3,7 @@ package com.seckill.common.constant;
 /**
  * 返回码定义
  */
-public class SeckillReturnCodeMapping {
+public class SeckillReturnCodeType {
 
     /**
      * 成功

@@ -3,7 +3,7 @@ package com.seckill.product.service.impl;
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillUserResult;
-import com.seckill.common.constant.SeckillGeneralCodeMapping;
+import com.seckill.common.constant.SeckillGeneralCodeType;
 import com.seckill.product.entity.SeckillUnique;
 import com.seckill.product.service.SeckillProductIntegrationService;
 import com.seckill.product.util.RedissonLockUtil;
@@ -92,7 +92,7 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
         @Override
         public Integer call() throws Exception {
 
-            RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeMapping.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProduct.getId());
+            RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeType.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProduct.getId());
             Boolean lockResult = redissonLockUtil.tryLock(rLock, RedissonLockUtil.WAIT_LOCK_TIME, RedissonLockUtil.LOCK_TIME, TimeUnit.SECONDS);
             try {
                 if (lockResult) {

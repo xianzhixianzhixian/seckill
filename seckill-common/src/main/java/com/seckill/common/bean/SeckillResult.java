@@ -2,7 +2,7 @@ package com.seckill.common.bean;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.constant.SeckillReturnCodeType;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class SeckillResult {
     }
 
     public SeckillResult(Object data) {
-        this.status = SeckillReturnCodeMapping.SUCCESS_CODE;
+        this.status = SeckillReturnCodeType.SUCCESS_CODE;
         this.msg = "交易成功";
         this.data = data;
     }

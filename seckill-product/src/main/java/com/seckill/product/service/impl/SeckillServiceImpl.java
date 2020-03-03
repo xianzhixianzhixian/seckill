@@ -4,10 +4,11 @@ import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillProductExample;
 import com.seckill.common.bean.SeckillUserResult;
-import com.seckill.common.constant.SeckillGeneralCodeMapping;
+import com.seckill.common.constant.SeckillGeneralCodeType;
 import com.seckill.product.entity.SeckillUnique;
 import com.seckill.product.service.SeckillService;
 import com.seckill.product.service.SeckillProductService;
+import com.seckill.product.service.feign.SeckillPaymentFeignService;
 import com.seckill.product.util.RedissonLockUtil;
 import org.redisson.api.RLock;
 import org.slf4j.Logger;
@@ -42,8 +43,6 @@ public class SeckillServiceImpl implements SeckillService {
     private SeckillUserResultServiceImpl seckillUserResultService;
     @Autowired
     private RedissonLockUtil redissonLockUtil;
-
-
 
     @Transactional
     @Override
@@ -90,14 +89,14 @@ public class SeckillServiceImpl implements SeckillService {
     @Override
     public void multipltThreadSeckillProduct(Long userId, Long seckillProductId) {
         logger.info("multipltThreadSeckillProduct入参userId：{} seckillProductId：{}", userId, seckillProductId);
-        Long seckillInventory = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId);
-        Long seckillNum = cacheMap.get(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId);
+        Long seckillInventory = cacheMap.get(SeckillGeneralCodeType.SECKILL_INVENTORY + "_" + seckillProductId);
+        Long seckillNum = cacheMap.get(SeckillGeneralCodeType.SECKILL_NUM + "_" + seckillProductId);
         if (seckillInventory == null) {
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
             seckillInventory = seckillProduct.getSeckillInventory();
             seckillNum = seckillProduct.getSeckillNum();
-            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
-            cacheMap.put(SeckillGeneralCodeMapping.SECKILL_NUM + "_" + seckillProductId, seckillNum);
+            cacheMap.put(SeckillGeneralCodeType.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
+            cacheMap.put(SeckillGeneralCodeType.SECKILL_NUM + "_" + seckillProductId, seckillNum);
         }
         SeckillThread seckillThread = new SeckillThread(userId, seckillNum, seckillInventory, seckillProductId);
         Thread thread = new Thread(seckillThread);
@@ -164,7 +163,7 @@ public class SeckillServiceImpl implements SeckillService {
     public Integer seckillProductRedisLock(Long userId, Long seckillProductId) {
         logger.info("seckillProductRedisLock入参userId：{} seckillProductId：{}", userId, seckillProductId);
         Integer seckillResultNum = 0;
-        RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeMapping.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProductId);
+        RLock rLock = redissonLockUtil.getFairLock(SeckillGeneralCodeType.REDISSON_SECKILL_PRODUCT_LOCK + "_" + seckillProductId);
         Boolean lockResult = redissonLockUtil.tryLock(rLock, RedissonLockUtil.WAIT_LOCK_TIME, RedissonLockUtil.LOCK_TIME, TimeUnit.SECONDS);
         if (lockResult) {
             SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
@@ -235,7 +234,7 @@ public class SeckillServiceImpl implements SeckillService {
                 logger.info("======线程{} 用户 {}成功秒杀======", Thread.currentThread().getName(), userId);
                 //这里更新cacheMap中剩余的库存，TODO 这里会不会出现多线程的问题
                 Long seckillInventory = inventory - seckillNum;
-                cacheMap.put(SeckillGeneralCodeMapping.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
+                cacheMap.put(SeckillGeneralCodeType.SECKILL_INVENTORY + "_" + seckillProductId, seckillInventory);
                 seckillProduct.setSeckillInventory(seckillInventory);
                 seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
             }

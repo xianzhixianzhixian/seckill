@@ -2,7 +2,7 @@ package com.seckill.message.consumer;
 
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillResult;
-import com.seckill.common.constant.SeckillReturnCodeMapping;
+import com.seckill.common.constant.SeckillReturnCodeType;
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.common.entity.event.Event;
 import com.seckill.common.entity.event.type.OrderEventType;
@@ -43,7 +43,7 @@ public class RabbitMessageConsumer {
         try {
             SeckillResult seckillResult = seckillOrderFeignService.createOrder(orderRequest);
             orderRequest = JsonUtils.jsonToPojo((String) seckillResult.getData(), OrderRequest.class);
-            if (seckillResult != null && SeckillReturnCodeMapping.SUCCESS_CODE.equals(seckillResult.getStatus())) {
+            if (seckillResult != null && SeckillReturnCodeType.SUCCESS_CODE.equals(seckillResult.getStatus())) {
                 Event event = new Event(orderRequest.getEventName(), OrderEventType.COMPLETE, orderRequest.getSeckillProduct(), orderRequest.getSeckillOrder(), orderRequest.getSeckillUserResult());
                 seckillResult = seckillProductFeignService.sendEvent(event);
                 logger.info("发送订单完成事件{}结果{}", event, seckillResult.getStatus());
@@ -62,7 +62,7 @@ public class RabbitMessageConsumer {
         logger.info("接收到的请求订单更新信息{}", seckillOrder);
         try {
             SeckillResult seckillResult = seckillOrderFeignService.updateSeckillOrderById(seckillOrder);
-            if (seckillResult != null && SeckillReturnCodeMapping.SUCCESS_CODE.equals(seckillResult.getStatus())) {
+            if (seckillResult != null && SeckillReturnCodeType.SUCCESS_CODE.equals(seckillResult.getStatus())) {
                 logger.info("receiveOrderUpdateMessage订单更新成功");
             } else {
                 logger.info("receiveOrderUpdateMessage订单更新错误");
