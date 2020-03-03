@@ -19,4 +19,18 @@ public interface SeckillOrderService {
      * @throws Exception
      */
     Integer createNewOrder(OrderRequest orderRequest) throws Exception;
+
+    /**
+     * 根据订单id查询订单信息
+     * @param id
+     * @return
+     */
+    SeckillOrder findSeckillOrderById(Long id);
+
+    /**
+     * 根据id更新订单信息
+     * @param seckillOrder
+     * @return
+     */
+    Integer updateSeckillOrderById(SeckillOrder seckillOrder);
 }

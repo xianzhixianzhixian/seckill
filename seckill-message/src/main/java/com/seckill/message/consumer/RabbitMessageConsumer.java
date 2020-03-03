@@ -1,5 +1,6 @@
 package com.seckill.message.consumer;
 
+import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.constant.SeckillReturnCodeMapping;
 import com.seckill.common.entity.OrderRequest;
@@ -49,6 +50,25 @@ public class RabbitMessageConsumer {
             }
         } catch (Exception e) {
             logger.error("receiverOrderMessage错误，原因{}", e);
+        }
+    }
+
+    /**
+     * 接收SeckillOrder的更新消息，用于订单信息的异步更新
+     * @param seckillOrder
+     */
+    @RabbitHandler
+    public void receiveOrderUpdateMessage(SeckillOrder seckillOrder) {
+        logger.info("接收到的请求订单更新信息{}", seckillOrder);
+        try {
+            SeckillResult seckillResult = seckillOrderFeignService.updateSeckillOrderById(seckillOrder);
+            if (seckillResult != null && SeckillReturnCodeMapping.SUCCESS_CODE.equals(seckillResult.getStatus())) {
+                logger.info("receiveOrderUpdateMessage订单更新成功");
+            } else {
+                logger.info("receiveOrderUpdateMessage订单更新错误");
+            }
+        } catch (Exception e) {
+            logger.error("receiveOrderUpdateMessage错误，原因{}", e);
         }
     }
 

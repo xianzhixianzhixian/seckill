@@ -1,5 +1,6 @@
 package com.seckill.message.controller;
 
+import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.entity.OrderRequest;
 import com.seckill.message.service.impl.SeckillMessageServiceImpl;
 import org.slf4j.Logger;
@@ -35,7 +36,7 @@ public class SeckillMessageController {
     }
 
     /**
-     * 接收订单消息
+     * 接收订单创建请求
      * @param orderRequest
      * @return
      */
@@ -49,4 +50,16 @@ public class SeckillMessageController {
         }
         return true;
     }
+
+    @PostMapping("/sendOrderUpdateMessage")
+    public Boolean sendOrderUpdateMessage(@RequestBody SeckillOrder seckillOrder) {
+        try {
+            seckillMessageServiceImpl.sendMessage(seckillOrder);
+        } catch (Exception e) {
+            logger.error("sendOrderMessage发送消息{}错误，原因{}", seckillOrder, e);
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -60,4 +60,14 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         seckillOrder.setOrderFlag(0);
         return seckillOrderMapper.insertSelective(seckillOrder);
     }
+
+    @Override
+    public SeckillOrder findSeckillOrderById(Long id) {
+        return seckillOrderMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Integer updateSeckillOrderById(SeckillOrder seckillOrder) {
+        return seckillOrderMapper.updateByPrimaryKeySelective(seckillOrder);
+    }
 }

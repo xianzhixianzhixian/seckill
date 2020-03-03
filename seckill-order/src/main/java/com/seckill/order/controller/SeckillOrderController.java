@@ -55,4 +55,26 @@ public class SeckillOrderController {
             return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, e.getMessage());
         }
     }
+    @PostMapping("/findSeckillOrderById")
+    public SeckillResult findSeckillOrderById(Long id) {
+        try {
+            SeckillOrder seckillOrder = seckillOrderService.findSeckillOrderById(id);
+            return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "查询订单信息成功", seckillOrder);
+        } catch (Exception e) {
+            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "查询订单信息出错", e);
+        }
+    }
+
+    @PostMapping("/updateSeckillOrderById")
+    public SeckillResult updateSeckillOrderById(@RequestBody SeckillOrder seckillOrder) {
+        Integer result = 0;
+        try {
+            result = seckillOrderService.updateSeckillOrderById(seckillOrder);
+            return new SeckillResult(SeckillReturnCodeMapping.SUCCESS_CODE, "更新订单信息成功", result);
+        } catch (Exception e) {
+            return new SeckillResult(SeckillReturnCodeMapping.SYSTEM_ERROR, "更新订单信息出错", e);
+        }
+    }
+
+
 }
