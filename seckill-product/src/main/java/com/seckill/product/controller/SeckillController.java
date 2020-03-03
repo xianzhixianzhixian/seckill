@@ -211,6 +211,12 @@ public class SeckillController implements InitializingBean {
         }
     }
 
+    //TODO 更新付款类型
+    @PostMapping("/updatePaymentType")
+    public SeckillUserResult updatePaymentType() {
+        return new SeckillUserResult();
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         //通过Redis进行实时切换秒杀策略

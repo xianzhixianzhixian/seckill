@@ -20,6 +20,7 @@
         <module>seckill-product</module>
         <module>seckill-order</module>
         <module>seckill-message</module>
+        <module>seckill-payment</module>
         <module>manager-user</module>
         <module>manager-merchant</module>
         <module>manager-shop</module>
