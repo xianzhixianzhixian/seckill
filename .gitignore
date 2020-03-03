@@ -1,6 +1,9 @@
-target/
-.mvn/
-.idea/
-*.iws
-*.iml
-*.ipr
+**target/
+**/.mvn/
+**/.idea/
+**/.settings/
+**/*.iws
+**/*.iml
+**/*.iprworkspace
+**/.project
+**/.classpath

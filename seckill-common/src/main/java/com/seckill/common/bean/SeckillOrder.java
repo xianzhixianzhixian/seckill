@@ -36,7 +36,7 @@ public class SeckillOrder {
 
     private Integer orderFlag;
 
-    private String seckillUserResultId;
+    private Long seckillUserResultId;
 
     private Date createdTime;
 
@@ -170,12 +170,12 @@ public class SeckillOrder {
         this.orderFlag = orderFlag;
     }
 
-    public String getSeckillUserResultId() {
+    public Long getSeckillUserResultId() {
         return seckillUserResultId;
     }
 
-    public void setSeckillUserResultId(String seckillUserResultId) {
-        this.seckillUserResultId = seckillUserResultId == null ? null : seckillUserResultId.trim();
+    public void setSeckillUserResultId(Long seckillUserResultId) {
+        this.seckillUserResultId = seckillUserResultId;
     }
 
     public Date getCreatedTime() {
@@ -192,30 +192,5 @@ public class SeckillOrder {
 
     public void setUpdatedTime(Date updatedTime) {
         this.updatedTime = updatedTime;
-    }
-
-    @Override
-    public String toString() {
-        return "SeckillOrder{" +
-                "id=" + id +
-                ", seckillProductId=" + seckillProductId +
-                ", productId=" + productId +
-                ", payAmount=" + payAmount +
-                ", userId=" + userId +
-                ", shopId=" + shopId +
-                ", createTime=" + createTime +
-                ", payTime=" + payTime +
-                ", payStatus=" + payStatus +
-                ", payType=" + payType +
-                ", receivingAdress='" + receivingAdress + '\'' +
-                ", receivingPhone='" + receivingPhone + '\'' +
-                ", receivingName='" + receivingName + '\'' +
-                ", tradeSerialNumber='" + tradeSerialNumber + '\'' +
-                ", seckillNum=" + seckillNum +
-                ", orderFlag=" + orderFlag +
-                ", seckillUserResultId='" + seckillUserResultId + '\'' +
-                ", createdTime=" + createdTime +
-                ", updatedTime=" + updatedTime +
-                '}';
     }
 }

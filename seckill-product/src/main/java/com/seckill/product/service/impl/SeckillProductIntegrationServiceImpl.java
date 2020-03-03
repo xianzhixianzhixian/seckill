@@ -119,6 +119,7 @@ public class SeckillProductIntegrationServiceImpl implements SeckillProductInteg
                         seckillProductService.updateSeckillProductByPrimaryKeySelective(seckillProduct);
                     }
                     seckillUserResultService.saveSeckillUserResult(seckillUserResult);
+                    seckillOrder.setSeckillUserResultId(seckillUserResult.getId());
                     return seckillUserResult.getResult();
                 } else {
                     synchronized (objectLock) {

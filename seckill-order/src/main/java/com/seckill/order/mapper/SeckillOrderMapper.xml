@@ -18,7 +18,7 @@
     <result column="trade_serial_number" jdbcType="VARCHAR" property="tradeSerialNumber" />
     <result column="seckill_num" jdbcType="BIGINT" property="seckillNum" />
     <result column="order_flag" jdbcType="INTEGER" property="orderFlag" />
-    <result column="seckill_user_result_id" jdbcType="VARCHAR" property="seckillUserResultId" />
+    <result column="seckill_user_result_id" jdbcType="BIGINT" property="seckillUserResultId" />
     <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
     <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
   </resultMap>
@@ -115,7 +115,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.seckill.common.bean.SeckillOrder" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.seckill.common.bean.SeckillOrder">
     insert into seckill_order (id, seckill_product_id, product_id, 
       pay_amount, user_id, shop_id, 
       create_time, pay_time, pay_status, 
@@ -128,10 +128,10 @@
       #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, #{payStatus,jdbcType=INTEGER}, 
       #{payType,jdbcType=INTEGER}, #{receivingAdress,jdbcType=VARCHAR}, #{receivingPhone,jdbcType=VARCHAR}, 
       #{receivingName,jdbcType=VARCHAR}, #{tradeSerialNumber,jdbcType=VARCHAR}, #{seckillNum,jdbcType=BIGINT}, 
-      #{orderFlag,jdbcType=INTEGER}, #{seckillUserResultId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{orderFlag,jdbcType=INTEGER}, #{seckillUserResultId,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillOrder" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillOrder">
     insert into seckill_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -242,7 +242,7 @@
         #{orderFlag,jdbcType=INTEGER},
       </if>
       <if test="seckillUserResultId != null">
-        #{seckillUserResultId,jdbcType=VARCHAR},
+        #{seckillUserResultId,jdbcType=BIGINT},
       </if>
       <if test="createdTime != null">
         #{createdTime,jdbcType=TIMESTAMP},
@@ -310,7 +310,7 @@
         order_flag = #{record.orderFlag,jdbcType=INTEGER},
       </if>
       <if test="record.seckillUserResultId != null">
-        seckill_user_result_id = #{record.seckillUserResultId,jdbcType=VARCHAR},
+        seckill_user_result_id = #{record.seckillUserResultId,jdbcType=BIGINT},
       </if>
       <if test="record.createdTime != null">
         created_time = #{record.createdTime,jdbcType=TIMESTAMP},
@@ -341,7 +341,7 @@
       trade_serial_number = #{record.tradeSerialNumber,jdbcType=VARCHAR},
       seckill_num = #{record.seckillNum,jdbcType=BIGINT},
       order_flag = #{record.orderFlag,jdbcType=INTEGER},
-      seckill_user_result_id = #{record.seckillUserResultId,jdbcType=VARCHAR},
+      seckill_user_result_id = #{record.seckillUserResultId,jdbcType=BIGINT},
       created_time = #{record.createdTime,jdbcType=TIMESTAMP},
       updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -397,7 +397,7 @@
         order_flag = #{orderFlag,jdbcType=INTEGER},
       </if>
       <if test="seckillUserResultId != null">
-        seckill_user_result_id = #{seckillUserResultId,jdbcType=VARCHAR},
+        seckill_user_result_id = #{seckillUserResultId,jdbcType=BIGINT},
       </if>
       <if test="createdTime != null">
         created_time = #{createdTime,jdbcType=TIMESTAMP},
@@ -425,7 +425,7 @@
       trade_serial_number = #{tradeSerialNumber,jdbcType=VARCHAR},
       seckill_num = #{seckillNum,jdbcType=BIGINT},
       order_flag = #{orderFlag,jdbcType=INTEGER},
-      seckill_user_result_id = #{seckillUserResultId,jdbcType=VARCHAR},
+      seckill_user_result_id = #{seckillUserResultId,jdbcType=BIGINT},
       created_time = #{createdTime,jdbcType=TIMESTAMP},
       updated_time = #{updatedTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
