@@ -3,6 +3,8 @@ package com.seckill.order.service;
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.entity.OrderRequest;
 
+import java.util.List;
+
 public interface SeckillOrderService {
 
     /**
@@ -33,4 +35,15 @@ public interface SeckillOrderService {
      * @return
      */
     Integer updateSeckillOrderById(SeckillOrder seckillOrder);
+
+    /**
+     * 以当前时间为起点，查询timeSpan之前(包含)或之后(包含)状态为orderState的订单
+     * @param timeType
+     * @param timeSpan
+     * @param payStatus
+     * @param orderFlag
+     * @return
+     */
+    List<SeckillOrder> listSeckillOrderByTime(Integer timeType , Integer timeSpan, Integer payStatus, Integer orderFlag);
+
 }

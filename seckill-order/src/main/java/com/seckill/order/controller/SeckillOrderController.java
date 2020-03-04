@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RequestMapping("/order")
 @RestController
 public class SeckillOrderController {
@@ -76,5 +78,14 @@ public class SeckillOrderController {
         }
     }
 
+    @PostMapping("/listSeckillOrderByTime")
+    public SeckillResult listSeckillOrderByTime(Integer timeType, Integer timeSpan, Integer payStatus, Integer orderFlag) {
+        try {
+            List<SeckillOrder> seckillOrderList = seckillOrderService.listSeckillOrderByTime(timeType, timeSpan, payStatus, orderFlag);
+            return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "查询订单信息成功", JsonUtils.objectToJson(seckillOrderList));
+        } catch (Exception e) {
+            return new SeckillResult(SeckillReturnCodeType.SYSTEM_ERROR, "查询订单信息出错", e);
+        }
+    }
 
 }
