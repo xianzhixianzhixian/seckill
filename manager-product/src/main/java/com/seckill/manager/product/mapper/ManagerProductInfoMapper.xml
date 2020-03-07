@@ -125,6 +125,9 @@
       #{approveTime,jdbcType=TIMESTAMP}, #{mechantId,jdbcType=BIGINT}, #{productTypeId,jdbcType=BIGINT}, 
       #{productInventory,jdbcType=BIGINT}, #{shopId,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <insert id="insertSelective" parameterType="com.seckill.common.bean.ManagerProductInfo">
     insert into manager_product_info
@@ -228,6 +231,9 @@
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <select id="countByExample" parameterType="com.seckill.common.bean.ManagerProductInfoExample" resultType="java.lang.Long">
     select count(*) from manager_product_info

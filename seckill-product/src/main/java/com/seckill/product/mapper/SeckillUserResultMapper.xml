@@ -111,7 +111,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.seckill.common.bean.SeckillUserResult" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insert" parameterType="com.seckill.common.bean.SeckillUserResult">
     insert into seckill_user_result (id, user_id, product_id, 
       seckill_product_id, result, result_data, 
       seckill_time, order_id, created_time, 
@@ -120,8 +120,11 @@
       #{seckillProductId,jdbcType=BIGINT}, #{result,jdbcType=INTEGER}, #{resultData,jdbcType=VARCHAR}, 
       #{seckillTime,jdbcType=TIMESTAMP}, #{orderId,jdbcType=BIGINT}, #{createdTime,jdbcType=TIMESTAMP}, 
       #{updatedTime,jdbcType=TIMESTAMP})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
-  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillUserResult" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.seckill.common.bean.SeckillUserResult">
     insert into seckill_user_result
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -187,6 +190,9 @@
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <select id="countByExample" parameterType="com.seckill.common.bean.SeckillUserResultExample" resultType="java.lang.Long">
     select count(*) from seckill_user_result

@@ -118,6 +118,9 @@
       #{city,jdbcType=VARCHAR}, #{businessLicense,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{state,jdbcType=INTEGER}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}
       )
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <insert id="insertSelective" parameterType="com.seckill.common.bean.ManagerShop">
     insert into manager_shop
@@ -197,6 +200,9 @@
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <select id="countByExample" parameterType="com.seckill.common.bean.ManagerShopExample" resultType="java.lang.Long">
     select count(*) from manager_shop

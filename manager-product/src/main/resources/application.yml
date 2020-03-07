@@ -5,9 +5,9 @@ spring:
   application:
     name: manager-product
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://192.168.56.103:8066/seckill?useUnicode=true&characterEncoding=utf8
     driver-class-name: com.mysql.jdbc.Driver
-    username: root
+    username: mycat
     password: 123456
     type: com.alibaba.druid.pool.DruidDataSource
     #Druid数据库连接池配置

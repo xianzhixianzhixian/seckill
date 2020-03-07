@@ -120,6 +120,9 @@
       #{birthday,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{weixin,jdbcType=VARCHAR}, 
       #{idCard,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
       #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <insert id="insertSelective" parameterType="com.seckill.common.bean.ManagerUser">
     insert into manager_user
@@ -211,6 +214,9 @@
         #{updatedTime,jdbcType=TIMESTAMP},
       </if>
     </trim>
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+      select last_insert_id() as id
+    </selectKey>
   </insert>
   <select id="countByExample" parameterType="com.seckill.common.bean.ManagerUserExample" resultType="java.lang.Long">
     select count(*) from manager_user
