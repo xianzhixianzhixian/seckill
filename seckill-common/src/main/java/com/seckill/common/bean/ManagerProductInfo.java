@@ -1,9 +1,10 @@
 package com.seckill.common.bean;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ManagerProductInfo {
+public class ManagerProductInfo implements Serializable {
     private Long id;
 
     private String productTitle;

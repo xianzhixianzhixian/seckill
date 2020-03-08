@@ -8,11 +8,15 @@ import com.seckill.manager.product.mapper.ManagerProductInfoMapper;
 import com.seckill.common.bean.ManagerProductInfoExample;
 import com.seckill.manager.product.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
+@CacheConfig(cacheNames = "productInfoCache")
 @Service
 public class ProductInfoServiceImpl implements ProductInfoService {
 
@@ -41,6 +45,8 @@ public class ProductInfoServiceImpl implements ProductInfoService {
         return productInfoMapper.selectByExample(example);
     }
 
+    //把key的值定义为productInfo中id的值
+    @CachePut(cacheNames = "productInfoCache", key = "#productInfo.id")
     @Override
     public Integer updateProductInfo(ManagerProductInfo productInfo){
         productInfo.setUpdateTime(new Date());
@@ -50,6 +56,8 @@ public class ProductInfoServiceImpl implements ProductInfoService {
         return productInfoMapper.updateByPrimaryKeySelective(productInfo);
     }
 
+    //把key的值定义为productId的值
+    @Cacheable(cacheNames = "productInfoCache", key = "#productId")
     @Override
     public ManagerProductInfo findProductByProductId(Long productId){
         return productInfoMapper.selectByPrimaryKey(productId);
@@ -77,6 +85,5 @@ public class ProductInfoServiceImpl implements ProductInfoService {
             return productDetailList.get(0);
         }
     }
-
-
+    
 }

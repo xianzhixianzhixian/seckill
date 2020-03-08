@@ -4,8 +4,10 @@ import com.seckill.common.bean.ManagerProductDetail;
 import com.seckill.manager.product.mapper.ManagerProductDetailMapper;
 import com.seckill.manager.product.service.ProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 
+@CacheConfig(cacheNames = "productDetailCache")
 @Service
 public class ProductDetailServiceImpl implements ProductDetailService {
 

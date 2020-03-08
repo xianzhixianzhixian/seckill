@@ -18,12 +18,12 @@ public class ProductController {
     private ProductInfoServiceImpl productInfoService;
 
     @PostMapping(value = "/listProductByShopId")
-    public List<ManagerProductInfo> listProductByShopId(@RequestBody Long shopId) {
+    public List<ManagerProductInfo> listProductByShopId(Long shopId) {
         return productInfoService.listProductInfo(shopId, 1);
     }
 
     @PostMapping(value = "/findProductByProductId")
-    public ManagerProductInfo findProductByProductId(@RequestBody Long productId) {
+    public ManagerProductInfo findProductByProductId(Long productId) {
         return productInfoService.findProductByProductId(productId);
     }
 }
