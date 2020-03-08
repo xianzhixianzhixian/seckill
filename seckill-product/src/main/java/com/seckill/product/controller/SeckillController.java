@@ -1,5 +1,6 @@
 package com.seckill.product.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillProduct;
 import com.seckill.common.bean.SeckillResult;
@@ -58,6 +59,7 @@ public class SeckillController implements InitializingBean {
     private CentralEventForwardHandler centralEventForwardHandler;
     private CentralEventProcessor centralEventProcessor;
 
+    @HystrixCommand(fallbackMethod =  "seckillProductAOPFail")
     @ResponseBody
     @PostMapping("/seckillProductAOP")
     public SeckillResult seckillProductAOP(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
@@ -73,12 +75,17 @@ public class SeckillController implements InitializingBean {
         }
     }
 
+    public SeckillResult seckillProductAOPFail(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "seckillProductAOP熔断降级");
+    }
+
     @ResponseBody
     @PostMapping("/multipltThreadSeckillProduct")
     public void multipltThreadSeckillProduct(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         seckillService.multipltThreadSeckillProduct(userId, seckillProductId);
     }
 
+    @HystrixCommand(fallbackMethod = "seckillProductPessimisticLockFail")
     @ResponseBody
     @PostMapping("/seckillProductPessimisticLock")
     public SeckillResult seckillProductPessimisticLock(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
@@ -89,6 +96,11 @@ public class SeckillController implements InitializingBean {
         return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "恭喜抢到商品");
     }
 
+    public SeckillResult seckillProductPessimisticLockFail(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "seckillProductPessimisticLock熔断降级");
+    }
+
+    @HystrixCommand(fallbackMethod = "seckillProductOptimisticLockFail")
     @ResponseBody
     @PostMapping("/seckillProductOptimisticLock")
     public SeckillResult seckillProductOptimisticLock(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
@@ -99,12 +111,17 @@ public class SeckillController implements InitializingBean {
         return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "恭喜抢到商品");
     }
 
+    public SeckillResult seckillProductOptimisticLockFail(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "seckillProductOptimisticLock熔断降级");
+    }
+
     @ResponseBody
     @PostMapping("/seckillProductQueueAndThread")
     public void seckillProductQueueAndThread(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
         seckillService.seckillProductQueueAndThread(userId, seckillProductId);
     }
 
+    @HystrixCommand(fallbackMethod = "seckillProductRedisLockFail")
     @ResponseBody
     @PostMapping("/seckillProductRedisLock")
     public SeckillResult seckillProductRedisLock(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
@@ -113,6 +130,10 @@ public class SeckillController implements InitializingBean {
             return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "商品已经卖完了哦");
         }
         return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "恭喜抢到商品");
+    }
+
+    public SeckillResult seckillProductRedisLockFail(@RequestParam("userId") Long userId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "seckillProductRedisLock熔断降级");
     }
 
     @ResponseBody
@@ -135,9 +156,10 @@ public class SeckillController implements InitializingBean {
         seckillProductIntegrationService.seckillProductDistributeFuture(seckillProduct, seckillOrder, seckillUserResult);
     }
 
+    @HystrixCommand(fallbackMethod = "seckillProductStrategyFail")
     @ResponseBody
     @PostMapping("/seckillProductStrategy")
-    public Integer seckillProductStrategy(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
+    public SeckillResult seckillProductStrategy(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
         SeckillProduct seckillProduct = seckillProductService.findSeckillProductById(seckillProductId);
         SeckillOrder seckillOrder = new SeckillOrder();
         seckillOrder.setUserId(userId);
@@ -146,9 +168,20 @@ public class SeckillController implements InitializingBean {
         SeckillUserResult seckillUserResult = new SeckillUserResult();
         seckillUserResult.setUserId(userId);
         seckillUserResult.setSeckillProductId(seckillProductId);
-        return seckillProductStrategy.seckillProduct(seckillProduct, seckillOrder, seckillUserResult);
+        Integer result = 0;
+        try {
+            result = seckillProductStrategy.seckillProduct(seckillProduct, seckillOrder, seckillUserResult);
+            return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "策略模式秒杀成功", result);
+        } catch (Exception e) {
+            return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "策略模式秒杀错误", e);
+        }
     }
 
+    public SeckillResult seckillProductStrategyFail(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "seckillProductStrategy熔断降级");
+    }
+
+    @HystrixCommand(fallbackMethod = "seckillProductEventFail")
     @ResponseBody
     @PostMapping("/seckillProductEvent")
     public SeckillResult seckillProductEvent(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
@@ -182,6 +215,11 @@ public class SeckillController implements InitializingBean {
         return new SeckillResult(SeckillReturnCodeType.SUCCESS_CODE, "正在抢购");
     }
 
+    public SeckillResult seckillProductEventFail(@RequestParam("userId") Long userId, @RequestParam("shopId") Long shopId, @RequestParam("seckillProductId") Long seckillProductId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "seckillProductEvent熔断降级");
+    }
+
+    @HystrixCommand(fallbackMethod = "selectSeckillUserResultByUserIdFail")
     @PostMapping("/selectSeckillUserResultByUserId")
     public SeckillResult selectSeckillUserResultByUserId(Long userId) {
         try {
@@ -192,6 +230,11 @@ public class SeckillController implements InitializingBean {
         }
     }
 
+    public SeckillResult selectSeckillUserResultByUserIdFail(Long userId) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "selectSeckillUserResultByUserId熔断降级");
+    }
+
+    @HystrixCommand(fallbackMethod = "sendEventFail")
     @PostMapping("/sendEvent")
     public SeckillResult sendEvent(@RequestBody Event event) {
         logger.info("sendEvent接收到event{}", event);
@@ -215,9 +258,18 @@ public class SeckillController implements InitializingBean {
         }
     }
 
+    public SeckillResult sendEventFail(@RequestBody Event event) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "sendEvent熔断降级");
+    }
+
+    @HystrixCommand(fallbackMethod = "payForOrderFail")
     @PostMapping("/payForOrder")
-    public SeckillResult updatePaymentType(PaymentParam paymentParam) {
+    public SeckillResult payForOrder(@RequestBody PaymentParam paymentParam) {
         return seckillPaymentFeignService.payForOrder(paymentParam);
+    }
+
+    public SeckillResult payForOrderFail(@RequestBody PaymentParam paymentParam) {
+        return new SeckillResult(SeckillReturnCodeType.BUSINESS_FAIL, "payForOrder熔断降级");
     }
 
     @Override
