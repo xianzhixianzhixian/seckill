@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(value = "seckill-message")
 public interface SeckillMessageFeignService {
 
-    @PostMapping("/message/sendOrderMessage")
-    public Boolean sendOrderMessage(@RequestBody OrderRequest orderRequest);
+    @PostMapping("/message/sendOrderRequestMessage")
+    public Boolean sendOrderRequestMessage(@RequestBody OrderRequest orderRequest);
 }

@@ -1,5 +1,6 @@
 package com.seckill.message.consumer;
 
+import com.rabbitmq.client.Channel;
 import com.seckill.common.bean.SeckillOrder;
 import com.seckill.common.bean.SeckillResult;
 import com.seckill.common.constant.SeckillReturnCodeType;
@@ -12,6 +13,7 @@ import com.seckill.message.service.feign.SeckillOrderFeignService;
 import com.seckill.message.service.feign.SeckillProductFeignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +40,7 @@ public class RabbitMessageConsumer {
      * @param orderRequest
      */
     @RabbitHandler
-    public void receiverOrderMessage(OrderRequest orderRequest) {
+    public void receiverOrderMessage(OrderRequest orderRequest, Channel channel, Message message) {
         logger.info("接收到的请求订单创建信息{}", orderRequest);
         try {
             SeckillResult seckillResult = seckillOrderFeignService.createOrder(orderRequest);
@@ -48,8 +50,16 @@ public class RabbitMessageConsumer {
                 seckillResult = seckillProductFeignService.sendEvent(event);
                 logger.info("发送订单完成事件{}结果{}", event, seckillResult.getStatus());
             }
+            //返回消息确认该条消息已经被消费，可以在队列中删除，否则消息服务器将会认为该条消息未被处理导致重发
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (Exception e) {
             logger.error("receiverOrderMessage错误，原因{}", e);
+            try {
+                //确认消费未成功
+                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
+            } catch (Exception ackException) {
+                logger.error("receiverOrderMessage basicAck错误，原因{}", ackException);
+            }
         }
     }
 

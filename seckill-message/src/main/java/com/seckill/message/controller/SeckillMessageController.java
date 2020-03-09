@@ -23,29 +23,18 @@ public class SeckillMessageController {
     @Autowired
     private SeckillMessageServiceImpl seckillMessageServiceImpl;
 
-    @PostMapping("/sendMessage")
-    public Boolean sendMessage(@RequestBody OrderRequest orderRequest) {
-        logger.info("message组件接收到请求{}", orderRequest);
-        try {
-            seckillMessageServiceImpl.sendMessage(orderRequest);
-        } catch (Exception e) {
-            logger.error("发送RabbitMQ消息{}出错，原因{}", orderRequest, e);
-            return false;
-        }
-        return true;
-    }
-
     /**
      * 接收订单创建请求
      * @param orderRequest
      * @return
      */
-    @PostMapping("/sendOrderMessage")
-    public Boolean sendOrderMessage(@RequestBody OrderRequest orderRequest) {
+    @PostMapping("/sendOrderRequestMessage")
+    public Boolean sendOrderRequestMessage(@RequestBody OrderRequest orderRequest) {
+        logger.info("message组件接收到请求{}", orderRequest);
         try {
-            seckillMessageServiceImpl.sendMessage(orderRequest);
+            seckillMessageServiceImpl.sendOrderRequestMessage(orderRequest);
         } catch (Exception e) {
-            logger.error("sendOrderMessage发送消息{}错误，原因{}", orderRequest, e);
+            logger.error("发送RabbitMQ消息{}出错，原因{}", orderRequest, e);
             return false;
         }
         return true;
@@ -54,7 +43,7 @@ public class SeckillMessageController {
     @PostMapping("/sendOrderUpdateMessage")
     public Boolean sendOrderUpdateMessage(@RequestBody SeckillOrder seckillOrder) {
         try {
-            seckillMessageServiceImpl.sendMessage(seckillOrder);
+            seckillMessageServiceImpl.sendSeckillOrderMessage(seckillOrder);
         } catch (Exception e) {
             logger.error("sendOrderMessage发送消息{}错误，原因{}", seckillOrder, e);
             return false;

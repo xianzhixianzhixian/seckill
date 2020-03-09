@@ -12,3 +12,11 @@ spring:
     connection-timeout: 15000
     #发送确认
     publisher-confirms: true
+    #开启消息失败退回
+    publisher-returns: true
+    #开启ACK（RabbitMQ消费者ACK机制：关闭RabbitMQ自动ACK，通过一个API来调用就行，然后每次你自己代码里确保处理完的时候(消费成功)，在程序里ACK一次）
+    listener:
+      direct:
+        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
